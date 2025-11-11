@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { Button } from './ui/button';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import AnalysisSection from './analysis-section';
 
 export default function LandingPage() {
   const { ref: ref1, isIntersecting: isIntersecting1 } = useIntersectionObserver({ threshold: 0.1 });
@@ -16,7 +18,7 @@ export default function LandingPage() {
     <div className="flex flex-col min-h-screen bg-white text-gray-800">
       <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-50 animate-in fade-in-0 duration-500">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <Image
               src="https://i.postimg.cc/QCys4Rbt/favicon-light.png"
               alt="Alumbra logo"
@@ -24,13 +26,13 @@ export default function LandingPage() {
               height={28}
             />
             <span className="text-xl font-bold">Alumbra</span>
-          </div>
+          </Link>
           <nav className="hidden md:flex">
             <ul className="flex items-center gap-6 text-sm font-medium">
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Como funciona
-                </a>
+                <Link href="/how-it-works" className="hover:text-primary transition-colors">
+                  Cómo funciona
+                </Link>
               </li>
               <li>
                 <a href="#" className="hover:text-primary transition-colors">
@@ -65,14 +67,23 @@ export default function LandingPage() {
                 Analiza, protege y actúa en tiempo real — todo en una plataforma poderosa. Eleva tu bienestar emocional con claridad instantánea y recomendaciones prácticas.
               </p>
               <div className="animate-in fade-in zoom-in-95 duration-700 delay-300">
-                <Button size="lg" className="group">
-                  Analiza ahora • es gratis
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                <Button size="lg" className="group" asChild>
+                  <Link href="#analysis-section">
+                    Analiza ahora • es gratis
+                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </Button>
               </div>
             </div>
           </div>
         </section>
+
+        <section id="analysis-section" className="py-20 md:py-24 bg-gray-50/50">
+          <div className="container mx-auto px-6">
+              <AnalysisSection />
+          </div>
+        </section>
+
 
         <section ref={ref1} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700", isIntersecting1 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6">
@@ -98,7 +109,7 @@ export default function LandingPage() {
                 <h3 className="text-xl font-bold mb-2">Pega tu conversación y analiza al instante</h3>
                 <p className="text-gray-600">Detecta abuso emocional al instante con una interfaz simple y humana.</p>
               </div>
-              <div className={cn("bg-gray-100 p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-200")}>
+              <div className={cn("bg-white p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-200")}>
                 <div className="relative h-56 w-full rounded-2xl overflow-hidden mb-6">
                   <Image
                     src="https://picsum.photos/seed/feature2/701/551"
@@ -111,7 +122,7 @@ export default function LandingPage() {
                 <h3 className="text-xl font-bold mb-2">Análisis avanzado de abuso emocional</h3>
                 <p className="text-gray-600">Detecta gaslighting, chantaje emocional y manipulación sutil sin que tengas que entender psicología. Alumbra lo hace por ti en segundos.</p>
               </div>
-              <div className={cn("bg-gray-100 p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-300")}>
+              <div className={cn("bg-white p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-300")}>
                 <div className="relative h-56 w-full rounded-2xl overflow-hidden mb-6">
                   <Image
                     src="https://picsum.photos/seed/feature3/700/558"
@@ -188,41 +199,6 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        
-        <section ref={ref4} className={cn("py-20 md:py-32 bg-gradient-to-b from-purple-100 to-purple-200/60 overflow-hidden transition-opacity duration-700", isIntersecting4 ? "opacity-100" : "opacity-0")}>
-            <div className={cn("container mx-auto px-6 text-center", isIntersecting4 && "animate-in fade-in slide-in-from-bottom-12 duration-700")}>
-                <h2 className="text-4xl md:text-7xl font-black leading-tight mb-6">Take your creative workflow<br/>to the next level</h2>
-                <p className="max-w-3xl mx-auto text-lg md:text-xl text-gray-600 mb-12">
-                    Supercharge your workflow with powerful design tools and effortless collaboration—perfect for freelancers and teams.
-                </p>
-                <div className="flex justify-center items-center gap-6 mb-20">
-                    <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition-opacity text-base h-14 px-10">Get Started</Button>
-                    <Image src="https://cdn-icons-png.flaticon.com/512/5968/5968705.png" alt="Figma" width={48} height={48} className="opacity-70" />
-                    <Image src="https://cdn-icons-png.flaticon.com/512/732/732199.png" alt="Apple" width={48} height={48} className="opacity-70" />
-                </div>
-            </div>
-            <div className={cn("max-w-6xl mx-auto px-4 sm:px-6", isIntersecting4 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-200")}>
-                <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-                    <div className="p-4 bg-gray-50 border-b flex justify-between items-center text-sm text-gray-500">
-                        <span>Agency / Portfolio</span>
-                        <div className="flex items-center gap-4">
-                            <div className="flex -space-x-2">
-                                <Image src="https://i.pravatar.cc/32?img=1" width={32} height={32} className="rounded-full ring-2 ring-white" alt="avatar 1" />
-                                <Image src="https://i.pravatar.cc/32?img=2" width={32} height={32} className="rounded-full ring-2 ring-white" alt="avatar 2" />
-                            </div>
-                            <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 rounded-full">Share</Button>
-                        </div>
-                    </div>
-                    <div className="relative h-[400px] md:h-[600px] bg-gradient-to-br from-purple-500 via-indigo-600 to-pink-500 flex items-center justify-center p-8">
-                         <Image src="https://picsum.photos/seed/mockup/1200/800" alt="App Mockup" layout="fill" objectFit="cover" className="opacity-80" data-ai-hint="app screenshot" />
-                         <div className="absolute inset-4 md:inset-8 border-4 border-white/20 rounded-3xl"></div>
-                         <div className="absolute top-8 left-8 bg-indigo-600 text-white py-2 px-5 rounded-full text-lg font-bold shadow-lg">
-                            Drafttr.
-                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
       </main>
 
@@ -250,8 +226,8 @@ export default function LandingPage() {
           <div>
             <h4 className="font-bold text-white mb-6">Quick Links</h4>
             <ul className="space-y-3 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">Home</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Cómo funciona</a></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
+              <li><Link href="/how-it-works" className="hover:text-white transition-colors">Cómo funciona</Link></li>
               <li><a href="#" className="hover:text-white transition-colors">Precios</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Reseñas</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Contacto</a></li>
