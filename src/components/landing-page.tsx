@@ -6,7 +6,6 @@ import { Button } from './ui/button';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import AnalysisSection from './analysis-section';
 import Header from './header';
 
 export default function LandingPage() {
@@ -42,13 +41,6 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-
-        <section id="analysis-section" className="py-20 md:py-24 bg-gray-50/50">
-          <div className="container mx-auto px-6">
-              <AnalysisSection />
-          </div>
-        </section>
-
 
         <section ref={ref1} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700", isIntersecting1 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6">
