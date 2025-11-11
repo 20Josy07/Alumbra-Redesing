@@ -2,8 +2,16 @@
 import { ArrowRight, Facebook, Instagram, Linkedin, Twitter, Youtube } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from './ui/button';
+import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
+import { cn } from '@/lib/utils';
 
 export default function LandingPage() {
+  const { ref: ref1, isIntersecting: isIntersecting1 } = useIntersectionObserver({ threshold: 0.1 });
+  const { ref: ref2, isIntersecting: isIntersecting2 } = useIntersectionObserver({ threshold: 0.1 });
+  const { ref: ref3, isIntersecting: isIntersecting3 } = useIntersectionObserver({ threshold: 0.1 });
+  const { ref: ref4, isIntersecting: isIntersecting4 } = useIntersectionObserver({ threshold: 0.1 });
+  const { ref: ref5, isIntersecting: isIntersecting5 } = useIntersectionObserver({ threshold: 0.1 });
+
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-800">
       <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-50 animate-in fade-in-0 duration-500">
@@ -66,9 +74,9 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="py-20 md:py-24 bg-gray-50">
+        <section ref={ref1} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700", isIntersecting1 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6">
-            <div className="text-center max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-12 duration-700">
+            <div className={cn("text-center max-w-3xl mx-auto", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-12 duration-700")}>
               <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
                 La herramienta esencial para proteger tu bienestar emocional
               </h2>
@@ -77,7 +85,7 @@ export default function LandingPage() {
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-8 mt-16">
-              <div className="bg-white p-6 rounded-3xl shadow-lg animate-in fade-in slide-in-from-bottom-16 duration-700 delay-100">
+              <div className={cn("bg-white p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-100")}>
                 <div className="relative h-56 w-full rounded-2xl overflow-hidden mb-6">
                   <Image
                     src="https://picsum.photos/seed/feature1/700/553"
@@ -90,7 +98,7 @@ export default function LandingPage() {
                 <h3 className="text-xl font-bold mb-2">Pega tu conversación y analiza al instante</h3>
                 <p className="text-gray-600">Detecta abuso emocional al instante con una interfaz simple y humana.</p>
               </div>
-              <div className="bg-gray-100 p-6 rounded-3xl shadow-lg animate-in fade-in slide-in-from-bottom-16 duration-700 delay-200">
+              <div className={cn("bg-gray-100 p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-200")}>
                 <div className="relative h-56 w-full rounded-2xl overflow-hidden mb-6">
                   <Image
                     src="https://picsum.photos/seed/feature2/701/551"
@@ -103,7 +111,7 @@ export default function LandingPage() {
                 <h3 className="text-xl font-bold mb-2">Análisis avanzado de abuso emocional</h3>
                 <p className="text-gray-600">Detecta gaslighting, chantaje emocional y manipulación sutil sin que tengas que entender psicología. Alumbra lo hace por ti en segundos.</p>
               </div>
-              <div className="bg-gray-100 p-6 rounded-3xl shadow-lg animate-in fade-in slide-in-from-bottom-16 duration-700 delay-300">
+              <div className={cn("bg-gray-100 p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-300")}>
                 <div className="relative h-56 w-full rounded-2xl overflow-hidden mb-6">
                   <Image
                     src="https://picsum.photos/seed/feature3/700/558"
@@ -120,9 +128,9 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="py-20 md:py-24">
+        <section ref={ref2} className={cn("py-20 md:py-24 transition-opacity duration-700", isIntersecting2 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-            <div className="animate-in fade-in slide-in-from-left-16 duration-700">
+            <div className={cn(isIntersecting2 && "animate-in fade-in slide-in-from-left-16 duration-700")}>
               <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">Simplifica tu<br />protección</h2>
               <div className="space-y-8">
                 <div className="flex gap-6 items-start">
@@ -148,21 +156,21 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-            <div className="relative h-96 md:h-[600px] w-full bg-gray-200 rounded-3xl animate-in fade-in zoom-in-95 duration-700 delay-200">
+            <div className={cn("relative h-96 md:h-[600px] w-full bg-gray-200 rounded-3xl", isIntersecting2 && "animate-in fade-in zoom-in-95 duration-700 delay-200")}>
                <Image src="https://picsum.photos/seed/protection/800/600" alt="Simplifica tu protección" layout="fill" objectFit="cover" className="rounded-3xl" data-ai-hint="protection steps" />
             </div>
           </div>
         </section>
 
-        <section className="py-20 md:py-32 bg-white">
+        <section ref={ref3} className={cn("py-20 md:py-32 bg-white transition-opacity duration-700", isIntersecting3 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-16">
-            <div className="md:w-1/2 animate-in fade-in slide-in-from-left-16 duration-700">
+            <div className={cn("md:w-1/2", isIntersecting3 && "animate-in fade-in slide-in-from-left-16 duration-700")}>
               <h2 className="text-4xl md:text-6xl font-extrabold leading-tight">
                 Amada por quienes se<br />protegen y quienes<br />
                 <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-transparent bg-clip-text">ayudan</span>
               </h2>
             </div>
-            <div className="md:w-1/2 max-w-lg animate-in fade-in slide-in-from-right-16 duration-700 delay-200">
+            <div className={cn("md:w-1/2 max-w-lg", isIntersecting3 && "animate-in fade-in slide-in-from-right-16 duration-700 delay-200")}>
               <div className="flex gap-3 mb-8">
                 <Image src="https://picsum.photos/seed/avatar1/56/56" alt="Usuario" width={56} height={56} className="rounded-2xl shadow-md" data-ai-hint="woman face" />
                 <Image src="https://picsum.photos/seed/avatar2/56/56" alt="Usuario" width={56} height={56} className="rounded-2xl shadow-md" data-ai-hint="man face" />
@@ -181,8 +189,8 @@ export default function LandingPage() {
           </div>
         </section>
         
-        <section className="py-20 md:py-32 bg-gradient-to-b from-purple-100 to-purple-200/60 overflow-hidden">
-            <div className="container mx-auto px-6 text-center animate-in fade-in slide-in-from-bottom-12 duration-700">
+        <section ref={ref4} className={cn("py-20 md:py-32 bg-gradient-to-b from-purple-100 to-purple-200/60 overflow-hidden transition-opacity duration-700", isIntersecting4 ? "opacity-100" : "opacity-0")}>
+            <div className={cn("container mx-auto px-6 text-center", isIntersecting4 && "animate-in fade-in slide-in-from-bottom-12 duration-700")}>
                 <h2 className="text-4xl md:text-7xl font-black leading-tight mb-6">Take your creative workflow<br/>to the next level</h2>
                 <p className="max-w-3xl mx-auto text-lg md:text-xl text-gray-600 mb-12">
                     Supercharge your workflow with powerful design tools and effortless collaboration—perfect for freelancers and teams.
@@ -193,7 +201,7 @@ export default function LandingPage() {
                     <Image src="https://cdn-icons-png.flaticon.com/512/732/732199.png" alt="Apple" width={48} height={48} className="opacity-70" />
                 </div>
             </div>
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 animate-in fade-in slide-in-from-bottom-16 duration-700 delay-200">
+            <div className={cn("max-w-6xl mx-auto px-4 sm:px-6", isIntersecting4 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-200")}>
                 <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
                     <div className="p-4 bg-gray-50 border-b flex justify-between items-center text-sm text-gray-500">
                         <span>Agency / Portfolio</span>
@@ -218,7 +226,7 @@ export default function LandingPage() {
 
       </main>
 
-      <footer className="bg-gray-900 text-gray-400 py-20">
+      <footer ref={ref5} className={cn("bg-gray-900 text-gray-400 py-20 transition-opacity duration-700", isIntersecting5 ? "opacity-100" : "opacity-0")}>
         <div className="container mx-auto px-6 grid md:grid-cols-3 gap-12">
           <div>
             <div className="flex items-center gap-3 mb-4">
