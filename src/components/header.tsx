@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Button } from './ui/button';
 
 type HeaderProps = {
-  activeLink?: 'how-it-works';
+  activeLink?: 'how-it-works' | 'reviews';
 };
 
 export default function Header({ activeLink }: HeaderProps) {
@@ -28,9 +28,9 @@ export default function Header({ activeLink }: HeaderProps) {
               </Link>
             </li>
             <li>
-              <a href="#" className="hover:text-primary transition-colors">
+              <Link href="/reviews" className={activeLink === 'reviews' ? 'text-primary font-semibold transition-colors' : 'hover:text-primary transition-colors'}>
                 Reseñas
-              </a>
+              </Link>
             </li>
             <li>
               <a href="#" className="hover:text-primary transition-colors">
