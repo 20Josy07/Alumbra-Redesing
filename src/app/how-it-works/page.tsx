@@ -1,8 +1,10 @@
+
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Bot, FileText, LifeBuoy, Lock, ClipboardPaste, BrainCircuit } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import Header from "@/components/header";
 
 const steps = [
     {
@@ -50,45 +52,7 @@ const steps = [
 export default function HowItWorksPage() {
     return (
         <div className="bg-white text-gray-800">
-            {/* Header */}
-             <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-                <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-                    <Link href="/" className="flex items-center gap-2">
-                        <Image
-                        src="https://i.postimg.cc/QCys4Rbt/favicon-light.png"
-                        alt="Alumbra logo"
-                        width={28}
-                        height={28}
-                        />
-                        <span className="text-xl font-bold">Alumbra</span>
-                    </Link>
-                    <nav className="hidden md:flex">
-                        <ul className="flex items-center gap-6 text-sm font-medium">
-                        <li>
-                            <Link href="/how-it-works" className="text-primary font-semibold transition-colors">
-                            Cómo funciona
-                            </Link>
-                        </li>
-                        <li>
-                            <a href="#" className="hover:text-primary transition-colors">
-                            Reseñas
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" className="hover:text-primary transition-colors">
-                            Equipo
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" className="hover:text-primary transition-colors">
-                            Contacto
-                            </a>
-                        </li>
-                        </ul>
-                    </nav>
-                    <Button>Inicia sesión ahora</Button>
-                </div>
-            </header>
+            <Header activeLink="how-it-works" />
 
             <main>
                 {/* Hero Section */}

@@ -1,3 +1,4 @@
+
 'use client';
 import { ArrowRight, Facebook, Instagram, Linkedin, Twitter, Youtube } from 'lucide-react';
 import Image from 'next/image';
@@ -6,6 +7,7 @@ import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import AnalysisSection from './analysis-section';
+import Header from './header';
 
 export default function LandingPage() {
   const { ref: ref1, isIntersecting: isIntersecting1 } = useIntersectionObserver({ threshold: 0.1 });
@@ -16,44 +18,7 @@ export default function LandingPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-800">
-      <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-50 animate-in fade-in-0 duration-500">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="https://i.postimg.cc/QCys4Rbt/favicon-light.png"
-              alt="Alumbra logo"
-              width={28}
-              height={28}
-            />
-            <span className="text-xl font-bold">Alumbra</span>
-          </Link>
-          <nav className="hidden md:flex">
-            <ul className="flex items-center gap-6 text-sm font-medium">
-              <li>
-                <Link href="/how-it-works" className="hover:text-primary transition-colors">
-                  Cómo funciona
-                </Link>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Reseñas
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Equipo
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Contacto
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <Button>Inicia sesión ahora</Button>
-        </div>
-      </header>
+      <Header />
 
       <main className="flex-1">
         <section className="text-center py-20 md:py-32">
