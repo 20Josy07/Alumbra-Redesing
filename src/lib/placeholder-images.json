@@ -65,6 +65,18 @@
       "description": "A profile picture of a user.",
       "imageUrl": "https://i.pravatar.cc/150?img=25",
       "imageHint": "person smiling"
+    },
+    {
+      "id": "team-elena",
+      "description": "A profile picture of a team member.",
+      "imageUrl": "https://i.pravatar.cc/300?img=31",
+      "imageHint": "woman professional"
+    },
+    {
+      "id": "team-marco",
+      "description": "A profile picture of a team member.",
+      "imageUrl": "https://i.pravatar.cc/300?img=60",
+      "imageHint": "man professional"
     }
   ]
 }
