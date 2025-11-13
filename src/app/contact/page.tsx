@@ -70,7 +70,7 @@ export default function ContactPage() {
                                 <div>
                                     <h3 className="text-lg font-semibold">Ubicación</h3>
                                     <p className="text-gray-600">Estamos basados en Colombia, trabajando para todo el mundo.</p>
-                                    <p className="font-medium">Bogotá, Colombia</p>
+                                    <p className="font-medium">Barranquilla, Colombia</p>
                                 </div>
                             </div>
                             <div className="mt-8">
