@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from "react";
@@ -13,7 +12,8 @@ export default function Dashboard() {
         const pendingResult = sessionStorage.getItem('pendingAnalysisResult');
         if (pendingResult) {
             try {
-                setPendingAnalysis(JSON.parse(pendingResult));
+                const parsedResult = JSON.parse(pendingResult);
+                setPendingAnalysis(parsedResult);
                 // Clear the result from storage so it's not shown again on reload
                 sessionStorage.removeItem('pendingAnalysisResult');
             } catch (e) {
@@ -23,5 +23,5 @@ export default function Dashboard() {
         }
     }, []);
 
-    return <DashboardPage pendingAnalysis={pendingAnalysis} />;
+    return <DashboardPage pendingAnalysis={pendingAnalysis} setPendingAnalysis={setPendingAnalysis} />;
 }

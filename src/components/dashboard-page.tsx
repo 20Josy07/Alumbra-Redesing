@@ -1,42 +1,61 @@
-
 'use client';
 
-import { useUser } from "@/firebase";
+import { useUser, useFirestore, useCollection } from "@/firebase";
 import AnalysisSection from "./analysis-section";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { FileText, Clock, Sparkles, AlertCircle, CheckCircle, BrainCircuit } from "lucide-react";
+import { FileText, Clock, Sparkles, AlertCircle, BrainCircuit, Loader } from "lucide-react";
 import Resources from "./resources";
 import { type AnalysisResult } from "@/app/actions";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-
-const recentAnalyses = [
-    {
-        title: "Conversación de WhatsApp con Alex",
-        date: "Hace 2 horas",
-        risk: "Alto",
-        summary: "Se detectaron múltiples indicadores de gaslighting y manipulación..."
-    },
-    {
-        title: "Email de mi jefe",
-        date: "Ayer",
-        risk: "Bajo",
-        summary: "Comunicación directa pero con tono exigente. No se detectaron tácticas de abuso."
-    },
-    {
-        title: "SMS con María",
-        date: "Hace 3 días",
-        risk: "Medio",
-        summary: "Se identificaron patrones de chantaje emocional y control coercitivo leve."
-    }
-];
+import { saveAnalysis } from "@/firebase/firestore/analyses";
+import { useToast } from "@/hooks/use-toast";
+import { type AnalysisRecord } from "@/types";
+import { useMemo } from "react";
+import { collection, query, orderBy } from "firebase/firestore";
 
 interface DashboardPageProps {
   pendingAnalysis?: AnalysisResult | null;
+  setPendingAnalysis: (analysis: AnalysisResult | null) => void;
 }
 
-export default function DashboardPage({ pendingAnalysis }: DashboardPageProps) {
+export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: DashboardPageProps) {
     const { user } = useUser();
+    const firestore = useFirestore();
+    const { toast } = useToast();
+
+    const analysesQuery = useMemo(() => {
+        if (!user || !firestore) return null;
+        return query(collection(firestore, 'users', user.uid, 'analyses'), orderBy('createdAt', 'desc'));
+    }, [user, firestore]);
+
+    const { data: analyses, loading: loadingAnalyses } = useCollection<AnalysisRecord>(analysesQuery);
+
+    const handleSaveAnalysis = async () => {
+        if (!pendingAnalysis || !user || !firestore) return;
+
+        try {
+            const analysisToSave = {
+                ...pendingAnalysis,
+                title: `Análisis del ${new Date().toLocaleDateString()}`,
+                originalText: sessionStorage.getItem('lastAnalyzedText') || '',
+            };
+            await saveAnalysis(firestore, user.uid, analysisToSave);
+            toast({
+                title: "Análisis guardado",
+                description: "Tu análisis ha sido guardado en tu historial.",
+            });
+            setPendingAnalysis(null); // Clear the pending analysis from view
+            sessionStorage.removeItem('lastAnalyzedText');
+        } catch (error) {
+            console.error("Error saving analysis:", error);
+            toast({
+                variant: "destructive",
+                title: "Error al guardar",
+                description: "No se pudo guardar el análisis. Inténtalo de nuevo.",
+            });
+        }
+    };
 
     const renderPendingAnalysis = () => {
         if (!pendingAnalysis) return null;
@@ -80,7 +99,7 @@ export default function DashboardPage({ pendingAnalysis }: DashboardPageProps) {
                   </div>
                 </CardContent>
                 <CardContent>
-                    <Button>Guardar Análisis en el Historial</Button>
+                    <Button onClick={handleSaveAnalysis}>Guardar Análisis en el Historial</Button>
                 </CardContent>
             </Card>
         );
@@ -104,21 +123,34 @@ export default function DashboardPage({ pendingAnalysis }: DashboardPageProps) {
                             <CardDescription>Revisa tus análisis guardados anteriormente.</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <ul className="space-y-4">
-                                {recentAnalyses.map((analysis, index) => (
-                                    <li key={index} className="flex items-start gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors">
-                                        <div className="flex-shrink-0">
-                                            <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
-                                                <FileText className="w-5 h-5 text-accent-foreground" />
-                                            </div>
-                                        </div>
-                                        <div className="flex-1">
-                                            <h3 className="font-semibold text-sm">{analysis.title}</h3>
-                                            <p className="text-xs text-muted-foreground flex items-center gap-1.5"><Clock className="w-3 h-3" />{analysis.date}</p>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
+                            {loadingAnalyses ? (
+                                <div className="flex items-center justify-center p-6">
+                                    <Loader className="w-6 h-6 animate-spin" />
+                                </div>
+                            ) : (
+                                <ul className="space-y-4">
+                                    {analyses && analyses.length > 0 ? (
+                                        analyses.map((analysis) => (
+                                            <li key={analysis.id} className="flex items-start gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors">
+                                                <div className="flex-shrink-0">
+                                                    <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
+                                                        <FileText className="w-5 h-5 text-accent-foreground" />
+                                                    </div>
+                                                </div>
+                                                <div className="flex-1">
+                                                    <h3 className="font-semibold text-sm">{analysis.title}</h3>
+                                                    <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                                                        <Clock className="w-3 h-3" />
+                                                        {analysis.createdAt ? new Date(analysis.createdAt.seconds * 1000).toLocaleString() : 'Fecha desconocida'}
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        ))
+                                    ) : (
+                                        <p className="text-sm text-muted-foreground text-center py-4">No tienes análisis guardados.</p>
+                                    )}
+                                </ul>
+                            )}
                         </CardContent>
                     </Card>
                 </div>

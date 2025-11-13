@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useTransition } from 'react';
@@ -6,13 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader, BrainCircuit, Lock, AlertCircle, Sparkles, CheckCircle } from 'lucide-react';
+import { Loader, BrainCircuit, Lock, AlertCircle, Sparkles } from 'lucide-react';
 import { performAnalysis, type AnalysisResult } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useUser } from '@/firebase';
+import { useRouter } from 'next/navigation';
 
-type AnalysisState = 'idle' | 'loading' | 'error' | 'success';
+type AnalysisState = 'idle' | 'loading' | 'error' | 'success_public' | 'success_user';
 
 export default function AnalysisSection() {
   const [text, setText] = useState('');
@@ -21,12 +22,18 @@ export default function AnalysisSection() {
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+  const { user } = useUser();
+  const router = useRouter();
 
   const handleAnalysis = async () => {
     setError(null);
+    setAnalysisResult(null);
     setAnalysisState('loading');
     startTransition(async () => {
+      // Store the text to be analyzed in sessionStorage
+      sessionStorage.setItem('lastAnalyzedText', text);
       const { data, error } = await performAnalysis(text);
+      
       if (error) {
         setError(error);
         setAnalysisState('error');
@@ -37,18 +44,25 @@ export default function AnalysisSection() {
         });
       } else if (data) {
         setAnalysisResult(data);
-        setAnalysisState('success');
-        // Save result to sessionStorage to retrieve after login
-        sessionStorage.setItem('pendingAnalysisResult', JSON.stringify(data));
-        toast({
-          title: "Análisis Completado",
-          description: "Hemos analizado tu texto. Inicia sesión para ver los resultados.",
-        });
+        if (user) {
+          // If user is logged in, they can see the results directly
+          // For now, let's store it and redirect to dashboard to show it there
+          sessionStorage.setItem('pendingAnalysisResult', JSON.stringify(data));
+          router.push('/dashboard');
+        } else {
+          // If user is not logged in, show the blurred results and prompt to log in
+          setAnalysisState('success_public');
+          sessionStorage.setItem('pendingAnalysisResult', JSON.stringify(data));
+           toast({
+            title: "Análisis Completado",
+            description: "Inicia sesión o crea una cuenta para ver los resultados completos.",
+          });
+        }
       }
     });
   };
 
-  const renderResult = () => {
+  const renderPublicResult = () => {
     if (!analysisResult) return null;
     
     const { abuseAnalysis, summary } = analysisResult;
@@ -57,38 +71,43 @@ export default function AnalysisSection() {
       <Card className="relative overflow-hidden">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CheckCircle className="text-green-500" />
-            Análisis Completado
+            <Sparkles className="text-primary" />
+            Análisis Preliminar
           </CardTitle>
           <CardDescription>
-            Tu informe preliminar está listo. Inicia sesión para desbloquear el análisis completo y las recomendaciones.
+            Tu informe está listo. Inicia sesión para desbloquear el análisis completo y las recomendaciones.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
             <h3 className="font-semibold text-lg flex items-center gap-2">
-              <Sparkles className="text-primary w-5 h-5" />
               Resumen de la IA
             </h3>
-            <p className="text-gray-600 mt-1">{summary.summary}</p>
+            <p className="text-gray-600 mt-1">{summary.summary.substring(0, 70)}...</p>
           </div>
            <div>
             <h3 className="font-semibold text-lg flex items-center gap-2">
               <AlertCircle className={cn("w-5 h-5", abuseAnalysis.abuseDetected ? 'text-red-500' : 'text-green-500')} />
               Detección de Abuso
             </h3>
-            <p className="text-gray-600 mt-1">{abuseAnalysis.explanation}</p>
+            <p className="text-gray-600 mt-1">{abuseAnalysis.explanation.substring(0, 70)}...</p>
           </div>
         </CardContent>
          <div className="absolute inset-0 bg-white/80 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
             <Lock className="w-16 h-16 text-primary mb-4" />
             <h3 className="text-2xl font-bold mb-2">Resultados Bloqueados</h3>
             <p className="text-gray-600 mb-6 max-w-sm">
-                Tu análisis está listo. Inicia sesión para ver el informe completo, obtener recomendaciones y acceder a recursos de ayuda.
+                Tu análisis está listo. Inicia sesión para ver el informe completo, obtener recomendaciones y guardar tu historial de forma segura.
             </p>
             <Button size="lg" asChild>
                 <Link href="/login">Inicia Sesión Para Ver Resultados</Link>
             </Button>
+             <p className="text-sm text-muted-foreground mt-4">
+                ¿No tienes una cuenta?{" "}
+                <Link href="/signup" className="text-primary font-semibold hover:underline">
+                    Regístrate
+                </Link>
+            </p>
         </div>
       </Card>
     );
@@ -152,7 +171,7 @@ export default function AnalysisSection() {
           </CardFooter>
         </Card>
         
-        {analysisState === 'success' && <div className="mt-8">{renderResult()}</div>}
+        {analysisState === 'success_public' && <div className="mt-8">{renderPublicResult()}</div>}
       </div>
     </section>
   );

@@ -1,0 +1,65 @@
+{
+  "entities": {
+    "analysisRecord": {
+      "title": "Analysis Record",
+      "description": "Represents a single analysis performed by a user.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the analysis."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who performed the analysis."
+        },
+        "title": {
+          "type": "string",
+          "description": "A user-defined title for the analysis."
+        },
+        "originalText": {
+            "type": "string",
+            "description": "The original text that was analyzed."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the analysis was created."
+        },
+        "abuseAnalysis": {
+          "type": "object",
+          "properties": {
+            "abuseDetected": {
+              "type": "boolean"
+            },
+            "explanation": {
+              "type": "string"
+            }
+          },
+          "required": ["abuseDetected", "explanation"]
+        },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "summary": {
+              "type": "string"
+            }
+          },
+          "required": ["summary"]
+        }
+      },
+      "required": ["userId", "title", "createdAt", "abuseAnalysis", "summary", "originalText"]
+    }
+  },
+  "auth": {
+    "providers": ["google.com", "password"]
+  },
+  "firestore": {
+    "/users/{userId}/analyses/{analysisId}": {
+      "schema": {
+        "$ref": "#/entities/analysisRecord"
+      },
+      "description": "Stores the analysis records for a specific user."
+    }
+  }
+}
