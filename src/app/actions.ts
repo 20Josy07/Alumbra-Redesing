@@ -44,7 +44,7 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
         
         const { output } = await ai.generate({
           prompt,
-          model: 'gemini-2.5-flash',
+          model: googleAI('gemini-2.5-flash'),
           output: { schema: AbuseAnalysisSchema },
         });
         return output!;
@@ -62,7 +62,7 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
 
         const { output } = await ai.generate({
           prompt,
-          model: 'gemini-2.5-flash',
+          model: googleAI('gemini-2.5-flash'),
           output: { schema: SummarySchema },
         });
         return output!;
