@@ -16,7 +16,7 @@ import { collection, query, orderBy, Timestamp } from "firebase/firestore";
 import { useCollection, useMemoFirebase } from "@/firebase";
 
 interface DashboardPageProps {
-  pendingAnalysis?: AnalysisResult | null;
+  pendingAnalysis: AnalysisResult | null;
   setPendingAnalysis: (analysis: AnalysisResult | null) => void;
 }
 
