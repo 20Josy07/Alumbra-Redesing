@@ -1,9 +1,10 @@
 "use server";
 
-import { ai } from '@/ai/genkit';
+import { genkit } from 'genkit';
+import { googleAI } from '@genkit-ai/google-genai';
 import { z } from 'genkit';
+import { gemini25Flash } from '@/ai/genkit';
 
-// Environment variables are now loaded globally from `src/ai/dev.ts`
 
 // Define schemas and types directly in the action file
 const AbuseAnalysisSchema = z.object({
@@ -28,6 +29,11 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
   }
   
   try {
+    // Initialize Genkit on-demand within the server action
+    const ai = genkit({
+      plugins: [googleAI({ apiKey: process.env.GEMINI_API_KEY })],
+    });
+
     const abuseAnalysisFlow = ai.defineFlow(
       {
         name: 'abuseAnalysisFlow',
@@ -39,7 +45,7 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
         
         const { output } = await ai.generate({
           prompt,
-          model: 'googleai/gemini-2.5-flash',
+          model: gemini25Flash,
           output: { schema: AbuseAnalysisSchema },
         });
         return output!;
@@ -57,7 +63,7 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
 
         const { output } = await ai.generate({
           prompt,
-          model: 'googleai/gemini-2.5-flash',
+          model: gemini25Flash,
           output: { schema: SummarySchema },
         });
         return output!;
@@ -83,6 +89,9 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
   } catch (e: any) {
     console.error("Error during AI analysis:", e);
     const errorMessage = e.message || "Ocurrió un error inesperado durante el análisis. Por favor, inténtalo más tarde.";
+    if (e.message && e.message.includes('API key not valid')) {
+        return { data: null, error: "La clave de API para el servicio de IA no es válida. Por favor, verifica la configuración." };
+    }
     return { data: null, error: errorMessage };
   }
 }
