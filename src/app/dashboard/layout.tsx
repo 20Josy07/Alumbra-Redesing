@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useUser } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,7 +13,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSeparator,
+  SidebarSeparator,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
@@ -103,7 +103,7 @@ export default function DashboardLayout({
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-            <SidebarMenuSeparator />
+            <SidebarSeparator />
              <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <Link href="/resources">
