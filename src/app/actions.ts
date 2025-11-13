@@ -5,13 +5,13 @@ import { z } from 'genkit';
 
 // Define schemas and types directly in the action file
 const AbuseAnalysisSchema = z.object({
-  abuseDetected: z.boolean().describe('Whether or not psychological abuse is detected.'),
-  explanation: z.string().describe('Explanation of why abuse was or was not detected.'),
+  abuseDetected: z.boolean().describe('Indica si se detectó abuso psicológico.'),
+  explanation: z.string().describe('Una explicación de por qué se detectó o no el abuso.'),
 });
 export type AnalyzeTextInputForAbuseOutput = z.infer<typeof AbuseAnalysisSchema>;
 
 const SummarySchema = z.object({
-  summary: z.string().describe('A summarized list of the abuse indicators found in the text. If no indicators are found, it should state that no indicators were found.'),
+  summary: z.string().describe('Una lista resumida de los indicadores de abuso encontrados en el texto. Si no se encuentran indicadores, debe indicar que no se encontraron.'),
 });
 export type AnalyzeTextAndSummarizeAbuseIndicatorsOutput = z.infer<typeof SummarySchema>;
 
@@ -22,7 +22,7 @@ export interface AnalysisResult {
 
 export async function performAnalysis(text: string): Promise<{ data: AnalysisResult | null; error: string | null }> {
   if (!text || text.trim().length < 20) {
-    return { data: null, error: "Please enter a more detailed description (at least 20 characters)." };
+    return { data: null, error: "Por favor, introduce una descripción más detallada (al menos 20 caracteres)." };
   }
   
   try {
@@ -33,7 +33,7 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
         outputSchema: AbuseAnalysisSchema,
       },
       async (text) => {
-        const prompt = `You are an AI expert in detecting psychological abuse in text. Analyze the following text and determine if it contains indicators of psychological abuse. Return abuseDetected as true if psychological abuse is detected, otherwise return false. Provide a short explanation. Text: ${text}`;
+        const prompt = `Eres un experto en IA para detectar abuso psicológico en textos. Analiza el siguiente texto y determina si contiene indicadores de abuso psicológico. Responde con abuseDetected como true si se detecta abuso, de lo contrario, false. Proporciona una breve explicación en español. Texto: ${text}`;
         
         const { output } = await ai.generate({
           prompt,
@@ -51,7 +51,7 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
         outputSchema: SummarySchema,
       },
       async (text) => {
-         const prompt = `You are an AI expert in identifying psychological abuse tactics in text. Review the following text and provide a summarized list of the abuse indicators found. If no indicators are found, clearly state that. Text: ${text}`;
+         const prompt = `Eres un experto en IA para identificar tácticas de abuso psicológico en textos. Revisa el siguiente texto y proporciona una lista resumida en español de los indicadores de abuso encontrados. Si no se encuentran indicadores, indícalo claramente. Texto: ${text}`;
 
         const { output } = await ai.generate({
           prompt,
@@ -69,7 +69,7 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
     ]);
 
     if (!abuseResult || !summaryResult) {
-        throw new Error('One or more AI analysis flows failed to return a result.');
+        throw new Error('Uno o más flujos de análisis de IA no devolvieron un resultado.');
     }
 
     const result: AnalysisResult = {
@@ -80,7 +80,7 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
     return { data: result, error: null };
   } catch (e: any) {
     console.error("Error during AI analysis:", e);
-    const errorMessage = e.message || "An unexpected error occurred during analysis. Please try again later.";
+    const errorMessage = e.message || "Ocurrió un error inesperado durante el análisis. Por favor, inténtalo más tarde.";
     return { data: null, error: errorMessage };
   }
 }
