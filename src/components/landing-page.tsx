@@ -7,6 +7,7 @@ import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import Header from './header';
+import AnalysisSection from './analysis-section';
 
 export default function LandingPage() {
   const { ref: ref1, isIntersecting: isIntersecting1 } = useIntersectionObserver({ threshold: 0.1 });
@@ -41,6 +42,8 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        <AnalysisSection />
 
         <section ref={ref1} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700", isIntersecting1 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6">
