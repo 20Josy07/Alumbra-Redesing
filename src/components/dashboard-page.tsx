@@ -13,7 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { type AnalysisRecord } from "@/types";
 import { useMemo } from "react";
 import { collection, query, orderBy, Timestamp } from "firebase/firestore";
-import { useCollection } from "@/firebase";
+import { useCollection, useMemoFirebase } from "@/firebase";
 
 interface DashboardPageProps {
   pendingAnalysis?: AnalysisResult | null;
@@ -25,7 +25,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
     const firestore = useFirestore();
     const { toast } = useToast();
 
-    const analysesQuery = useMemo(() => {
+    const analysesQuery = useMemoFirebase(() => {
         if (!user || !firestore) return null;
         return query(collection(firestore, 'users', user.uid, 'analyses'), orderBy('createdAt', 'desc'));
     }, [user, firestore]);
@@ -57,14 +57,29 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
             });
         }
     };
+
+    const handleDiscardAnalysis = () => {
+        setPendingAnalysis(null);
+        sessionStorage.removeItem('lastAnalyzedText');
+        toast({
+            title: "Análisis descartado",
+            description: "El análisis no ha sido guardado.",
+        });
+    };
     
     const formatDate = (timestamp: Timestamp | Date | undefined | null) => {
         if (!timestamp) return 'Fecha desconocida';
+        // Firestore Timestamps can be either from the server (Timestamp) or locally created (Date)
         if (timestamp instanceof Timestamp) {
             return timestamp.toDate().toLocaleString();
         }
         if (timestamp instanceof Date) {
             return timestamp.toLocaleString();
+        }
+        // Handle cases where it might be a server-pending timestamp (null) or other types
+        const date = (timestamp as any).toDate?.();
+        if (date instanceof Date) {
+            return date.toLocaleString();
         }
         return 'Fecha inválida';
     };
@@ -83,7 +98,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
                     Resultados de tu Análisis Reciente
                   </CardTitle>
                   <CardDescription>
-                    Aquí está el análisis completo del texto que proporcionaste antes de iniciar sesión.
+                    Aquí está el análisis completo del texto que proporcionaste. Puedes guardarlo en tu historial o descartarlo.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -112,7 +127,10 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
                   </div>
                 </CardContent>
                 <CardContent>
-                    <Button onClick={handleSaveAnalysis}>Guardar Análisis en el Historial</Button>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                        <Button onClick={handleSaveAnalysis} className="flex-1">Guardar Análisis en el Historial</Button>
+                        <Button onClick={handleDiscardAnalysis} variant="outline" className="flex-1">Descartar Análisis</Button>
+                    </div>
                 </CardContent>
             </Card>
         );
