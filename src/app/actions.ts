@@ -5,6 +5,9 @@ import { genkit } from 'genkit';
 import { googleAI } from '@genkit-ai/google-genai';
 import { z } from 'genkit';
 
+// Define el modelo a utilizar
+const geminiPro = googleAI('gemini-pro');
+
 // Define schemas and types directly in the action file
 const AbuseAnalysisSchema = z.object({
   abuseDetected: z.boolean().describe('Indica si se detectó abuso psicológico.'),
@@ -44,7 +47,7 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
         
         const { output } = await ai.generate({
           prompt,
-          model: googleAI('gemini-2.5-flash'),
+          model: geminiPro,
           output: { schema: AbuseAnalysisSchema },
         });
         return output!;
@@ -62,7 +65,7 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
 
         const { output } = await ai.generate({
           prompt,
-          model: googleAI('gemini-2.5-flash'),
+          model: geminiPro,
           output: { schema: SummarySchema },
         });
         return output!;
