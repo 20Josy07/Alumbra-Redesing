@@ -6,6 +6,7 @@ import { Mail, Phone, MapPin, Send, Instagram, Linkedin, Facebook } from "lucide
 import Header from "@/components/header";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export default function ContactPage() {
     return (
@@ -87,6 +88,48 @@ export default function ContactPage() {
                                     </a>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </section>
+                
+                {/* FAQ Section */}
+                <section className="py-20 md:py-24 bg-gray-50">
+                    <div className="container mx-auto px-6">
+                        <div className="text-center max-w-3xl mx-auto">
+                            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
+                                Preguntas Frecuentes
+                            </h2>
+                            <p className="mt-4 text-lg text-gray-600">
+                                Resolvemos tus dudas más importantes sobre Alumbra. Tu tranquilidad es nuestra prioridad.
+                            </p>
+                        </div>
+                        <div className="max-w-3xl mx-auto mt-12">
+                            <Accordion type="single" collapsible className="w-full">
+                                <AccordionItem value="item-1">
+                                    <AccordionTrigger className="text-lg font-semibold">¿Mi información es privada y segura?</AccordionTrigger>
+                                    <AccordionContent className="text-base text-gray-600">
+                                        Absolutamente. Tu privacidad es nuestra máxima prioridad. Todas las conversaciones se analizan de forma anónima y se eliminan de nuestros sistemas inmediatamente después del análisis. No almacenamos tus datos personales ni el contenido de tus chats.
+                                    </AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-2">
+                                    <AccordionTrigger className="text-lg font-semibold">¿Qué tipo de abuso puede detectar la IA?</AccordionTrigger>
+                                    <AccordionContent className="text-base text-gray-600">
+                                        Nuestra IA está entrenada para identificar una amplia gama de tácticas de abuso psicológico y emocional, incluyendo (pero no limitado a) gaslighting, manipulación, control coercitivo, aislamiento, intimidación, amenazas veladas y descalificaciones constantes.
+                                    </AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-3">
+                                    <AccordionTrigger className="text-lg font-semibold">¿Alumbra reemplaza la terapia o el consejo profesional?</AccordionTrigger>
+                                    <AccordionContent className="text-base text.gray-600">
+                                        No. Alumbra es una herramienta de detección y concienciación. Ofrece una primera evaluación para darte claridad, pero no reemplaza el diagnóstico ni el consejo de un profesional de la salud mental o legal. Te animamos a usar nuestro informe como un punto de partida para buscar ayuda calificada si es necesario.
+                                    </AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-4">
+                                    <AccordionTrigger className="text-lg font-semibold">¿El servicio es realmente gratuito?</AccordionTrigger>
+                                    <AccordionContent className="text-base text-gray-600">
+                                        Sí, el análisis básico de conversaciones es y siempre será gratuito. Creemos que todo el mundo merece tener acceso a herramientas que protejan su bienestar. En el futuro, podríamos ofrecer funciones avanzadas opcionales con un costo, pero el núcleo de Alumbra permanecerá accesible para todos.
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
                         </div>
                     </div>
                 </section>
