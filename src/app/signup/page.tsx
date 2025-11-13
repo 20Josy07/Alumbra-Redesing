@@ -58,6 +58,28 @@ export default function SignupPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordError, setPasswordError] = useState<string | null>(null);
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+        if (confirmPassword && newPassword !== confirmPassword) {
+            setPasswordError('Las contraseñas no coinciden');
+        } else {
+            setPasswordError(null);
+        }
+    };
+
+    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newConfirmPassword = e.target.value;
+        setConfirmPassword(newConfirmPassword);
+        if (password !== newConfirmPassword) {
+            setPasswordError('Las contraseñas no coinciden');
+        } else {
+            setPasswordError(null);
+        }
+    };
     
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
@@ -85,7 +107,7 @@ export default function SignupPage() {
                                   type={showPassword ? "text" : "password"} 
                                   required 
                                   value={password}
-                                  onChange={(e) => setPassword(e.target.value)}
+                                  onChange={handlePasswordChange}
                                 />
                                 <Button 
                                   type="button" 
@@ -106,6 +128,8 @@ export default function SignupPage() {
                                   id="confirm-password" 
                                   type={showConfirmPassword ? "text" : "password"} 
                                   required 
+                                  value={confirmPassword}
+                                  onChange={handleConfirmPasswordChange}
                                 />
                                 <Button 
                                   type="button" 
@@ -117,8 +141,9 @@ export default function SignupPage() {
                                     {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                                 </Button>
                             </div>
+                            {passwordError && <p className="text-sm font-medium text-destructive">{passwordError}</p>}
                         </div>
-                        <Button type="submit" className="w-full" size="lg">
+                        <Button type="submit" className="w-full" size="lg" disabled={!!passwordError}>
                             Crear Cuenta
                         </Button>
                         <div className="relative">
