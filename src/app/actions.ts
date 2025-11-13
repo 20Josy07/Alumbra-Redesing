@@ -2,9 +2,8 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
-import { config } from 'dotenv';
 
-config({ path: '.env' });
+// Environment variables are now loaded globally from `src/ai/dev.ts`
 
 // Define schemas and types directly in the action file
 const AbuseAnalysisSchema = z.object({

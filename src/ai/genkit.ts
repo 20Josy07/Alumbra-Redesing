@@ -1,8 +1,7 @@
 import {genkit} from 'genkit';
 import {googleAI} from '@genkit-ai/google-genai';
-import {config} from 'dotenv';
 
-config({ path: '.env' }); // Load environment variables from .env file
+// Environment variables are now loaded globally from `src/ai/dev.ts`
 
 export const ai = genkit({
   plugins: [googleAI({apiKey: process.env.GEMINI_API_KEY})],
