@@ -44,7 +44,7 @@ const analyzeTextInputForAbusePrompt = ai.definePrompt({
   Text: {{{text}}}`,
 });
 
-const analyzeTextInputForAbuseFlow = ai.defineFlow(
+export const analyzeTextInputForAbuseFlow = ai.defineFlow(
   {
     name: 'analyzeTextInputForAbuseFlow',
     inputSchema: AnalyzeTextInputForAbuseInputSchema,
