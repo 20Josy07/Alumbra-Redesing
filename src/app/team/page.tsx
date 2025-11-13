@@ -10,7 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 const teamMembers = [
     {
         id: "team-elena",
-        name: "Maria Gabriela De Los Rios Camacho",
+        name: "María De Los Ríos",
         role: "Co-Fundadora",
         bio: "Impulsada por una profunda pasión por la justicia social y la tecnología, Elena lidera la visión de Alumbra. Con experiencia en desarrollo de productos y una empatía inquebrantable, su misión es crear herramientas que empoderen y protejan a las personas.",
         socials: {
