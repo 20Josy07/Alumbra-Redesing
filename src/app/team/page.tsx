@@ -55,7 +55,7 @@ export default function TeamPage() {
                 {/* Team Members Section */}
                 <section className="py-20 md:py-24">
                     <div className="container mx-auto px-6">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-center max-w-6xl mx-auto">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-center max-w-4xl mx-auto">
                             {teamMembers.map((member) => {
                                 const image = getImage(member.id);
                                 return (
