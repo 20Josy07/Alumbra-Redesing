@@ -1,10 +1,14 @@
+'use client';
 
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import Header from "@/components/header";
+import { Eye, EyeOff } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const GoogleIcon = () => (
     <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
@@ -12,8 +16,49 @@ const GoogleIcon = () => (
     </svg>
 );
 
+const PasswordStrengthIndicator = ({ password }: { password?: string }) => {
+    const getStrength = () => {
+        if (!password) return { level: 'none', text: '' };
+        const hasNumber = /\d/.test(password);
+        const hasUpper = /[A-Z]/.test(password);
+        const hasLower = /[a-z]/.test(password);
+        const hasSpecial = /[!@#$%^&*]/.test(password);
+        const hasLength = password.length >= 8;
+
+        const score = [hasNumber, hasUpper, hasLower, hasSpecial, hasLength].filter(Boolean).length;
+
+        if (score <= 2) return { level: 'low', text: 'Baja' };
+        if (score <= 4) return { level: 'medium', text: 'Media' };
+        return { level: 'strong', text: 'Fuerte' };
+    };
+
+    const { level, text } = getStrength();
+
+    if (level === 'none') return null;
+
+    return (
+        <div className="flex items-center gap-2 mt-2">
+            <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div className={cn('h-full transition-all duration-300 rounded-full', {
+                    'w-1/3 bg-red-500': level === 'low',
+                    'w-2/3 bg-yellow-500': level === 'medium',
+                    'w-full bg-green-500': level === 'strong',
+                })} />
+            </div>
+            <span className={cn('text-xs font-medium', {
+                'text-red-500': level === 'low',
+                'text-yellow-500': level === 'medium',
+                'text-green-500': level === 'strong',
+            })}>{text}</span>
+        </div>
+    );
+};
 
 export default function SignupPage() {
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [password, setPassword] = useState('');
+    
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
             <Header />
@@ -34,11 +79,44 @@ export default function SignupPage() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="password">Contraseña</Label>
-                            <Input id="password" type="password" required />
+                            <div className="relative">
+                                <Input 
+                                  id="password" 
+                                  type={showPassword ? "text" : "password"} 
+                                  required 
+                                  value={password}
+                                  onChange={(e) => setPassword(e.target.value)}
+                                />
+                                <Button 
+                                  type="button" 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="absolute top-1/2 right-2 -translate-y-1/2 h-7 w-7 text-gray-500 hover:bg-transparent"
+                                  onClick={() => setShowPassword(prev => !prev)}
+                                >
+                                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </Button>
+                            </div>
+                            <PasswordStrengthIndicator password={password} />
                         </div>
                          <div className="space-y-2">
                             <Label htmlFor="confirm-password">Confirmar Contraseña</Label>
-                            <Input id="confirm-password" type="password" required />
+                             <div className="relative">
+                                <Input 
+                                  id="confirm-password" 
+                                  type={showConfirmPassword ? "text" : "password"} 
+                                  required 
+                                />
+                                <Button 
+                                  type="button" 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="absolute top-1/2 right-2 -translate-y-1/2 h-7 w-7 text-gray-500 hover:bg-transparent"
+                                  onClick={() => setShowConfirmPassword(prev => !prev)}
+                                >
+                                    {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </Button>
+                            </div>
                         </div>
                         <Button type="submit" className="w-full" size="lg">
                             Crear Cuenta
