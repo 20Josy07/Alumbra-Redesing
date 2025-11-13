@@ -20,7 +20,7 @@ const teamMembers = [
     },
     {
         id: "team-marco",
-        name: "Josimar Acosta Martínez",
+        name: "Josimar Acosta",
         role: "Co-Fundador",
         bio: "Marco es el arquitecto detrás de la inteligencia artificial de Alumbra. Como experto en IA y procesamiento de lenguaje natural, se dedica a construir una tecnología robusta, segura y precisa que pueda marcar una diferencia real en la vida de los usuarios.",
         socials: {
@@ -63,12 +63,12 @@ export default function TeamPage() {
                                         <Card className="rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
                                             <CardContent className="p-0">
                                                 {image && (
-                                                    <div className="relative h-80 w-full">
+                                                    <div className="relative w-full aspect-[4/5]">
                                                         <Image
                                                             src={image.imageUrl}
                                                             alt={`Foto de ${member.name}`}
-                                                            layout="fill"
-                                                            objectFit="cover"
+                                                            fill
+                                                            style={{ objectFit: 'cover' }}
                                                             data-ai-hint={image.imageHint}
                                                         />
                                                     </div>
