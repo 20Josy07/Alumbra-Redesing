@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Header from "@/components/header";
-import PanicButton from "@/components/panic-button";
 import { ArrowLeft } from "lucide-react";
 
 export default function NotFound() {
@@ -26,7 +25,6 @@ export default function NotFound() {
           </Button>
         </div>
       </main>
-      <PanicButton />
     </div>
   );
 }

@@ -7,7 +7,6 @@ import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import Header from './header';
-import PanicButton from './panic-button';
 
 export default function LandingPage() {
   const { ref: ref1, isIntersecting: isIntersecting1 } = useIntersectionObserver({ threshold: 0.1 });
@@ -160,7 +159,6 @@ export default function LandingPage() {
 
       </main>
       
-      <PanicButton />
 
       <footer ref={ref5} className={cn("bg-gray-900 text-gray-400 py-20 transition-opacity duration-700", isIntersecting5 ? "opacity-100" : "opacity-0")}>
         <div className="container mx-auto px-6 grid md:grid-cols-3 gap-12">
