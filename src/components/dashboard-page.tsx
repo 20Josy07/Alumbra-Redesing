@@ -4,8 +4,11 @@
 import { useUser } from "@/firebase";
 import AnalysisSection from "./analysis-section";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { FileText, Clock } from "lucide-react";
+import { FileText, Clock, Sparkles, AlertCircle, CheckCircle, BrainCircuit } from "lucide-react";
 import Resources from "./resources";
+import { type AnalysisResult } from "@/app/actions";
+import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
 
 const recentAnalyses = [
     {
@@ -28,8 +31,60 @@ const recentAnalyses = [
     }
 ];
 
-export default function DashboardPage() {
+interface DashboardPageProps {
+  pendingAnalysis?: AnalysisResult | null;
+}
+
+export default function DashboardPage({ pendingAnalysis }: DashboardPageProps) {
     const { user } = useUser();
+
+    const renderPendingAnalysis = () => {
+        if (!pendingAnalysis) return null;
+        
+        const { abuseAnalysis, summary } = pendingAnalysis;
+
+        return (
+             <Card className="border-primary border-2 animate-in fade-in-0 duration-500">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-2xl">
+                    <BrainCircuit className="text-primary" />
+                    Resultados de tu Análisis Reciente
+                  </CardTitle>
+                  <CardDescription>
+                    Aquí está el análisis completo del texto que proporcionaste antes de iniciar sesión.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <h3 className="font-bold text-lg flex items-center gap-2">
+                      <Sparkles className="text-primary w-5 h-5" />
+                      Resumen Detallado de la IA
+                    </h3>
+                    <p className="text-muted-foreground mt-1 text-base">{summary.summary}</p>
+                  </div>
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <h3 className="font-bold text-lg flex items-center gap-2">
+                      <AlertCircle className={cn("w-5 h-5", abuseAnalysis.abuseDetected ? 'text-destructive' : 'text-green-600')} />
+                      Detección y Explicación de Abuso
+                    </h3>
+                    <p className={cn("mt-1 text-base", abuseAnalysis.abuseDetected ? 'text-destructive' : 'text-green-700')}>{abuseAnalysis.explanation}</p>
+                  </div>
+                   <div className="p-4 border-l-4 border-yellow-500 bg-yellow-500/10">
+                     <h3 className="font-bold text-yellow-800">Próximos Pasos y Recomendaciones</h3>
+                     <p className="text-yellow-700 mt-1">
+                         {abuseAnalysis.abuseDetected 
+                            ? "Hemos detectado indicadores preocupantes. Es importante que busques apoyo. Consulta nuestros recursos de ayuda para obtener orientación profesional. Guarda este análisis en tu historial para futuras referencias."
+                            : "No hemos detectado indicadores claros de abuso en este texto, pero tu intuición es importante. Si sigues sintiendo que algo no está bien, considera hablar con un profesional. Revisa nuestros recursos para más información."
+                         }
+                     </p>
+                  </div>
+                </CardContent>
+                <CardContent>
+                    <Button>Guardar Análisis en el Historial</Button>
+                </CardContent>
+            </Card>
+        );
+    }
 
     return (
         <div className="space-y-8">
@@ -40,7 +95,7 @@ export default function DashboardPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
-                    <AnalysisSection />
+                    {pendingAnalysis ? renderPendingAnalysis() : <AnalysisSection />}
                 </div>
                 <div className="lg:col-span-1">
                     <Card>

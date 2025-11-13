@@ -3,7 +3,7 @@
 
 import { useUser } from "@/firebase";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +22,7 @@ import { Home, History, User, Settings, LifeBuoy, LogOut } from "lucide-react";
 import Link from "next/link";
 import PanicButton from "@/components/panic-button";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { AnalysisResult } from "@/app/actions";
 
 export default function DashboardLayout({
   children,
@@ -30,12 +31,30 @@ export default function DashboardLayout({
 }) {
   const { user, loading, auth } = useUser();
   const router = useRouter();
+  const [pendingAnalysis, setPendingAnalysis] = useState<AnalysisResult | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
     }
   }, [user, loading, router]);
+
+  useEffect(() => {
+    // Check for pending analysis result in sessionStorage after login
+    if (user && !loading) {
+      const pendingResult = sessionStorage.getItem('pendingAnalysisResult');
+      if (pendingResult) {
+        try {
+          setPendingAnalysis(JSON.parse(pendingResult));
+          // Clear the result from storage so it's not shown again
+          sessionStorage.removeItem('pendingAnalysisResult');
+        } catch (e) {
+          console.error("Failed to parse pending analysis result:", e);
+          sessionStorage.removeItem('pendingAnalysisResult');
+        }
+      }
+    }
+  }, [user, loading]);
 
   const handleSignOut = () => {
     if (auth) {
@@ -58,6 +77,16 @@ export default function DashboardLayout({
         </div>
     );
   }
+  
+  // Pass the pending analysis to the children, if any
+  const childrenWithProps = React.Children.map(children, child => {
+    if (React.isValidElement(child)) {
+      // @ts-ignore
+      return React.cloneElement(child, { pendingAnalysis });
+    }
+    return child;
+  });
+
 
   return (
     <SidebarProvider>
@@ -138,7 +167,7 @@ export default function DashboardLayout({
       </Sidebar>
       <SidebarInset>
         <main className="flex-1 p-4 sm:p-6 lg:p-8">
-            {children}
+            {childrenWithProps}
             <PanicButton />
         </main>
       </SidebarInset>

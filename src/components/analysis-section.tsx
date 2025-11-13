@@ -38,6 +38,8 @@ export default function AnalysisSection() {
       } else if (data) {
         setAnalysisResult(data);
         setAnalysisState('success');
+        // Save result to sessionStorage to retrieve after login
+        sessionStorage.setItem('pendingAnalysisResult', JSON.stringify(data));
         toast({
           title: "Análisis Completado",
           description: "Hemos analizado tu texto. Inicia sesión para ver los resultados.",

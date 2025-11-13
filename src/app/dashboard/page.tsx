@@ -1,6 +1,11 @@
 
 import DashboardPage from "@/components/dashboard-page";
+import type { AnalysisResult } from "@/app/actions";
 
-export default function Dashboard() {
-    return <DashboardPage />;
+interface DashboardProps {
+  pendingAnalysis?: AnalysisResult | null;
+}
+
+export default function Dashboard({ pendingAnalysis }: DashboardProps) {
+    return <DashboardPage pendingAnalysis={pendingAnalysis} />;
 }
