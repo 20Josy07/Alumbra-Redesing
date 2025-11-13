@@ -40,6 +40,45 @@ export default function TeamPage() {
             <Header activeLink="team" />
 
             <main>
+                {/* Mission Hero Section */}
+                <section className="py-20 md:py-28 bg-white">
+                    <div className="container mx-auto px-6 text-center">
+                         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
+                            Nuestra misión es más que <br /> tecnología, es empatía.
+                        </h1>
+                        <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
+                           En Alumbra, estamos construyendo la nueva generación de herramientas de bienestar emocional: simples, seguras y ultrarrápidas. Nuestra misión es empoderar a las personas para que pasen de la incertidumbre a la claridad sin fricciones.
+                        </p>
+                        <div className="relative h-96 md:h-[600px] w-full max-w-6xl mx-auto bg-gray-100 rounded-3xl shadow-2xl overflow-hidden">
+                           {getImage('team-group') && <Image 
+                                src={getImage('team-group')?.imageUrl as string}
+                                alt="Equipo de Alumbra"
+                                layout="fill"
+                                objectFit="cover"
+                                className="rounded-3xl"
+                                data-ai-hint={getImage('team-group')?.imageHint}
+                            />}
+                        </div>
+                    </div>
+                </section>
+                
+                {/* From Idea to Impact Section */}
+                <section className="py-20 md:py-24">
+                    <div className="container mx-auto px-6 text-center max-w-3xl">
+                         <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
+                            De la idea al impacto
+                        </h2>
+                        <div className="mt-6 text-lg text-gray-600 space-y-6 text-left">
+                            <p>
+                                El bienestar emocional ya no es solo para terapia, se trata de claridad, rapidez y acción. En Alumbra, estamos redefiniendo cómo se obtiene apoyo en la era digital. Creemos que cualquier persona con una duda o una preocupación merece una respuesta clara que le permita actuar.
+                            </p>
+                            <p>
+                                Nacimos de la frustración con la falta de herramientas accesibles y discretas. Alumbra fue creada para dar a las personas una forma más inteligente y simple de evaluar su situación. Ya sea que estés analizando una conversación, buscando entender una dinámica o simplemente necesites una segunda opinión, Alumbra es el espacio donde la claridad se encuentra con la acción.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
                 {/* Hero Section */}
                 <section className="py-20 md:py-28 text-center bg-gray-50">
                     <div className="container mx-auto px-6">
