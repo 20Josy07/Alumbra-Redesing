@@ -1,7 +1,6 @@
+
 import { config } from 'dotenv';
-config();
+config({ path: '.env' });
 
 // We import flows here to register them with Genkit's dev UI
-
-// The analysis flows are now defined directly in `src/app/actions.ts`
-// and don't need to be registered here for development.
+import './analysis-flow';

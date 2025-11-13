@@ -1,29 +1,10 @@
 
 "use server";
 
-import { genkit } from 'genkit';
-import { googleAI } from '@genkit-ai/google-genai';
-import { z } from 'genkit';
+import { analyzeText, type AnalysisResult } from "@/ai/analysis-flow";
 
-// Define el modelo a utilizar
-const geminiPro = googleAI('gemini-pro');
-
-// Define schemas and types directly in the action file
-const AbuseAnalysisSchema = z.object({
-  abuseDetected: z.boolean().describe('Indica si se detectó abuso psicológico.'),
-  explanation: z.string().describe('Una explicación de por qué se detectó o no el abuso.'),
-});
-export type AnalyzeTextInputForAbuseOutput = z.infer<typeof AbuseAnalysisSchema>;
-
-const SummarySchema = z.object({
-  summary: z.string().describe('Una lista resumida de los indicadores de abuso encontrados en el texto. Si no se encuentran indicadores, debe indicar que no se encontraron.'),
-});
-export type AnalyzeTextAndSummarizeAbuseIndicatorsOutput = z.infer<typeof SummarySchema>;
-
-export interface AnalysisResult {
-  abuseAnalysis: AnalyzeTextInputForAbuseOutput;
-  summary: AnalyzeTextAndSummarizeAbuseIndicatorsOutput;
-}
+// This interface is now imported from analysis-flow.ts, but we keep it here for any potential external use.
+export type { AnalysisResult } from "@/ai/analysis-flow";
 
 export async function performAnalysis(text: string): Promise<{ data: AnalysisResult | null; error: string | null }> {
   if (!text || text.trim().length < 20) {
@@ -31,69 +12,28 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
   }
   
   try {
-    // Initialize Genkit on-demand within the server action
-    const ai = genkit({
-      plugins: [googleAI({ apiKey: process.env.GEMINI_API_KEY })],
-    });
-
-    const abuseAnalysisFlow = ai.defineFlow(
-      {
-        name: 'abuseAnalysisFlow',
-        inputSchema: z.string(),
-        outputSchema: AbuseAnalysisSchema,
-      },
-      async (text) => {
-        const prompt = `Eres un experto en IA para detectar abuso psicológico en textos. Analiza el siguiente texto y determina si contiene indicadores de abuso psicológico. Responde con abuseDetected como true si se detecta abuso, de lo contrario, false. Proporciona una breve explicación en español. Texto: ${text}`;
-        
-        const { output } = await ai.generate({
-          prompt,
-          model: geminiPro,
-          output: { schema: AbuseAnalysisSchema },
-        });
-        return output!;
-      }
-    );
-
-    const summaryFlow = ai.defineFlow(
-      {
-        name: 'summaryFlow',
-        inputSchema: z.string(),
-        outputSchema: SummarySchema,
-      },
-      async (text) => {
-         const prompt = `Eres un experto en IA para identificar tácticas de abuso psicológico en textos. Revisa el siguiente texto y proporciona una lista resumida en español de los indicadores de abuso encontrados. Si no se encuentran indicadores, indícalo claramente. Texto: ${text}`;
-
-        const { output } = await ai.generate({
-          prompt,
-          model: geminiPro,
-          output: { schema: SummarySchema },
-        });
-        return output!;
-      }
-    );
-
-    // Run analyses in parallel
-    const [abuseResult, summaryResult] = await Promise.all([
-      abuseAnalysisFlow(text),
-      summaryFlow(text),
-    ]);
-
-    if (!abuseResult || !summaryResult) {
-        throw new Error('Uno o más flujos de análisis de IA no devolvieron un resultado.');
+    const result = await analyzeText(text);
+    
+    if (!result) {
+        throw new Error('El análisis de IA no devolvió un resultado.');
     }
-
-    const result: AnalysisResult = {
-      abuseAnalysis: abuseResult,
-      summary: summaryResult,
-    };
     
     return { data: result, error: null };
+
   } catch (e: any) {
     console.error("Error during AI analysis:", e);
-    const errorMessage = e.message || "Ocurrió un error inesperado durante el análisis. Por favor, inténtalo más tarde.";
-    if (e.message && e.message.includes('API key not valid')) {
-        return { data: null, error: "La clave de API para el servicio de IA no es válida. Por favor, verifica la configuración." };
+    
+    let errorMessage = "Ocurrió un error inesperado durante el análisis. Por favor, inténtalo más tarde.";
+    if (e.message) {
+        if (e.message.includes('API key not valid')) {
+            errorMessage = "La clave de API para el servicio de IA no es válida. Por favor, verifica la configuración.";
+        } else if (e.message.includes('model not found')) {
+            errorMessage = "El modelo de IA especificado no se pudo encontrar. Por favor, contacta a soporte.";
+        } else {
+            errorMessage = e.message;
+        }
     }
+    
     return { data: null, error: errorMessage };
   }
 }
