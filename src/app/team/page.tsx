@@ -20,11 +20,11 @@ const teamMembers = [
     },
     {
         id: "team-marco",
-        name: "Marco Vega",
-        role: "Co-Fundador & CTO",
+        name: "Josimar Acosta Martínez",
+        role: "Co-Fundador",
         bio: "Marco es el arquitecto detrás de la inteligencia artificial de Alumbra. Como experto en IA y procesamiento de lenguaje natural, se dedica a construir una tecnología robusta, segura y precisa que pueda marcar una diferencia real en la vida de los usuarios.",
         socials: {
-            instagram: "#",
+            instagram: "https://www.instagram.com/not.josimar/",
             linkedin: "#",
         }
     }
