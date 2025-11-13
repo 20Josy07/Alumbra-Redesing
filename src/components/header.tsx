@@ -44,7 +44,9 @@ export default function Header({ activeLink }: HeaderProps) {
             </li>
           </ul>
         </nav>
-        <Button>Inicia sesión ahora</Button>
+        <Button asChild>
+          <Link href="/login">Inicia sesión ahora</Link>
+        </Button>
       </div>
     </header>
   );
