@@ -76,7 +76,7 @@ export default function ContactPage() {
                             <div className="mt-8">
                                 <h3 className="text-lg font-semibold mb-4">Síguenos</h3>
                                 <div className="flex gap-6">
-                                    <a href="#" aria-label="Instagram" className="text-gray-500 hover:text-primary transition-colors">
+                                    <a href="https://www.instagram.com/alumbra.ia/" aria-label="Instagram" className="text-gray-500 hover:text-primary transition-colors">
                                         <Instagram className="h-6 w-6" />
                                     </a>
                                      <a href="#" aria-label="LinkedIn" className="text-gray-500 hover:text-primary transition-colors">
