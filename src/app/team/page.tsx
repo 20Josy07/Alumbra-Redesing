@@ -78,16 +78,20 @@ export default function TeamPage() {
                                             <p className="text-primary font-semibold mt-1 mb-3">{member.role}</p>
                                             <p className="text-gray-600 max-w-sm mx-auto">{member.bio}</p>
                                             <div className="flex justify-center gap-4 mt-6">
-                                                <Button variant="outline" size="icon" asChild>
-                                                    <a href={member.socials.instagram} aria-label={`${member.name} on Instagram`}>
-                                                        <Instagram className="h-5 w-5" />
-                                                    </a>
-                                                </Button>
-                                                <Button variant="outline" size="icon" asChild>
-                                                    <a href={member.socials.linkedin} aria-label={`${member.name} on LinkedIn`}>
-                                                        <Linkedin className="h-5 w-5" />
-                                                    </a>
-                                                </Button>
+                                                {member.socials.instagram && member.socials.instagram !== '#' && (
+                                                    <Button variant="outline" size="icon" asChild>
+                                                        <a href={member.socials.instagram} aria-label={`${member.name} on Instagram`}>
+                                                            <Instagram className="h-5 w-5" />
+                                                        </a>
+                                                    </Button>
+                                                )}
+                                                {member.socials.linkedin && member.socials.linkedin !== '#' && (
+                                                    <Button variant="outline" size="icon" asChild>
+                                                        <a href={member.socials.linkedin} aria-label={`${member.name} on LinkedIn`}>
+                                                            <Linkedin className="h-5 w-5" />
+                                                        </a>
+                                                    </Button>
+                                                )}
                                             </div>
                                         </CardContent>
                                     </Card>
