@@ -3,7 +3,7 @@
 
 import Resources from "@/components/resources";
 import Header from "@/components/header";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Globe, Phone, MessageCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
