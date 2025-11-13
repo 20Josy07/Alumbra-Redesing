@@ -30,6 +30,15 @@ const teamMembers = [
     }
 ];
 
+const whyWeExistPoints = [
+    "El bienestar emocional es muy complicado. Eliminamos la complejidad innecesaria.",
+    "El flujo de trabajo para obtener ayuda está fragmentado. Unimos herramientas esenciales en una sola experiencia.",
+    "La velocidad para actuar importa. Optimizamos para una ejecución rápida sin comprometer la calidad del análisis.",
+    "La privacidad no es negociable. La convertimos en un pilar de nuestro diseño.",
+    "La claridad prospera con estructura. Proporcionamos un camino claro sin sofocar la autonomía del usuario.",
+    "Las herramientas deben funcionar para las personas, no al revés. Diseñamos con empatía y claridad."
+];
+
 export default function TeamPage() {
     const getImage = (id: string) => {
         return PlaceHolderImages.find(img => img.id === id);
@@ -79,8 +88,37 @@ export default function TeamPage() {
                     </div>
                 </section>
 
+                {/* Why We Exist Section */}
+                <section className="py-20 md:py-24 bg-gray-50">
+                    <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+                        <div className="relative h-96 md:h-[600px] w-full bg-gray-200 rounded-3xl shadow-lg">
+                           {getImage('mockup-2') && <Image 
+                               src={getImage('mockup-2')?.imageUrl as string}
+                               alt="Maqueta de la aplicación Alumbra"
+                               layout="fill"
+                               objectFit="cover"
+                               className="rounded-3xl"
+                               data-ai-hint={getImage('mockup-2')?.imageHint}
+                           />}
+                        </div>
+                        <div>
+                            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">
+                                Por qué existimos
+                            </h2>
+                            <ul className="space-y-6">
+                                {whyWeExistPoints.map((point, index) => (
+                                    <li key={index} className="flex items-start gap-4">
+                                        <ArrowRight className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+                                        <span className="text-lg text-gray-700">{point}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                
                 {/* Hero Section */}
-                <section className="py-20 md:py-28 text-center bg-gray-50">
+                <section className="py-20 md:py-28 text-center bg-white">
                     <div className="container mx-auto px-6">
                         <h1 className="text-4xl md:text-5xl font-extrabold mt-2 mb-4 tracking-tight">
                            Conoce a nuestro equipo
@@ -92,7 +130,7 @@ export default function TeamPage() {
                 </section>
 
                 {/* Team Members Section */}
-                <section className="py-20 md:py-24">
+                <section className="py-20 md:py-24 bg-gray-50">
                     <div className="container mx-auto px-6">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-center max-w-4xl mx-auto">
                             {teamMembers.map((member) => {
@@ -138,7 +176,7 @@ export default function TeamPage() {
                 </section>
 
                 {/* CTA Section */}
-                <section className="py-20 md:py-28 text-center bg-gray-50">
+                <section className="py-20 md:py-28 text-center bg-white">
                     <div className="container mx-auto px-6">
                         <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
                             Únete a nuestra misión
