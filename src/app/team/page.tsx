@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/header";
-import { ArrowRight, Linkedin, Instagram } from "lucide-react";
+import { ArrowRight, Linkedin, Instagram, Facebook } from "lucide-react";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -43,9 +43,8 @@ export default function TeamPage() {
                 {/* Hero Section */}
                 <section className="py-20 md:py-28 text-center bg-gray-50">
                     <div className="container mx-auto px-6">
-                        <p className="font-semibold text-primary">NUESTRO EQUIPO</p>
-                        <h1 className="text-4xl md:text-6xl font-extrabold mt-2 mb-6 tracking-tight">
-                            Las mentes y corazones detrás de Alumbra
+                        <h1 className="text-4xl md:text-5xl font-extrabold mt-2 mb-4 tracking-tight">
+                           Conoce a nuestro equipo
                         </h1>
                         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                             Somos un equipo pequeño pero apasionado, comprometido con el uso de la tecnología para crear un impacto social positivo y duradero.
@@ -56,45 +55,43 @@ export default function TeamPage() {
                 {/* Team Members Section */}
                 <section className="py-20 md:py-24">
                     <div className="container mx-auto px-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 max-w-5xl mx-auto">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-center max-w-6xl mx-auto">
                             {teamMembers.map((member) => {
                                 const image = getImage(member.id);
                                 return (
-                                    <Card key={member.id} className="text-center border-none shadow-none">
-                                        <CardContent className="p-0">
-                                            {image && (
-                                                <div className="relative h-64 w-64 mx-auto mb-6">
-                                                    <Image
-                                                        src={image.imageUrl}
-                                                        alt={`Foto de ${member.name}`}
-                                                        width={256}
-                                                        height={256}
-                                                        className="rounded-full object-cover shadow-lg"
-                                                        data-ai-hint={image.imageHint}
-                                                    />
+                                    <div key={member.id} className="text-left">
+                                        <Card className="rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+                                            <CardContent className="p-0">
+                                                {image && (
+                                                    <div className="relative h-80 w-full">
+                                                        <Image
+                                                            src={image.imageUrl}
+                                                            alt={`Foto de ${member.name}`}
+                                                            layout="fill"
+                                                            objectFit="cover"
+                                                            data-ai-hint={image.imageHint}
+                                                        />
+                                                    </div>
+                                                )}
+                                                <div className="p-6">
+                                                    <h2 className="text-xl font-bold">{member.name}</h2>
+                                                    <p className="text-gray-500 mt-1 mb-4">{member.role}</p>
+                                                    <div className="flex gap-4 items-center">
+                                                         {member.socials.instagram && member.socials.instagram !== '#' && (
+                                                            <a href={member.socials.instagram} aria-label={`${member.name} on Instagram`} className="text-gray-400 hover:text-primary transition-colors">
+                                                                <Instagram className="h-5 w-5" />
+                                                            </a>
+                                                        )}
+                                                        {member.socials.linkedin && member.socials.linkedin !== '#' && (
+                                                            <a href={member.socials.linkedin} aria-label={`${member.name} on LinkedIn`} className="text-gray-400 hover:text-primary transition-colors">
+                                                                <Linkedin className="h-5 w-5" />
+                                                            </a>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            )}
-                                            <h2 className="text-2xl font-bold tracking-tight">{member.name}</h2>
-                                            <p className="text-primary font-semibold mt-1 mb-3">{member.role}</p>
-                                            <p className="text-gray-600 max-w-sm mx-auto">{member.bio}</p>
-                                            <div className="flex justify-center gap-4 mt-6">
-                                                {member.socials.instagram && member.socials.instagram !== '#' && (
-                                                    <Button variant="outline" size="icon" asChild>
-                                                        <a href={member.socials.instagram} aria-label={`${member.name} on Instagram`}>
-                                                            <Instagram className="h-5 w-5" />
-                                                        </a>
-                                                    </Button>
-                                                )}
-                                                {member.socials.linkedin && member.socials.linkedin !== '#' && (
-                                                    <Button variant="outline" size="icon" asChild>
-                                                        <a href={member.socials.linkedin} aria-label={`${member.name} on LinkedIn`}>
-                                                            <Linkedin className="h-5 w-5" />
-                                                        </a>
-                                                    </Button>
-                                                )}
-                                            </div>
-                                        </CardContent>
-                                    </Card>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
                                 );
                             })}
                         </div>
