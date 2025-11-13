@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -9,10 +10,17 @@ import Link from "next/link";
 import Header from "@/components/header";
 import { Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/firebase';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 const GoogleIcon = () => (
     <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
-        <path fill="#4285F4" d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12.5C5,8.75 8.36,5.73 12.19,5.73C15.22,5.73 16.63,7.27 17.59,8.1L19.83,6.19C17.67,4.38 15.22,3 12.19,3C6.42,3 2,7.42 2,13C2,18.58 6.42,23 12.19,23C17.96,23 22,18.58 22,13C22,12.31 21.69,11.66 21.35,11.1V11.1Z" />
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05" />
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
     </svg>
 );
 
@@ -60,6 +68,29 @@ export default function SignupPage() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordError, setPasswordError] = useState<string | null>(null);
+    const auth = useAuth();
+    const router = useRouter();
+    const { toast } = useToast();
+
+    const handleGoogleSignIn = async () => {
+        if (!auth) return;
+        const provider = new GoogleAuthProvider();
+        try {
+            await signInWithPopup(auth, provider);
+            toast({
+                title: "¡Bienvenido/a!",
+                description: "Tu cuenta ha sido creada y has iniciado sesión.",
+            });
+            router.push('/dashboard');
+        } catch (error) {
+            console.error("Error during Google sign-in:", error);
+            toast({
+                variant: "destructive",
+                title: "Error al registrarte",
+                description: "Hubo un problema al intentar registrarte con Google. Por favor, inténtalo de nuevo.",
+            });
+        }
+    };
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newPassword = e.target.value;
@@ -156,7 +187,7 @@ export default function SignupPage() {
                                 </span>
                             </div>
                         </div>
-                        <Button variant="outline" className="w-full" size="lg">
+                        <Button variant="outline" className="w-full" size="lg" onClick={handleGoogleSignIn}>
                             <GoogleIcon />
                             Registrarse con Google
                         </Button>

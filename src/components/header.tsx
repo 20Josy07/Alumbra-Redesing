@@ -134,6 +134,13 @@ export default function Header({ activeLink }: HeaderProps) {
                 </div>
                 <nav className="flex-1 px-6">
                   <ul className="flex flex-col gap-6 text-lg font-medium">
+                    {user && (
+                         <li>
+                            <Link href="/dashboard" className='text-primary font-semibold transition-colors' onClick={() => setIsSheetOpen(false)}>
+                                Dashboard
+                            </Link>
+                        </li>
+                    )}
                     {navLinks}
                   </ul>
                 </nav>
@@ -146,7 +153,7 @@ export default function Header({ activeLink }: HeaderProps) {
                          </Avatar>
                          <div className="flex-1">
                            <p className="font-semibold">{user.displayName}</p>
-                           <Button variant="ghost" size="sm" onClick={handleSignOut} className="p-0 h-auto text-destructive hover:bg-transparent">
+                           <Button variant="ghost" size="sm" onClick={handleSignOut} className="p-0 h-auto text-destructive hover:bg-transparent hover:text-destructive">
                              Cerrar sesión
                            </Button>
                          </div>
