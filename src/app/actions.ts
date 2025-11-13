@@ -2,7 +2,6 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
-import { generateWallpaper, type GenerateWallpaperOutput } from '@/ai/flows/generate-wallpaper-flow';
 
 // Define schemas and types directly in the action file
 const AbuseAnalysisSchema = z.object({
@@ -83,19 +82,5 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
     console.error("Error during AI analysis:", e);
     const errorMessage = e.message || "An unexpected error occurred during analysis. Please try again later.";
     return { data: null, error: errorMessage };
-  }
-}
-
-export async function performWallpaperGeneration(prompt: string): Promise<{ data: GenerateWallpaperOutput | null; error: string | null }> {
-  if (!prompt || prompt.trim().length === 0) {
-    return { data: null, error: "Please enter a prompt for the wallpaper." };
-  }
-  
-  try {
-    const result = await generateWallpaper({ prompt });
-    return { data: result, error: null };
-  } catch (e) {
-    console.error("Error during wallpaper generation:", e);
-    return { data: null, error: "An unexpected error occurred while generating the wallpaper. Please try again." };
   }
 }
