@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -9,6 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { LogOut, Menu } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 type HeaderProps = {
   activeLink?: 'how-it-works' | 'reviews' | 'team' | 'contact';
@@ -17,11 +19,13 @@ type HeaderProps = {
 export default function Header({ activeLink }: HeaderProps) {
   const { user, auth } = useUser();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const router = useRouter();
 
 
   const handleSignOut = () => {
     if (auth) {
       auth.signOut();
+      router.push('/');
     }
   };
 
@@ -89,6 +93,10 @@ export default function Header({ activeLink }: HeaderProps) {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => router.push('/dashboard')}>
+                    <span>Dashboard</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Cerrar sesión</span>
@@ -111,9 +119,8 @@ export default function Header({ activeLink }: HeaderProps) {
                 <span className="sr-only">Abrir menú</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-              <div className="flex flex-col h-full">
-                <div className="p-6">
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] p-0 flex flex-col">
+              <div className="p-6">
                    <Link href="/" className="flex items-center gap-2" onClick={() => setIsSheetOpen(false)}>
                       <Image
                         src="https://i.postimg.cc/QCys4Rbt/favicon-light.png"
@@ -124,8 +131,8 @@ export default function Header({ activeLink }: HeaderProps) {
                       <span className="text-xl font-bold">Alumbra</span>
                     </Link>
                 </div>
-                <nav className="flex-1">
-                  <ul className="flex flex-col gap-6 p-6 text-lg font-medium">
+                <nav className="flex-1 px-6">
+                  <ul className="flex flex-col gap-6 text-lg font-medium">
                     {navLinks}
                   </ul>
                 </nav>

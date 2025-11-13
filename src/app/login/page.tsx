@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -32,7 +33,7 @@ export default function LoginPage() {
                 title: "¡Bienvenido/a!",
                 description: "Has iniciado sesión correctamente.",
             });
-            router.push('/');
+            router.push('/dashboard');
         } catch (error) {
             console.error("Error during Google sign-in:", error);
             toast({
