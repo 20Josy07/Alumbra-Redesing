@@ -1,7 +1,8 @@
 import { firebaseApp } from './config';
 import { Auth, getAuth } from 'firebase/auth';
 import { Firestore, getFirestore } from 'firebase/firestore';
-import { useCollection, useDoc } from './firestore/hooks';
+import { useCollection } from './firestore/use-collection';
+import { useDoc } from './firestore/use-doc';
 import { useMemo } from 'react';
 import type { DocumentReference, Query } from 'firebase/firestore';
 
@@ -14,7 +15,8 @@ export function initializeFirebase() {
 
 export * from './provider';
 export * from './auth/use-user';
-export { useCollection, useDoc };
+export { useCollection } from './firestore/use-collection';
+export { useDoc } from './firestore/use-doc';
 
 /**
  * A hook that memoizes a Firestore query or document reference.
