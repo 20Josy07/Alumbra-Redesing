@@ -1,10 +1,9 @@
+
 "use server";
 
 import { genkit } from 'genkit';
 import { googleAI } from '@genkit-ai/google-genai';
 import { z } from 'genkit';
-import { gemini25Flash } from '@/ai/genkit';
-
 
 // Define schemas and types directly in the action file
 const AbuseAnalysisSchema = z.object({
@@ -45,7 +44,7 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
         
         const { output } = await ai.generate({
           prompt,
-          model: gemini25Flash,
+          model: 'gemini-2.5-flash',
           output: { schema: AbuseAnalysisSchema },
         });
         return output!;
@@ -63,7 +62,7 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
 
         const { output } = await ai.generate({
           prompt,
-          model: gemini25Flash,
+          model: 'gemini-2.5-flash',
           output: { schema: SummarySchema },
         });
         return output!;
