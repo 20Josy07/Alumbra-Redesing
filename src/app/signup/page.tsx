@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -78,10 +77,10 @@ export default function SignupPage() {
         try {
             await signInWithPopup(auth, provider);
             toast({
-                title: "¡Bienvenido/a!",
-                description: "Tu cuenta ha sido creada y has iniciado sesión.",
+                title: "¡Bienvenido/a a Alumbra!",
+                description: "Tu cuenta ha sido creada.",
             });
-            router.push('/dashboard');
+            router.push('/welcome');
         } catch (error) {
             console.error("Error during Google sign-in:", error);
             toast({
