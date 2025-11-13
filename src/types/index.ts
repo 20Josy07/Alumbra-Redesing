@@ -1,4 +1,4 @@
-import { Timestamp } from "firebase/firestore";
+import { Timestamp, FieldValue } from "firebase/firestore";
 import { type AnalysisResult } from "@/app/actions";
 
 export interface AnalysisRecord extends AnalysisResult {
@@ -6,5 +6,5 @@ export interface AnalysisRecord extends AnalysisResult {
     userId: string;
     title: string;
     originalText: string;
-    createdAt: Timestamp;
+    createdAt: Timestamp | FieldValue;
 }

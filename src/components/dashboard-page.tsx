@@ -1,6 +1,6 @@
 'use client';
 
-import { useUser, useFirestore, useCollection } from "@/firebase";
+import { useUser, useFirestore } from "@/firebase";
 import AnalysisSection from "./analysis-section";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { FileText, Clock, Sparkles, AlertCircle, BrainCircuit, Loader } from "lucide-react";
@@ -12,7 +12,8 @@ import { saveAnalysis } from "@/firebase/firestore/analyses";
 import { useToast } from "@/hooks/use-toast";
 import { type AnalysisRecord } from "@/types";
 import { useMemo } from "react";
-import { collection, query, orderBy } from "firebase/firestore";
+import { collection, query, orderBy, Timestamp } from "firebase/firestore";
+import { useCollection } from "@/firebase";
 
 interface DashboardPageProps {
   pendingAnalysis?: AnalysisResult | null;
@@ -56,6 +57,18 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
             });
         }
     };
+    
+    const formatDate = (timestamp: Timestamp | Date | undefined | null) => {
+        if (!timestamp) return 'Fecha desconocida';
+        if (timestamp instanceof Timestamp) {
+            return timestamp.toDate().toLocaleString();
+        }
+        if (timestamp instanceof Date) {
+            return timestamp.toLocaleString();
+        }
+        return 'Fecha inválida';
+    };
+
 
     const renderPendingAnalysis = () => {
         if (!pendingAnalysis) return null;
@@ -130,7 +143,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
                             ) : (
                                 <ul className="space-y-4">
                                     {analyses && analyses.length > 0 ? (
-                                        analyses.map((analysis) => (
+                                        analyses.slice(0, 5).map((analysis) => (
                                             <li key={analysis.id} className="flex items-start gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors">
                                                 <div className="flex-shrink-0">
                                                     <div className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center">
@@ -141,7 +154,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
                                                     <h3 className="font-semibold text-sm">{analysis.title}</h3>
                                                     <p className="text-xs text-muted-foreground flex items-center gap-1.5">
                                                         <Clock className="w-3 h-3" />
-                                                        {analysis.createdAt ? new Date(analysis.createdAt.seconds * 1000).toLocaleString() : 'Fecha desconocida'}
+                                                        {formatDate(analysis.createdAt)}
                                                     </p>
                                                 </div>
                                             </li>
