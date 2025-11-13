@@ -13,32 +13,35 @@ const GoogleIcon = () => (
 );
 
 
-export default function LoginPage() {
+export default function SignupPage() {
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
             <Header />
             <main className="flex-1 flex items-center justify-center py-12 px-6">
                 <Card className="w-full max-w-md shadow-xl">
                     <CardHeader className="text-center">
-                        <CardTitle className="text-3xl font-extrabold tracking-tight">Inicia Sesión</CardTitle>
-                        <CardDescription className="mt-2">Accede a tu cuenta para ver tu historial y resultados completos.</CardDescription>
+                        <CardTitle className="text-3xl font-extrabold tracking-tight">Crea una Cuenta</CardTitle>
+                        <CardDescription className="mt-2">Empieza a usar Alumbra para proteger tu bienestar emocional.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
+                        <div className="space-y-2">
+                            <Label htmlFor="name">Nombre</Label>
+                            <Input id="name" type="text" placeholder="Tu nombre completo" required />
+                        </div>
                         <div className="space-y-2">
                             <Label htmlFor="email">Correo Electrónico</Label>
                             <Input id="email" type="email" placeholder="tu@email.com" required />
                         </div>
                         <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="password">Contraseña</Label>
-                                <Link href="#" className="text-sm text-primary hover:underline">
-                                    ¿Olvidaste tu contraseña?
-                                </Link>
-                            </div>
+                            <Label htmlFor="password">Contraseña</Label>
                             <Input id="password" type="password" required />
                         </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="confirm-password">Confirmar Contraseña</Label>
+                            <Input id="confirm-password" type="password" required />
+                        </div>
                         <Button type="submit" className="w-full" size="lg">
-                            Iniciar Sesión
+                            Crear Cuenta
                         </Button>
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">
@@ -46,20 +49,20 @@ export default function LoginPage() {
                             </div>
                             <div className="relative flex justify-center text-xs uppercase">
                                 <span className="bg-background px-2 text-muted-foreground">
-                                    O continúa con
+                                    O regístrate con
                                 </span>
                             </div>
                         </div>
                         <Button variant="outline" className="w-full" size="lg">
                             <GoogleIcon />
-                            Iniciar Sesión con Google
+                            Registrarse con Google
                         </Button>
                     </CardContent>
                     <CardFooter className="justify-center">
                         <p className="text-sm text-muted-foreground">
-                            ¿No tienes una cuenta?{" "}
-                            <Link href="/signup" className="text-primary font-semibold hover:underline">
-                                Regístrate
+                            ¿Ya tienes una cuenta?{" "}
+                            <Link href="/login" className="text-primary font-semibold hover:underline">
+                                Inicia Sesión
                             </Link>
                         </p>
                     </CardFooter>
