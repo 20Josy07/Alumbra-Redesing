@@ -1,3 +1,4 @@
+'use client';
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,6 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import Header from "@/components/header";
+import { useAuth } from "@/firebase";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 const GoogleIcon = () => (
     <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
@@ -14,6 +19,30 @@ const GoogleIcon = () => (
 
 
 export default function LoginPage() {
+    const auth = useAuth();
+    const router = useRouter();
+    const { toast } = useToast();
+
+    const handleGoogleSignIn = async () => {
+        if (!auth) return;
+        const provider = new GoogleAuthProvider();
+        try {
+            await signInWithPopup(auth, provider);
+            toast({
+                title: "¡Bienvenido/a!",
+                description: "Has iniciado sesión correctamente.",
+            });
+            router.push('/');
+        } catch (error) {
+            console.error("Error during Google sign-in:", error);
+            toast({
+                variant: "destructive",
+                title: "Error al iniciar sesión",
+                description: "Hubo un problema al intentar iniciar sesión con Google. Por favor, inténtalo de nuevo.",
+            });
+        }
+    };
+
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
             <Header />
@@ -50,7 +79,7 @@ export default function LoginPage() {
                                 </span>
                             </div>
                         </div>
-                        <Button variant="outline" className="w-full" size="lg">
+                        <Button variant="outline" className="w-full" size="lg" onClick={handleGoogleSignIn}>
                             <GoogleIcon />
                             Iniciar Sesión con Google
                         </Button>
