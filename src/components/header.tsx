@@ -24,8 +24,9 @@ export default function Header({ activeLink }: HeaderProps) {
 
   const handleSignOut = () => {
     if (auth) {
-      auth.signOut();
-      router.push('/');
+      auth.signOut().then(() => {
+        router.push('/');
+      });
     }
   };
 
@@ -156,8 +157,7 @@ export default function Header({ activeLink }: HeaderProps) {
                     </Button>
                   )}
                 </div>
-              </div>
-            </SheetContent>
+              </SheetContent>
           </Sheet>
         </div>
       </div>
