@@ -10,7 +10,7 @@ import Header from "@/components/header";
 import { Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/firebase';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 
@@ -64,9 +64,13 @@ const PasswordStrengthIndicator = ({ password }: { password?: string }) => {
 export default function SignupPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordError, setPasswordError] = useState<string | null>(null);
+
     const auth = useAuth();
     const router = useRouter();
     const { toast } = useToast();
@@ -90,6 +94,46 @@ export default function SignupPage() {
             });
         }
     };
+    
+    const handleEmailSignUp = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!auth) return;
+        if (password !== confirmPassword) {
+            setPasswordError('Las contraseñas no coinciden');
+            return;
+        }
+        if (passwordError) return;
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            if (userCredential.user) {
+                await updateProfile(userCredential.user, {
+                    displayName: name
+                });
+            }
+            toast({
+                title: "¡Bienvenido/a a Alumbra!",
+                description: "Tu cuenta ha sido creada.",
+            });
+            router.push('/welcome');
+
+        } catch (error: any) {
+            console.error("Error during email sign-up:", error);
+            let description = "Hubo un problema al crear tu cuenta. Por favor, inténtalo de nuevo.";
+            if (error.code === 'auth/email-already-in-use') {
+                description = "Este correo electrónico ya está en uso. Por favor, inicia sesión o usa otro correo.";
+            } else if (error.code === 'auth/weak-password') {
+                description = "La contraseña es demasiado débil. Debe tener al menos 6 caracteres.";
+            }
+            
+            toast({
+                variant: "destructive",
+                title: "Error al registrarte",
+                description,
+            });
+        }
+    };
+
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newPassword = e.target.value;
@@ -120,77 +164,93 @@ export default function SignupPage() {
                         <CardTitle className="text-3xl font-extrabold tracking-tight">Crea una Cuenta</CardTitle>
                         <CardDescription className="mt-2">Empieza a usar Alumbra para proteger tu bienestar emocional.</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div className="space-y-2">
-                            <Label htmlFor="name">Nombre</Label>
-                            <Input id="name" type="text" placeholder="Tu nombre completo" required />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Correo Electrónico</Label>
-                            <Input id="email" type="email" placeholder="tu@email.com" required />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Contraseña</Label>
+                    <form onSubmit={handleEmailSignUp}>
+                        <CardContent className="space-y-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="name">Nombre</Label>
+                                <Input 
+                                  id="name" 
+                                  type="text" 
+                                  placeholder="Tu nombre completo" 
+                                  required 
+                                  value={name}
+                                  onChange={(e) => setName(e.target.value)}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Correo Electrónico</Label>
+                                <Input 
+                                  id="email" 
+                                  type="email" 
+                                  placeholder="tu@email.com" 
+                                  required 
+                                  value={email}
+                                  onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="password">Contraseña</Label>
+                                <div className="relative">
+                                    <Input 
+                                      id="password" 
+                                      type={showPassword ? "text" : "password"} 
+                                      required 
+                                      value={password}
+                                      onChange={handlePasswordChange}
+                                    />
+                                    <Button 
+                                      type="button" 
+                                      variant="ghost" 
+                                      size="icon" 
+                                      className="absolute top-1/2 right-2 -translate-y-1/2 h-7 w-7 text-gray-500 hover:bg-transparent"
+                                      onClick={() => setShowPassword(prev => !prev)}
+                                    >
+                                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                    </Button>
+                                </div>
+                                <PasswordStrengthIndicator password={password} />
+                            </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="confirm-password">Confirmar Contraseña</Label>
+                                 <div className="relative">
+                                    <Input 
+                                      id="confirm-password" 
+                                      type={showConfirmPassword ? "text" : "password"} 
+                                      required 
+                                      value={confirmPassword}
+                                      onChange={handleConfirmPasswordChange}
+                                    />
+                                    <Button 
+                                      type="button" 
+                                      variant="ghost" 
+                                      size="icon" 
+                                      className="absolute top-1/2 right-2 -translate-y-1/2 h-7 w-7 text-gray-500 hover:bg-transparent"
+                                      onClick={() => setShowConfirmPassword(prev => !prev)}
+                                    >
+                                        {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                    </Button>
+                                </div>
+                                {passwordError && <p className="text-sm font-medium text-destructive">{passwordError}</p>}
+                            </div>
+                            <Button type="submit" className="w-full" size="lg" disabled={!!passwordError || !name || !email || !password}>
+                                Crear Cuenta
+                            </Button>
                             <div className="relative">
-                                <Input 
-                                  id="password" 
-                                  type={showPassword ? "text" : "password"} 
-                                  required 
-                                  value={password}
-                                  onChange={handlePasswordChange}
-                                />
-                                <Button 
-                                  type="button" 
-                                  variant="ghost" 
-                                  size="icon" 
-                                  className="absolute top-1/2 right-2 -translate-y-1/2 h-7 w-7 text-gray-500 hover:bg-transparent"
-                                  onClick={() => setShowPassword(prev => !prev)}
-                                >
-                                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                                </Button>
+                                <div className="absolute inset-0 flex items-center">
+                                    <span className="w-full border-t" />
+                                </div>
+                                <div className="relative flex justify-center text-xs uppercase">
+                                    <span className="bg-background px-2 text-muted-foreground">
+                                        O regístrate con
+                                    </span>
+                                </div>
                             </div>
-                            <PasswordStrengthIndicator password={password} />
-                        </div>
-                         <div className="space-y-2">
-                            <Label htmlFor="confirm-password">Confirmar Contraseña</Label>
-                             <div className="relative">
-                                <Input 
-                                  id="confirm-password" 
-                                  type={showConfirmPassword ? "text" : "password"} 
-                                  required 
-                                  value={confirmPassword}
-                                  onChange={handleConfirmPasswordChange}
-                                />
-                                <Button 
-                                  type="button" 
-                                  variant="ghost" 
-                                  size="icon" 
-                                  className="absolute top-1/2 right-2 -translate-y-1/2 h-7 w-7 text-gray-500 hover:bg-transparent"
-                                  onClick={() => setShowConfirmPassword(prev => !prev)}
-                                >
-                                    {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                                </Button>
-                            </div>
-                            {passwordError && <p className="text-sm font-medium text-destructive">{passwordError}</p>}
-                        </div>
-                        <Button type="submit" className="w-full" size="lg" disabled={!!passwordError}>
-                            Crear Cuenta
-                        </Button>
-                        <div className="relative">
-                            <div className="absolute inset-0 flex items-center">
-                                <span className="w-full border-t" />
-                            </div>
-                            <div className="relative flex justify-center text-xs uppercase">
-                                <span className="bg-background px-2 text-muted-foreground">
-                                    O regístrate con
-                                </span>
-                            </div>
-                        </div>
-                        <Button variant="outline" className="w-full" size="lg" onClick={handleGoogleSignIn}>
-                            <GoogleIcon />
-                            Registrarse con Google
-                        </Button>
-                    </CardContent>
+                            <Button type="button" variant="outline" className="w-full" size="lg" onClick={handleGoogleSignIn}>
+                                <GoogleIcon />
+                                Registrarse con Google
+                            </Button>
+                        </CardContent>
+                    </form>
                     <CardFooter className="justify-center">
                         <p className="text-sm text-muted-foreground">
                             ¿Ya tienes una cuenta?{" "}
