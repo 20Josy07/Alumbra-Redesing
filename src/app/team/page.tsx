@@ -3,18 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/header";
-import { ArrowRight, Linkedin, Twitter } from "lucide-react";
+import { ArrowRight, Linkedin, Instagram } from "lucide-react";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent } from "@/components/ui/card";
 
 const teamMembers = [
     {
         id: "team-elena",
-        name: "Elena Rodriguez",
-        role: "Co-Fundadora & CEO",
+        name: "Maria Gabriela De Los Rios Camacho",
+        role: "Co-Fundadora",
         bio: "Impulsada por una profunda pasión por la justicia social y la tecnología, Elena lidera la visión de Alumbra. Con experiencia en desarrollo de productos y una empatía inquebrantable, su misión es crear herramientas que empoderen y protejan a las personas.",
         socials: {
-            twitter: "#",
+            instagram: "https://www.instagram.com/_mgdlrc_/",
             linkedin: "#",
         }
     },
@@ -24,7 +24,7 @@ const teamMembers = [
         role: "Co-Fundador & CTO",
         bio: "Marco es el arquitecto detrás de la inteligencia artificial de Alumbra. Como experto en IA y procesamiento de lenguaje natural, se dedica a construir una tecnología robusta, segura y precisa que pueda marcar una diferencia real en la vida de los usuarios.",
         socials: {
-            twitter: "#",
+            instagram: "#",
             linkedin: "#",
         }
     }
@@ -79,8 +79,8 @@ export default function TeamPage() {
                                             <p className="text-gray-600 max-w-sm mx-auto">{member.bio}</p>
                                             <div className="flex justify-center gap-4 mt-6">
                                                 <Button variant="outline" size="icon" asChild>
-                                                    <a href={member.socials.twitter} aria-label={`${member.name} on Twitter`}>
-                                                        <Twitter className="h-5 w-5" />
+                                                    <a href={member.socials.instagram} aria-label={`${member.name} on Instagram`}>
+                                                        <Instagram className="h-5 w-5" />
                                                     </a>
                                                 </Button>
                                                 <Button variant="outline" size="icon" asChild>
