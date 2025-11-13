@@ -7,14 +7,28 @@ import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import Header from './header';
-import AnalysisSection from './analysis-section';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
+import { BrainCircuit, Lock } from 'lucide-react';
+import { useUser } from '@/firebase';
+import { useRouter } from 'next/navigation';
 
 export default function LandingPage() {
   const { ref: ref1, isIntersecting: isIntersecting1 } = useIntersectionObserver({ threshold: 0.1 });
   const { ref: ref2, isIntersecting: isIntersecting2 } = useIntersectionObserver({ threshold: 0.1 });
   const { ref: ref3, isIntersecting: isIntersecting3 } = useIntersectionObserver({ threshold: 0.1 });
-  const { ref: ref4, isIntersecting: isIntersecting4 } = useIntersectionObserver({ threshold: 0.1 });
   const { ref: ref5, isIntersecting: isIntersecting5 } = useIntersectionObserver({ threshold: 0.1 });
+
+  const { user } = useUser();
+  const router = useRouter();
+
+  const handleAnalysisClick = () => {
+    if (user) {
+      router.push('/dashboard');
+    } else {
+      router.push('/login');
+    }
+  };
+
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-800">
@@ -32,20 +46,62 @@ export default function LandingPage() {
                 Analiza, protege y actúa en tiempo real — todo en una plataforma poderosa. Eleva tu bienestar emocional con claridad instantánea y recomendaciones prácticas.
               </p>
               <div className="animate-in fade-in zoom-in-95 duration-700 delay-300">
-                <Button size="lg" className="group" asChild>
-                  <Link href="/#analysis-section">
+                <Button size="lg" className="group" onClick={handleAnalysisClick}>
                     Analiza ahora • es gratis
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                  </Link>
                 </Button>
               </div>
             </div>
           </div>
         </section>
 
-        <AnalysisSection />
+        <section id="analysis-section" className="py-20 md:py-24 bg-gray-50 scroll-mt-20">
+            <div className="container mx-auto px-6 max-w-4xl">
+                <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
+                    Analiza una Conversación Ahora
+                </h2>
+                <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+                    Inicia sesión para obtener un análisis instantáneo, gratuito y 100% anónimo desde tu dashboard personal.
+                </p>
+                </div>
 
-        <section ref={ref1} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700", isIntersecting1 ? "opacity-100" : "opacity-0")}>
+                <Card className="shadow-2xl relative overflow-hidden">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                    <BrainCircuit className="text-primary" />
+                    Analizador de Abuso Emocional
+                    </CardTitle>
+                    <CardDescription>
+                    Pega la conversación que quieres analizar en el cuadro de texto de tu dashboard.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="h-40 bg-muted rounded-md flex items-center justify-center p-6">
+                        <p className="text-muted-foreground text-center">Inicia sesión para acceder al analizador.</p>
+                    </div>
+                </CardContent>
+                 <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+                    <Lock className="w-16 h-16 text-primary mb-4" />
+                    <h3 className="text-2xl font-bold mb-2">Función Disponible para Usuarios</h3>
+                    <p className="text-gray-600 mb-6 max-w-sm">
+                        Para proteger tu privacidad, el análisis se realiza en tu dashboard personal una vez que has iniciado sesión.
+                    </p>
+                    <Button size="lg" asChild>
+                        <Link href="/login">Inicia Sesión Para Analizar</Link>
+                    </Button>
+                     <p className="text-sm text-muted-foreground mt-4">
+                        ¿No tienes una cuenta?{" "}
+                        <Link href="/signup" className="text-primary font-semibold hover:underline">
+                            Regístrate
+                        </Link>
+                    </p>
+                </div>
+                </Card>
+            </div>
+        </section>
+
+        <section ref={ref1} className={cn("py-20 md:py-24 bg-white transition-opacity duration-700", isIntersecting1 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6">
             <div className={cn("text-center max-w-3xl mx-auto", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-12 duration-700")}>
               <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
@@ -107,14 +163,14 @@ export default function LandingPage() {
                 <div className="flex gap-6 items-start">
                   <div className="text-2xl font-bold text-primary opacity-50">01</div>
                   <div>
-                    <h3 className="text-xl font-bold">Pega tu chat</h3>
-                    <p className="text-gray-600 mt-1">Copia el chat de WhatsApp, SMS o cualquier otra app.</p>
+                    <h3 className="text-xl font-bold">Inicia sesión y ve a tu dashboard</h3>
+                    <p className="text-gray-600 mt-1">Tu espacio seguro para analizar conversaciones.</p>
                   </div>
                 </div>
                 <div className="flex gap-6 items-start">
                   <div className="text-2xl font-bold text-primary opacity-50">02</div>
                   <div>
-                    <h3 className="text-xl font-bold">Alumbra analiza</h3>
+                    <h3 className="text-xl font-bold">Pega tu chat y Alumbra analiza</h3>
                     <p className="text-gray-600 mt-1">Alumbra detecta patrones de abuso emocional automáticamente, sin que tengas que hacer nada más.</p>
                   </div>
                 </div>
@@ -133,7 +189,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section ref={ref3} className={cn("py-20 md:py-32 bg-white transition-opacity duration-700", isIntersecting3 ? "opacity-100" : "opacity-0")}>
+        <section ref={ref3} className={cn("py-20 md:py-32 bg-gray-50 transition-opacity duration-700", isIntersecting3 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-16">
             <div className={cn("md:w-1/2", isIntersecting3 && "animate-in fade-in slide-in-from-left-16 duration-700")}>
               <h2 className="text-4xl md:text-6xl font-extrabold leading-tight">

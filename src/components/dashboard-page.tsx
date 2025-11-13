@@ -1,19 +1,20 @@
 'use client';
 
 import { useUser, useFirestore } from "@/firebase";
-import AnalysisSection from "./analysis-section";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { FileText, Clock, Sparkles, AlertCircle, BrainCircuit, Loader } from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import { FileText, Clock, Sparkles, AlertCircle, BrainCircuit, Loader, Lock } from "lucide-react";
 import Resources from "./resources";
-import { type AnalysisResult } from "@/app/actions";
+import { type AnalysisResult, performAnalysis } from "@/app/actions";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { saveAnalysis } from "@/firebase/firestore/analyses";
 import { useToast } from "@/hooks/use-toast";
 import { type AnalysisRecord } from "@/types";
-import { useMemo } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { collection, query, orderBy, Timestamp } from "firebase/firestore";
 import { useCollection, useMemoFirebase } from "@/firebase";
+import { Textarea } from "./ui/textarea";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 
 interface DashboardPageProps {
   pendingAnalysis: AnalysisResult | null;
@@ -24,6 +25,11 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
     const { user } = useUser();
     const firestore = useFirestore();
     const { toast } = useToast();
+    const [text, setText] = useState('');
+    const [error, setError] = useState<string | null>(null);
+    const [isPending, startTransition] = useTransition();
+    const [lastAnalyzedText, setLastAnalyzedText] = useState('');
+
 
     const analysesQuery = useMemoFirebase(() => {
         if (!user || !firestore) return null;
@@ -32,22 +38,43 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
 
     const { data: analyses, loading: loadingAnalyses } = useCollection<AnalysisRecord>(analysesQuery);
 
+    const handleAnalysis = async () => {
+        setError(null);
+        setPendingAnalysis(null);
+        startTransition(async () => {
+            setLastAnalyzedText(text); // Save text for potential save action
+            const { data, error } = await performAnalysis(text);
+            
+            if (error) {
+                setError(error);
+                toast({
+                    variant: "destructive",
+                    title: "Error de Análisis",
+                    description: error,
+                });
+            } else if (data) {
+                setPendingAnalysis(data);
+                setText(''); // Clear textarea after successful analysis
+            }
+        });
+    };
+
     const handleSaveAnalysis = async () => {
         if (!pendingAnalysis || !user || !firestore) return;
 
         try {
             const analysisToSave = {
                 ...pendingAnalysis,
-                title: `Análisis del ${new Date().toLocaleDateString()}`,
-                originalText: sessionStorage.getItem('lastAnalyzedText') || '',
+                title: `Análisis del ${new Date().toLocaleDateString('es-ES')}`,
+                originalText: lastAnalyzedText,
             };
             await saveAnalysis(firestore, user.uid, analysisToSave);
             toast({
                 title: "Análisis guardado",
                 description: "Tu análisis ha sido guardado en tu historial.",
             });
-            setPendingAnalysis(null); // Clear the pending analysis from view
-            sessionStorage.removeItem('lastAnalyzedText');
+            setPendingAnalysis(null);
+            setLastAnalyzedText('');
         } catch (error) {
             console.error("Error saving analysis:", error);
             toast({
@@ -60,7 +87,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
 
     const handleDiscardAnalysis = () => {
         setPendingAnalysis(null);
-        sessionStorage.removeItem('lastAnalyzedText');
+        setLastAnalyzedText('');
         toast({
             title: "Análisis descartado",
             description: "El análisis no ha sido guardado.",
@@ -69,17 +96,15 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
     
     const formatDate = (timestamp: Timestamp | Date | undefined | null) => {
         if (!timestamp) return 'Fecha desconocida';
-        // Firestore Timestamps can be either from the server (Timestamp) or locally created (Date)
-        if (timestamp instanceof Timestamp) {
-            return timestamp.toDate().toLocaleString();
-        }
-        if (timestamp instanceof Date) {
-            return timestamp.toLocaleString();
-        }
-        // Handle cases where it might be a server-pending timestamp (null) or other types
-        const date = (timestamp as any).toDate?.();
+        const date = (timestamp as Timestamp)?.toDate ? (timestamp as Timestamp).toDate() : (timestamp as Date);
         if (date instanceof Date) {
-            return date.toLocaleString();
+            return date.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
         return 'Fecha inválida';
     };
@@ -95,7 +120,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-2xl">
                     <BrainCircuit className="text-primary" />
-                    Resultados de tu Análisis Reciente
+                    Resultados de tu Análisis
                   </CardTitle>
                   <CardDescription>
                     Aquí está el análisis completo del texto que proporcionaste. Puedes guardarlo en tu historial o descartarlo.
@@ -114,7 +139,9 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
                       <AlertCircle className={cn("w-5 h-5", abuseAnalysis.abuseDetected ? 'text-destructive' : 'text-green-600')} />
                       Detección y Explicación de Abuso
                     </h3>
-                    <p className={cn("mt-1 text-base", abuseAnalysis.abuseDetected ? 'text-destructive' : 'text-green-700')}>{abuseAnalysis.explanation}</p>
+                     <p className={cn("mt-1 text-base", abuseAnalysis.abuseDetected ? 'text-destructive-foreground/90' : 'text-green-700', abuseAnalysis.abuseDetected && 'p-2 bg-destructive/80 rounded-md' )}>
+                        {abuseAnalysis.explanation}
+                    </p>
                   </div>
                    <div className="p-4 border-l-4 border-yellow-500 bg-yellow-500/10">
                      <h3 className="font-bold text-yellow-800">Próximos Pasos y Recomendaciones</h3>
@@ -126,15 +153,62 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
                      </p>
                   </div>
                 </CardContent>
-                <CardContent>
-                    <div className="flex flex-col sm:flex-row gap-4">
+                <CardFooter>
+                    <div className="flex flex-col sm:flex-row gap-4 w-full">
                         <Button onClick={handleSaveAnalysis} className="flex-1">Guardar Análisis en el Historial</Button>
                         <Button onClick={handleDiscardAnalysis} variant="outline" className="flex-1">Descartar Análisis</Button>
                     </div>
-                </CardContent>
+                </CardFooter>
             </Card>
         );
     }
+    
+    const renderAnalysisForm = () => (
+         <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BrainCircuit className="text-primary" />
+              Analizador de Abuso Emocional
+            </CardTitle>
+            <CardDescription>
+              Pega la conversación que quieres analizar en el cuadro de abajo. Mínimo 20 caracteres.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Textarea
+              placeholder="Pega aquí el texto de WhatsApp, SMS, email, etc."
+              rows={10}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              disabled={isPending}
+              className="text-base"
+            />
+            {error && (
+              <Alert variant="destructive" className="mt-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+          <CardFooter className="flex-col items-stretch gap-4">
+            <Button onClick={handleAnalysis} disabled={isPending || text.trim().length < 20} size="lg" className="w-full">
+              {isPending ? (
+                <>
+                  <Loader className="mr-2 h-5 w-5 animate-spin" />
+                  Analizando...
+                </>
+              ) : (
+                'Analizar Texto'
+              )}
+            </Button>
+            <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
+              <Lock className="w-3 h-3" />
+              <span>Análisis 100% anónimo y seguro</span>
+            </div>
+          </CardFooter>
+        </Card>
+    );
 
     return (
         <div className="space-y-8">
@@ -145,13 +219,13 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
-                    {pendingAnalysis ? renderPendingAnalysis() : <AnalysisSection />}
+                    {pendingAnalysis ? renderPendingAnalysis() : renderAnalysisForm()}
                 </div>
                 <div className="lg:col-span-1">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Historial de Análisis</CardTitle>
-                            <CardDescription>Revisa tus análisis guardados anteriormente.</CardDescription>
+                            <CardTitle>Historial Reciente</CardTitle>
+                            <CardDescription>Tus últimos 5 análisis guardados.</CardDescription>
                         </CardHeader>
                         <CardContent>
                             {loadingAnalyses ? (
