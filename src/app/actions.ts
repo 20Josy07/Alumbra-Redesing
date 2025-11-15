@@ -1,10 +1,9 @@
-
-"use server";
+'use server';
 
 import { analyzeText, type AnalysisResult } from "@/ai/analysis-flow";
 
-// This interface is now imported from analysis-flow.ts, but we keep it here for any potential external use.
-export type { AnalysisResult } from "@/ai/analysis-flow";
+// This interface is now imported from analysis-flow.ts
+export type { AnalysisResult };
 
 export async function performAnalysis(text: string): Promise<{ data: AnalysisResult | null; error: string | null }> {
   if (!text || text.trim().length < 20) {

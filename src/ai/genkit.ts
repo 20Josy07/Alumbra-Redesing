@@ -1,9 +1,13 @@
-import {genkit, Model} from 'genkit';
-import {googleAI} from '@genkit-ai/google-genai';
+import { genkit } from 'genkit';
+import { googleAI } from '@genkit-ai/google-genai';
 
-// Environment variables are now loaded globally from `src/ai/dev.ts`
-
-export const gemini25Flash = googleAI('gemini-2.5-flash');
-
-// We are no longer exporting a pre-configured `ai` object.
-// Configuration will happen on-demand within server actions.
+/**
+ * This is the central configuration for Genkit.
+ * It creates a global 'ai' object that is configured with the necessary plugins.
+ * This object should be imported and used by all other AI-related flows and actions.
+ */
+export const ai = genkit({
+  plugins: [
+    googleAI({ apiKey: process.env.GEMINI_API_KEY }),
+  ],
+});

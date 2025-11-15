@@ -1,4 +1,3 @@
-
 'use server';
 /**
  * @fileOverview This file contains the Genkit flow for analyzing text for psychological abuse.
@@ -7,16 +6,9 @@
  * - AnalysisResult - The output type for the analysis flow.
  */
 
-import { genkit } from 'genkit';
+import { ai } from './genkit'; // Import the configured 'ai' object
 import { googleAI } from '@genkit-ai/google-genai';
 import { z } from 'genkit';
-
-// Configure Genkit with the Google AI plugin.
-// This creates the global 'ai' object we'll use to define flows and models.
-const ai = genkit({
-  plugins: [googleAI({ apiKey: process.env.GEMINI_API_KEY })],
-});
-
 
 // Define the consolidated output schema for the analysis.
 const AnalysisResultSchema = z.object({
