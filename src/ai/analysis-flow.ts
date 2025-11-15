@@ -38,8 +38,6 @@ const analysisFlow = ai.defineFlow(
   },
   async (text) => {
     
-    const geminiPro = googleAI('gemini-pro');
-
     const prompt = `
       Eres un experto en IA altamente especializado en detectar abuso psicológico y emocional en textos.
       Tu tarea es analizar el siguiente texto y proporcionar una evaluación estructurada en formato JSON.
@@ -60,7 +58,7 @@ const analysisFlow = ai.defineFlow(
 
     const { output } = await ai.generate({
       prompt,
-      model: geminiPro,
+      model: googleAI('gemini-pro'),
       output: { schema: AnalysisResultSchema },
       config: {
         safetySettings: [
