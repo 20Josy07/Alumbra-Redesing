@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { BrainCircuit, Lock } from 'lucide-react';
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function LandingPage() {
   const { ref: ref1, isIntersecting: isIntersecting1 } = useIntersectionObserver({ threshold: 0.1 });
@@ -26,6 +27,10 @@ export default function LandingPage() {
     } else {
       router.push('/login');
     }
+  };
+
+  const getImage = (id: string) => {
+    return PlaceHolderImages.find(img => img.id === id);
   };
 
 
@@ -113,39 +118,39 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-3 gap-8 mt-16">
               <div className={cn("bg-white p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-100")}>
                 <div className="relative h-56 w-full rounded-2xl overflow-hidden mb-6">
-                  <Image
-                    src="https://picsum.photos/seed/feature1/700/553"
-                    alt="Pega tu conversación y analiza al instante"
+                  {getImage('feature1') && <Image
+                    src={getImage('feature1')!.imageUrl}
+                    alt={getImage('feature1')!.description}
                     fill
                     className="object-cover"
-                    data-ai-hint="conversation analysis"
-                  />
+                    data-ai-hint={getImage('feature1')!.imageHint}
+                  />}
                 </div>
                 <h3 className="text-xl font-bold mb-2">Pega tu conversación y analiza al instante</h3>
                 <p className="text-gray-600">Detecta abuso emocional al instante con una interfaz simple y humana.</p>
               </div>
               <div className={cn("bg-white p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-200")}>
                 <div className="relative h-56 w-full rounded-2xl overflow-hidden mb-6">
-                  <Image
-                    src="https://picsum.photos/seed/feature2/701/551"
-                    alt="Análisis avanzado de abuso emocional"
+                   {getImage('feature2') && <Image
+                    src={getImage('feature2')!.imageUrl}
+                    alt={getImage('feature2')!.description}
                     fill
                     className="object-cover"
-                    data-ai-hint="advanced analysis"
-                  />
+                    data-ai-hint={getImage('feature2')!.imageHint}
+                  />}
                 </div>
                 <h3 className="text-xl font-bold mb-2">Análisis avanzado de abuso emocional</h3>
                 <p className="text-gray-600">Detecta gaslighting, chantaje emocional y manipulación sutil sin que tengas que entender psicología. Alumbra lo hace por ti en segundos.</p>
               </div>
               <div className={cn("bg-white p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-300")}>
                 <div className="relative h-56 w-full rounded-2xl overflow-hidden mb-6">
-                  <Image
-                    src="https://picsum.photos/seed/feature3/700/558"
-                    alt="Soporte en tiempo real"
+                  {getImage('feature3') && <Image
+                    src={getImage('feature3')!.imageUrl}
+                    alt={getImage('feature3')!.description}
                     fill
                     className="object-cover"
-                    data-ai-hint="real-time support"
-                  />
+                    data-ai-hint={getImage('feature3')!.imageHint}
+                  />}
                 </div>
                 <h3 className="text-xl font-bold mb-2">Soporte en tiempo real</h3>
                 <p className="text-gray-600">Conecta con recursos de ayuda o profesionales en el momento exacto en que Alumbra detecta un riesgo.</p>
@@ -183,7 +188,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className={cn("relative h-96 md:h-[600px] w-full bg-gray-200 rounded-3xl", isIntersecting2 && "animate-in fade-in zoom-in-95 duration-700 delay-200")}>
-               <Image src="https://picsum.photos/seed/protection/800/600" alt="Simplifica tu protección" fill className="object-cover rounded-3xl" data-ai-hint="protection steps" />
+                {getImage('protection') && <Image src={getImage('protection')!.imageUrl} alt={getImage('protection')!.description} fill className="object-cover rounded-3xl" data-ai-hint={getImage('protection')!.imageHint} />}
             </div>
           </div>
         </section>
@@ -198,11 +203,13 @@ export default function LandingPage() {
             </div>
             <div className={cn("md:w-1/2 max-w-lg", isIntersecting3 && "animate-in fade-in slide-in-from-right-16 duration-700 delay-200")}>
               <div className="flex gap-3 mb-8">
-                <Image src="https://picsum.photos/seed/avatar1/56/56" alt="Usuario" width={56} height={56} className="rounded-2xl shadow-md" data-ai-hint="woman face" />
-                <Image src="https://picsum.photos/seed/avatar2/56/56" alt="Usuario" width={56} height={56} className="rounded-2xl shadow-md" data-ai-hint="man face" />
-                <Image src="https://picsum.photos/seed/avatar3/56/56" alt="Usuario" width={56} height={56} className="rounded-2xl shadow-lg scale-110 ring-2 ring-purple-500 z-10" data-ai-hint="person face" />
-                <Image src="https://picsum.photos/seed/avatar4/56/56" alt="Usuario" width={56} height={56} className="rounded-2xl shadow-md" data-ai-hint="woman smiling" />
-                <Image src="https://picsum.photos/seed/avatar5/56/56" alt="Usuario" width={56} height={56} className="rounded-2xl shadow-md" data-ai-hint="man smiling" />
+                 {['avatar1', 'avatar2', 'avatar3', 'avatar4', 'avatar5'].map((id, index) => {
+                    const image = getImage(id);
+                    if (!image) return null;
+                    return (
+                        <Image key={id} src={image.imageUrl} alt={image.description} width={56} height={56} className={cn("rounded-2xl shadow-md", index === 2 && "scale-110 ring-2 ring-purple-500 z-10")} data-ai-hint={image.imageHint} />
+                    );
+                 })}
               </div>
               <blockquote className="text-xl italic text-gray-700 border-l-4 border-primary pl-6 mb-6">
                 “Alumbra me dio la claridad que necesitaba en un momento muy confuso. Por primera vez entendí lo que estaba viviendo y pude actuar. Gracias a esta herramienta hoy estoy fuera de una relación tóxica y más fuerte que nunca.”
@@ -268,5 +275,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    

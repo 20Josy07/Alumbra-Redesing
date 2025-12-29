@@ -3,19 +3,19 @@
     {
       "id": "feature1",
       "description": "A person analyzing a conversation on a laptop.",
-      "imageUrl": "https://images.unsplash.com/photo-1758518729161-7b2fc86b6c81?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjb252ZXJzYXRpb24lMjBhbmFseXNpc3xlbnwwfHx8fDE3NjI4OTk0MDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1516321497487-e288fb19713f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb252ZXJzYXRpb24lMjBhbmFseXNpc3xlbnwwfHx8fDE3NjI5OTM4ODd8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "conversation analysis"
     },
     {
       "id": "feature2",
       "description": "An abstract representation of advanced AI analysis.",
-      "imageUrl": "https://images.unsplash.com/photo-1711606815631-38d32cdaec3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxhZHZhbmNlZCUyMGFuYWx5c2lzfGVufDB8fHx8MTc2Mjg5OTQwMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1678494848318-4d578b8a5d5d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxhZHZhbmNlZCUyMGFuYWx5c2lzfGVufDB8fHx8MTc2Mjk5Mzg4N3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "advanced analysis"
     },
     {
       "id": "feature3",
       "description": "A person receiving support through a video call.",
-      "imageUrl": "https://picsum.photos/seed/feature3/700/558",
+      "imageUrl": "https://images.unsplash.com/photo-1554224155-83e390bd0553?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyZWFsLXRpbWUlMjBzdXBwb3J0fGVufDB8fHx8MTc2Mjk5Mzg4N3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "real-time support"
     },
     {
@@ -89,6 +89,30 @@
       "description": "A mockup of the app UI.",
       "imageUrl": "https://images.unsplash.com/photo-1559028006-448665bd7c22?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhcHAlMjBtb2NrdXB8ZW58MHx8fHwxNzYyOTQ5MDkyfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "app mockup"
+    },
+    {
+      "id": "step1",
+      "description": "Person copying text from a phone to a laptop.",
+      "imageUrl": "https://images.unsplash.com/photo-1587573262374-984365318b63?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb3B5JTIwcGFzdGV8ZW58MHx8fHwxNzYyOTkzNTc0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "copy paste"
+    },
+    {
+      "id": "step2",
+      "description": "Abstract representation of a neural network analyzing text.",
+      "imageUrl": "https://images.unsplash.com/photo-1696253900688-a145831e57a3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxhaSUyMGFuYWx5c2lzfGVufDB8fHx8MTc2Mjk5MzYwNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "AI analysis"
+    },
+    {
+      "id": "step3",
+      "description": "Example of an Alumbra report on a tablet.",
+      "imageUrl": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkZXRhaWxlZCUyMHJlcG9ydHxlbnwwfHx8fDE3NjI5OTM2MDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "detailed report"
+    },
+    {
+      "id": "step4",
+      "description": "Person on a video call with a mental health professional.",
+      "imageUrl": "https://images.unsplash.com/photo-1622902344036-7c27211342ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzdXBwb3J0JTIwY2FsbHxlbnwwfHx8fDE3NjI5OTM2MDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "support call"
     }
   ]
 }

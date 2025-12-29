@@ -7,6 +7,23 @@ service cloud.firestore {
     function isOwner(userId) {
       return request.auth != null && request.auth.uid == userId;
     }
+
+    function isAnalysisRecord(data) {
+      let requiredKeys = ['userId', 'title', 'originalText', 'createdAt', 'abuseAnalysis', 'summary'];
+      let abuseAnalysisKeys = ['abuseDetected', 'explanation'];
+      let summaryKeys = ['summary'];
+
+      return data.keys().hasAll(requiredKeys)
+        && data.userId is string && data.userId == request.auth.uid
+        && data.title is string
+        && data.originalText is string
+        && data.createdAt is timestamp
+        && data.abuseAnalysis.keys().hasAll(abuseAnalysisKeys)
+        && data.abuseAnalysis.abuseDetected is bool
+        && data.abuseAnalysis.explanation is string
+        && data.summary.keys().hasAll(summaryKeys)
+        && data.summary.summary is string;
+    }
     
     // USERS
     // Users can only read and write their own data.
@@ -15,8 +32,11 @@ service cloud.firestore {
 
       // ANALYSES
       // A user can read, create, update, and delete their own analysis records.
+      // Data must conform to the AnalysisRecord schema on create and update.
       match /analyses/{analysisId} {
-        allow read, create, update, delete: if isOwner(userId);
+        allow read, delete: if isOwner(userId);
+        allow create: if isOwner(userId) && isAnalysisRecord(request.resource.data);
+        allow update: if isOwner(userId) && isAnalysisRecord(request.resource.data);
       }
     }
   }

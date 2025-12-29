@@ -5,51 +5,40 @@ import { ArrowRight, Bot, FileText, LifeBuoy, Lock, ClipboardPaste, BrainCircuit
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/header";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 const steps = [
     {
         icon: <ClipboardPaste className="w-12 h-12 text-primary" />,
         title: "1. Pega tu Conversación",
         description: "Copia el texto de cualquier conversación (WhatsApp, SMS, email, etc.) y pégalo directamente en nuestro analizador seguro. No hay límites ni formatos complicados.",
-        image: {
-            src: "https://picsum.photos/seed/step1/800/600",
-            alt: "Persona copiando texto de un teléfono a una laptop",
-            hint: "copy paste"
-        }
+        imageId: "step1"
     },
     {
         icon: <BrainCircuit className="w-12 h-12 text-primary" />,
         title: "2. La IA Analiza en Segundos",
         description: "Nuestra inteligencia artificial, entrenada por expertos en psicología, escanea el texto en busca de patrones y tácticas de abuso emocional como gaslighting, manipulación y control coercitivo.",
-        image: {
-            src: "https://picsum.photos/seed/step2/800/600",
-            alt: "Representación abstracta de una red neuronal analizando texto",
-            hint: "AI analysis"
-        }
+        imageId: "step2"
     },
     {
         icon: <FileText className="w-12 h-12 text-primary" />,
         title: "3. Recibe tu Informe Detallado",
         description: "Obtén un reporte claro y fácil de entender con un puntaje de riesgo, los tipos de abuso detectados, ejemplos concretos de tu texto y recomendaciones personalizadas para protegerte.",
-        image: {
-            src: "https://picsum.photos/seed/step3/800/600",
-            alt: "Ejemplo de un reporte de Alumbra en una tablet",
-            hint: "detailed report"
-        }
+        imageId: "step3"
     },
     {
         icon: <LifeBuoy className="w-12 h-12 text-primary" />,
         title: "4. Conecta con Ayuda (Opcional)",
         description: "Si el informe detecta un riesgo, te ofrecemos acceso directo a una lista de recursos verificados, como líneas de ayuda y terapeutas especializados, para que no estés solo/a.",
-        image: {
-            src: "https://picsum.photos/seed/step4/800/600",
-            alt: "Persona en una videollamada con un profesional de la salud mental",
-            hint: "support call"
-        }
+        imageId: "step4"
     }
 ];
 
 export default function HowItWorksPage() {
+    const getImage = (id: string) => {
+        return PlaceHolderImages.find(img => img.id === id);
+    }
+
     return (
         <div className="bg-white text-gray-800">
             <Header activeLink="how-it-works" />
@@ -73,7 +62,9 @@ export default function HowItWorksPage() {
                 <section className="py-20 md:py-24">
                     <div className="container mx-auto px-6">
                         <div className="space-y-20">
-                            {steps.map((step, index) => (
+                            {steps.map((step, index) => {
+                                const image = getImage(step.imageId);
+                                return (
                                 <div key={index} className={`grid md:grid-cols-2 gap-12 md:gap-16 items-center ${index % 2 === 1 ? 'md:grid-flow-col-dense' : ''}`}>
                                     <div className={`${index % 2 === 1 ? 'md:col-start-2' : ''}`}>
                                         {step.icon}
@@ -81,16 +72,18 @@ export default function HowItWorksPage() {
                                         <p className="text-lg text-gray-600">{step.description}</p>
                                     </div>
                                     <div className={`relative h-80 md:h-96 w-full bg-gray-100 rounded-3xl shadow-lg overflow-hidden ${index % 2 === 1 ? 'md:col-start-1' : ''}`}>
-                                        <Image 
-                                            src={step.image.src} 
-                                            alt={step.image.alt}
-                                            fill
-                                            className="object-cover rounded-3xl"
-                                            data-ai-hint={step.image.hint}
-                                        />
+                                        {image && (
+                                            <Image 
+                                                src={image.imageUrl} 
+                                                alt={image.description}
+                                                fill
+                                                className="object-cover rounded-3xl"
+                                                data-ai-hint={image.imageHint}
+                                            />
+                                        )}
                                     </div>
                                 </div>
-                            ))}
+                            )})}
                         </div>
                     </div>
                 </section>
