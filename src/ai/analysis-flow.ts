@@ -74,8 +74,14 @@ const analysisFlow = ai.defineFlow(
   },
   async (text) => {
     
+    // Correctly call the defined prompt
     const { output } = await analysisPrompt(text);
   
-    return output!;
+    // Ensure the output is not null before returning
+    if (!output) {
+      throw new Error("El análisis de IA no devolvió un resultado válido.");
+    }
+    
+    return output;
   }
 );
