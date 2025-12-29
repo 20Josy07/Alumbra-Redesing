@@ -13,7 +13,7 @@ import { type AnalysisRecord } from "@/types";
 import { useMemo, useState, useTransition } from "react";
 import { collection, query, orderBy, Timestamp } from "firebase/firestore";
 import { useCollection, useMemoFirebase } from "@/firebase";
-import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 
 interface DashboardPageProps {
@@ -175,12 +175,12 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Input
+            <Textarea
               placeholder="Pega aquí el texto de WhatsApp, SMS, email, etc."
               value={text}
               onChange={(e) => setText(e.target.value)}
               disabled={isPending}
-              className="text-base"
+              className="text-base min-h-[120px]"
             />
             {error && (
               <Alert variant="destructive" className="mt-4">
