@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview This file contains the Genkit flow for analyzing text for psychological abuse.
@@ -6,9 +7,9 @@
  * - AnalysisResult - The output type for the analysis flow.
  */
 
-import { ai } from './genkit'; // Import the configured 'ai' object
-import { googleAI } from '@genkit-ai/google-genai';
-import { z } from 'genkit';
+import { ai } from './genkit';
+import { gemini15Flash } from '@genkit-ai/google-genai';
+import { z } from 'zod';
 
 // Define the consolidated output schema for the analysis.
 const AnalysisResultSchema = z.object({
@@ -58,7 +59,7 @@ const analysisFlow = ai.defineFlow(
 
     const { output } = await ai.generate({
       prompt,
-      model: googleAI('gemini-1.5-flash'),
+      model: gemini15Flash,
       output: { schema: AnalysisResultSchema },
       config: {
         safetySettings: [
