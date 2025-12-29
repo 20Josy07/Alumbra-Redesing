@@ -58,6 +58,7 @@ const analysisPrompt = ai.definePrompt(
           threshold: 'BLOCK_NONE',
         },
       ],
+      model: 'googleai/gemini-1.5-flash-preview-0514'
     },
   },
 );
@@ -72,14 +73,7 @@ const analysisFlow = ai.defineFlow(
   },
   async (text) => {
     
-    const { output } = await ai.generate({
-      prompt: {
-        prompt: analysisPrompt,
-        input: text,
-      },
-      model: 'googleai/gemini-1.5-flash-preview-0514',
-      output: { schema: AnalysisResultSchema },
-    });
+    const { output } = await analysisPrompt(text);
   
     return output!;
   }
