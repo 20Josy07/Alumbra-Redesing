@@ -77,7 +77,7 @@ const analysisFlow = ai.defineFlow(
         prompt: analysisPrompt,
         input: text,
       },
-      model: 'googleai/gemini-1.5-flash',
+      model: 'googleai/gemini-1.5-flash-preview-0514',
       output: { schema: AnalysisResultSchema },
     });
   
