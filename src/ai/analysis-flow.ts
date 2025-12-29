@@ -8,7 +8,6 @@
  */
 
 import { ai } from './genkit';
-import { gemini15Flash } from '@genkit-ai/google-genai';
 import { z } from 'zod';
 
 // Define the consolidated output schema for the analysis.
@@ -56,20 +55,21 @@ const analysisFlow = ai.defineFlow(
       ${text}
       ---
     `;
-
+   
     const { output } = await ai.generate({
-      prompt,
-      model: gemini15Flash,
-      output: { schema: AnalysisResultSchema },
-      config: {
-        safetySettings: [
-            {
-                category: 'HARM_CATEGORY_HARASSMENT',
-                threshold: 'BLOCK_NONE'
-            }
-        ]
-      }
-    });
+    prompt,
+    model: 'googleai/gemini-1.5-flash',
+    output: { schema: AnalysisResultSchema },
+    config: {
+      safetySettings: [
+        {
+          category: 'HARM_CATEGORY_HARASSMENT',
+          threshold: 'BLOCK_NONE',
+        },
+      ],
+    },
+  });
+  
 
     return output!;
   }
