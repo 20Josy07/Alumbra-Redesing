@@ -12,7 +12,7 @@ import { FirebaseOptions, initializeApp, getApp, getApps } from "firebase/app";
  * Project settings > General > Your apps > Web app > SDK setup and configuration
  */
 export const firebaseConfig: FirebaseOptions = {
-  apiKey: "AIzaSyAhYc_tFRMWsWijyqAZqRpp2f591WzDE6A",
+  apiKey: "AIzaSyDGG6i6HZuT6JlNdyesl1m3bxChMfa38XE",
   authDomain: "studio-2974479464-2f7f9.firebaseapp.com",
   projectId: "studio-2974479464-2f7f9",
   storageBucket: "studio-2974479464-2f7f9.appspot.com",
