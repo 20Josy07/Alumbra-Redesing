@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from "react";
@@ -46,6 +45,8 @@ export default function LoginPage() {
             let description = "Hubo un problema al iniciar sesión. Verifica tus credenciales.";
             if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
                 description = "Correo o contraseña incorrectos. Por favor, verifica tus datos.";
+            } else if (error.code === 'auth/invalid-api-key' || error.code?.includes('identity-toolkit')) {
+                description = "La configuración de autenticación no es correcta. Por favor, revisa la consola de Firebase.";
             }
             toast({
                 variant: "destructive",
