@@ -52,6 +52,15 @@ const analysisPrompt = ai.definePrompt(
       {{{input}}}
       ---
     `,
+    model: googleAI.model('gemini-1.5-flash'),
+    config: {
+      safetySettings: [
+        {
+          category: 'HARM_CATEGORY_HARASSMENT',
+          threshold: 'BLOCK_NONE',
+        },
+      ],
+    }
   },
 );
 
@@ -65,20 +74,8 @@ const analysisFlow = ai.defineFlow(
   },
   async (text) => {
     
-    // Correctly call the defined prompt
-    const { output } = await ai.generate({
-        prompt: analysisPrompt,
-        model: googleAI.model('gemini-1.5-flash'),
-        input: text,
-        config: {
-          safetySettings: [
-            {
-              category: 'HARM_CATEGORY_HARASSMENT',
-              threshold: 'BLOCK_NONE',
-            },
-          ],
-        }
-    });
+    // Directly invoke the prompt with the input text.
+    const { output } = await analysisPrompt(text);
   
     // Ensure the output is not null before returning
     if (!output) {
