@@ -29,16 +29,12 @@ export async function analyzeText(text: string): Promise<AnalysisResult> {
   return analysisFlow(text);
 }
 
-// Define the Genkit flow.
-const analysisFlow = ai.defineFlow(
+const analysisPrompt = ai.definePrompt(
   {
-    name: 'analysisFlow',
-    inputSchema: z.string(),
-    outputSchema: AnalysisResultSchema,
-  },
-  async (text) => {
-    
-    const prompt = `
+    name: 'analysisPrompt',
+    input: { schema: z.string() },
+    output: { schema: AnalysisResultSchema },
+    prompt: `
       Eres un experto en IA altamente especializado en detectar abuso psicológico y emocional en textos.
       Tu tarea es analizar el siguiente texto y proporcionar una evaluación estructurada en formato JSON.
 
@@ -52,14 +48,9 @@ const analysisFlow = ai.defineFlow(
 
       Analiza el siguiente texto:
       ---
-      ${text}
+      {{{input}}}
       ---
-    `;
-   
-    const { output } = await ai.generate({
-    prompt,
-    model: 'googleai/gemini-1.5-flash',
-    output: { schema: AnalysisResultSchema },
+    `,
     config: {
       safetySettings: [
         {
@@ -68,9 +59,28 @@ const analysisFlow = ai.defineFlow(
         },
       ],
     },
-  });
-  
+  },
+);
 
+
+// Define the Genkit flow.
+const analysisFlow = ai.defineFlow(
+  {
+    name: 'analysisFlow',
+    inputSchema: z.string(),
+    outputSchema: AnalysisResultSchema,
+  },
+  async (text) => {
+    
+    const { output } = await ai.generate({
+      prompt: {
+        prompt: analysisPrompt,
+        input: text,
+      },
+      model: 'googleai/gemini-1.5-flash',
+      output: { schema: AnalysisResultSchema },
+    });
+  
     return output!;
   }
 );
