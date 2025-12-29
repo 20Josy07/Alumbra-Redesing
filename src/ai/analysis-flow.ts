@@ -58,7 +58,7 @@ const analysisFlow = ai.defineFlow(
 
     const { output } = await ai.generate({
       prompt,
-      model: googleAI('gemini-pro'),
+      model: googleAI('gemini-1.5-flash'),
       output: { schema: AnalysisResultSchema },
       config: {
         safetySettings: [
