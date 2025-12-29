@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -85,7 +86,11 @@ export default function SignupPage() {
                 description: "Tu cuenta ha sido creada.",
             });
             router.push('/welcome');
-        } catch (error) {
+        } catch (error: any) {
+            if (error.code === 'auth/cancelled-popup-request') {
+                // User cancelled the popup, so we do nothing.
+                return;
+            }
             console.error("Error during Google sign-in:", error);
             toast({
                 variant: "destructive",

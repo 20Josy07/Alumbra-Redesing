@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from "react";
@@ -66,7 +67,11 @@ export default function LoginPage() {
                 description: "Has iniciado sesión correctamente.",
             });
             router.push('/dashboard');
-        } catch (error) {
+        } catch (error: any) {
+            if (error.code === 'auth/cancelled-popup-request') {
+                // User cancelled the popup, so we do nothing.
+                return;
+            }
             console.error("Error during Google sign-in:", error);
             toast({
                 variant: "destructive",
