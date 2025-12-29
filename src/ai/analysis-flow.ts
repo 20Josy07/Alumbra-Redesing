@@ -53,7 +53,7 @@ const analysisPrompt = ai.definePrompt(
       ---
     `,
     config: {
-      model: googleAI.model('gemini-1.5-flash'), // Correct way to specify the model
+      model: googleAI.model('gemini-1.5-flash'),
       safetySettings: [
         {
           category: 'HARM_CATEGORY_HARASSMENT',
