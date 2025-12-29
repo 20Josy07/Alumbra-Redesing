@@ -1,7 +1,5 @@
-
-import type {NextConfig} from 'next';
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   experimental: {
     allowedDevOrigins: ['*'],
   },
@@ -44,7 +42,7 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'https' ,
+        protocol: 'https',
         hostname: 'i.postimg.cc',
         port: '',
         pathname: '/**',
@@ -72,5 +70,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-
-    
