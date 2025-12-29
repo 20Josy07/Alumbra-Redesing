@@ -9,6 +9,7 @@
 
 import { ai } from './genkit';
 import { z } from 'zod';
+import { googleAI } from '@genkit-ai/google-genai';
 
 // Define the consolidated output schema for the analysis.
 const AnalysisResultSchema = z.object({
@@ -58,7 +59,7 @@ const analysisPrompt = ai.definePrompt(
           threshold: 'BLOCK_NONE',
         },
       ],
-      model: 'googleai/gemini-1.5-flash-preview-0514'
+      model: googleAI.model('gemini-1.5-flash-preview-0514')
     },
   },
 );
