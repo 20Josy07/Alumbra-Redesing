@@ -8,7 +8,7 @@ import { useUser } from '@/firebase';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { LogOut, Menu } from 'lucide-react';
-import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -38,7 +38,7 @@ export default function Header({ activeLink }: HeaderProps) {
         </Link>
       </li>
       <li>
-        <Link href="/reviews" className={activeLink === 'reviews' ? 'text-primary font-semibold transition-colors' : 'hover:text-primary transition-colors'} onClick={() => setIsSheetOpen(false)}>
+        <Link href="/reviews" className={activeLink === 'reviews' ? 'text-primary font-semibold transition-colors' : 'hover-text-primary transition-colors'} onClick={() => setIsSheetOpen(false)}>
           Reseñas
         </Link>
       </li>
@@ -121,7 +121,8 @@ export default function Header({ activeLink }: HeaderProps) {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px] p-0 flex flex-col">
-              <div className="p-6">
+              <SheetHeader className="p-6">
+                <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
                    <Link href="/" className="flex items-center gap-2" onClick={() => setIsSheetOpen(false)}>
                       <Image
                         src="https://i.postimg.cc/QCys4Rbt/favicon-light.png"
@@ -131,7 +132,7 @@ export default function Header({ activeLink }: HeaderProps) {
                       />
                       <span className="text-xl font-bold">Alumbra</span>
                     </Link>
-                </div>
+                </SheetHeader>
                 <nav className="flex-1 px-6">
                   <ul className="flex flex-col gap-6 text-lg font-medium">
                     {user && (
