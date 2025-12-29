@@ -52,7 +52,7 @@ const analysisPrompt = ai.definePrompt(
       {{{input}}}
       ---
     `,
-    model: googleAI.model('gemini-1.5-flash'),
+    model: googleAI.model('gemini-1.5-flash-latest'),
     config: {
       safetySettings: [
         {
