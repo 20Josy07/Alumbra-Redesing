@@ -33,6 +33,7 @@ export async function analyzeText(text: string): Promise<AnalysisResult> {
 const analysisPrompt = ai.definePrompt(
   {
     name: 'analysisPrompt',
+    input: { schema: z.string() },
     output: { schema: AnalysisResultSchema },
     prompt: `
       Eres un experto en IA altamente especializado en detectar abuso psicológico y emocional en textos.
@@ -51,6 +52,15 @@ const analysisPrompt = ai.definePrompt(
       {{{input}}}
       ---
     `,
+    config: {
+        model: googleAI.model('gemini-2.5-flash-lite'),
+        safetySettings: [
+            {
+            category: 'HARM_CATEGORY_HARASSMENT',
+            threshold: 'BLOCK_NONE',
+            },
+        ],
+    }
   },
 );
 
@@ -64,19 +74,7 @@ const analysisFlow = ai.defineFlow(
   },
   async (text) => {
     
-    const { output } = await ai.generate({
-        prompt: analysisPrompt,
-        model: googleAI.model('gemini-2.5-flash-lite'),
-        input: text,
-        config: {
-            safetySettings: [
-                {
-                category: 'HARM_CATEGORY_HARASSMENT',
-                threshold: 'BLOCK_NONE',
-                },
-            ],
-        }
-    });
+    const { output } = await analysisPrompt(text);
   
     // Ensure the output is not null before returning
     if (!output) {
@@ -86,4 +84,3 @@ const analysisFlow = ai.defineFlow(
     return output;
   }
 );
-
