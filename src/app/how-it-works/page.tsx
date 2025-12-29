@@ -84,9 +84,8 @@ export default function HowItWorksPage() {
                                         <Image 
                                             src={step.image.src} 
                                             alt={step.image.alt}
-                                            layout="fill"
-                                            objectFit="cover"
-                                            className="rounded-3xl"
+                                            fill
+                                            className="object-cover rounded-3xl"
                                             data-ai-hint={step.image.hint}
                                         />
                                     </div>
@@ -161,3 +160,5 @@ export default function HowItWorksPage() {
         </div>
     );
 }
+
+    

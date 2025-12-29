@@ -1,4 +1,3 @@
-
 'use client';
 import { ArrowRight, Facebook, Instagram, Linkedin, Twitter, Youtube } from 'lucide-react';
 import Image from 'next/image';
@@ -117,8 +116,8 @@ export default function LandingPage() {
                   <Image
                     src="https://picsum.photos/seed/feature1/700/553"
                     alt="Pega tu conversación y analiza al instante"
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    className="object-cover"
                     data-ai-hint="conversation analysis"
                   />
                 </div>
@@ -130,8 +129,8 @@ export default function LandingPage() {
                   <Image
                     src="https://picsum.photos/seed/feature2/701/551"
                     alt="Análisis avanzado de abuso emocional"
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    className="object-cover"
                     data-ai-hint="advanced analysis"
                   />
                 </div>
@@ -143,8 +142,8 @@ export default function LandingPage() {
                   <Image
                     src="https://picsum.photos/seed/feature3/700/558"
                     alt="Soporte en tiempo real"
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    className="object-cover"
                     data-ai-hint="real-time support"
                   />
                 </div>
@@ -184,7 +183,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className={cn("relative h-96 md:h-[600px] w-full bg-gray-200 rounded-3xl", isIntersecting2 && "animate-in fade-in zoom-in-95 duration-700 delay-200")}>
-               <Image src="https://picsum.photos/seed/protection/800/600" alt="Simplifica tu protección" layout="fill" objectFit="cover" className="rounded-3xl" data-ai-hint="protection steps" />
+               <Image src="https://picsum.photos/seed/protection/800/600" alt="Simplifica tu protección" fill className="object-cover rounded-3xl" data-ai-hint="protection steps" />
             </div>
           </div>
         </section>
@@ -269,3 +268,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    

@@ -62,9 +62,8 @@ export default function TeamPage() {
                            {getImage('team-group') && <Image 
                                 src={getImage('team-group')?.imageUrl as string}
                                 alt="Equipo de Alumbra"
-                                layout="fill"
-                                objectFit="cover"
-                                className="rounded-3xl"
+                                fill
+                                className="object-cover rounded-3xl"
                                 data-ai-hint={getImage('team-group')?.imageHint}
                             />}
                         </div>
@@ -95,9 +94,8 @@ export default function TeamPage() {
                            {getImage('mockup-2') && <Image 
                                src={getImage('mockup-2')?.imageUrl as string}
                                alt="Maqueta de la aplicación Alumbra"
-                               layout="fill"
-                               objectFit="cover"
-                               className="rounded-3xl"
+                               fill
+                               className="object-cover rounded-3xl"
                                data-ai-hint={getImage('mockup-2')?.imageHint}
                            />}
                         </div>
@@ -145,7 +143,7 @@ export default function TeamPage() {
                                                             src={image.imageUrl}
                                                             alt={`Foto de ${member.name}`}
                                                             fill
-                                                            style={{ objectFit: 'cover' }}
+                                                            className="object-cover"
                                                             data-ai-hint={image.imageHint}
                                                         />
                                                     </div>
@@ -198,3 +196,5 @@ export default function TeamPage() {
         </div>
     );
 }
+
+    
