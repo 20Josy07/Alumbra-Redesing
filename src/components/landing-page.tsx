@@ -268,7 +268,7 @@ export default function LandingPage() {
           </div>
         </section>
         
-        <section ref={ref4} className={cn("py-20 md:py-24 bg-white transition-opacity duration-700", isIntersecting4 ? "opacity-100" : "opacity-0")}>
+        <section ref={ref4} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700", isIntersecting4 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6">
             <div className={cn("text-center max-w-3xl mx-auto", isIntersecting4 && "animate-in fade-in slide-in-from-bottom-12 duration-700")}>
               <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
@@ -316,14 +316,14 @@ export default function LandingPage() {
       </main>
       
 
-      <footer ref={ref5} className={cn("bg-white text-gray-800 py-20 transition-opacity duration-700", isIntersecting5 ? "opacity-100" : "opacity-0")}>
+      <footer ref={ref5} className={cn("bg-gray-900 text-gray-400 py-20 transition-opacity duration-700", isIntersecting5 ? "opacity-100" : "opacity-0")}>
         <div className="container mx-auto px-6 grid md:grid-cols-3 gap-12">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <Image src="https://i.postimg.cc/QCys4Rbt/favicon-light.png" alt="Alumbra" width={32} height={32} />
-              <span className="text-2xl font-bold text-gray-900">Alumbra</span>
+              <span className="text-2xl font-bold text-white">Alumbra</span>
             </div>
-            <p className="text-sm leading-relaxed max-w-sm text-gray-600">
+            <p className="text-sm leading-relaxed max-w-sm">
               La primera IA que detecta abuso emocional en conversaciones y te da claridad instantánea para proteger tu bienestar.
             </p>
             <div className="mt-8">
@@ -338,33 +338,31 @@ export default function LandingPage() {
             </div>
           </div>
           <div>
-            <h4 className="font-bold text-gray-900 mb-6">Quick Links</h4>
+            <h4 className="font-bold text-white mb-6">Quick Links</h4>
             <ul className="space-y-3 text-sm">
-              <li><Link href="/" className="text-gray-600 hover:text-primary transition-colors">Home</Link></li>
-              <li><Link href="/how-it-works" className="text-gray-600 hover:text-primary transition-colors">Cómo funciona</Link></li>
-              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Precios</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Reseñas</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Contacto</a></li>
+              <li><Link href="/" className="hover:text-primary transition-colors">Home</Link></li>
+              <li><Link href="/how-it-works" className="hover:text-primary transition-colors">Cómo funciona</Link></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Precios</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Reseñas</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Contacto</a></li>
             </ul>
           </div>
           <div>
-            <h4 className="font-bold text-gray-900 mb-6">All Pages</h4>
+            <h4 className="font-bold text-white mb-6">All Pages</h4>
             <ul className="space-y-3 text-sm">
-              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Sobre nosotros</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Equipo</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Blog</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Privacidad</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Términos de uso</a></li>
-              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">404</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Sobre nosotros</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Equipo</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Blog</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Privacidad</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Términos de uso</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">404</a></li>
             </ul>
           </div>
         </div>
-        <div className="container mx-auto px-6 mt-16 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
+        <div className="container mx-auto px-6 mt-16 pt-8 border-t border-gray-700 text-center text-sm">
           <p>© 2025 Alumbra. Todos los derechos reservados. <span className="ml-4 opacity-70">Made with love in Colombia</span></p>
         </div>
       </footer>
     </div>
   );
 }
-
-    
