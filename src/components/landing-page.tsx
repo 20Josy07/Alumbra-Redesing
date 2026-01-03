@@ -1,5 +1,5 @@
 'use client';
-import { ArrowRight, Facebook, Instagram, Linkedin, Twitter, Youtube } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Facebook, Instagram, Linkedin, Twitter, XCircle, Youtube } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from './ui/button';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
@@ -11,11 +11,13 @@ import { BrainCircuit, Lock } from 'lucide-react';
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Badge } from './ui/badge';
 
 export default function LandingPage() {
   const { ref: ref1, isIntersecting: isIntersecting1 } = useIntersectionObserver({ threshold: 0.1 });
   const { ref: ref2, isIntersecting: isIntersecting2 } = useIntersectionObserver({ threshold: 0.1 });
   const { ref: ref3, isIntersecting: isIntersecting3 } = useIntersectionObserver({ threshold: 0.1 });
+  const { ref: ref4, isIntersecting: isIntersecting4 } = useIntersectionObserver({ threshold: 0.1 });
   const { ref: ref5, isIntersecting: isIntersecting5 } = useIntersectionObserver({ threshold: 0.1 });
 
   const { user } = useUser();
@@ -32,6 +34,50 @@ export default function LandingPage() {
   const getImage = (id: string) => {
     return PlaceHolderImages.find(img => img.id === id);
   };
+
+  const plans = [
+    {
+      name: "Plan Básico",
+      price: "$12.000",
+      description: "Empieza a analizar sin complicaciones",
+      features: [
+        { text: "30 análisis al mes", included: true },
+        { text: "Acceso al analizador de conversaciones", included: true },
+        { text: "Resultados claros y directos", included: true },
+        { text: "No incluye dashboard de gestión", included: false },
+      ],
+      cta: "Empezar ahora",
+      popular: false,
+    },
+    {
+      name: "Plan Pro",
+      price: "$25.000",
+      description: "Más control, más análisis",
+      features: [
+        { text: "60 análisis al mes", included: true },
+        { text: "Dashboard de gestión básico", included: true },
+        { text: "Historial de análisis", included: true },
+        { text: "Visualización de resultados", included: true },
+        { text: "Funciones avanzadas limitadas", included: false },
+      ],
+      cta: "Elegir Plan Pro",
+      popular: true,
+    },
+    {
+      name: "Plan Premium",
+      price: "$45.000",
+      description: "Análisis sin límites y control total",
+      features: [
+        { text: "Análisis ilimitados", included: true },
+        { text: "Dashboard de gestión completo", included: true },
+        { text: "Historial completo", included: true },
+        { text: "Herramientas avanzadas de control y visualización", included: true },
+        { text: "Acceso prioritario a nuevas funciones", included: true },
+      ],
+      cta: "Pasar a Premium",
+      popular: false,
+    }
+  ];
 
 
   return (
@@ -218,6 +264,51 @@ export default function LandingPage() {
                 María José Ramírez<br />
                 <span className="font-normal text-gray-500">Usuaria desde marzo 2025</span>
               </p>
+            </div>
+          </div>
+        </section>
+        
+        <section ref={ref4} className={cn("py-20 md:py-24 bg-white transition-opacity duration-700", isIntersecting4 ? "opacity-100" : "opacity-0")}>
+          <div className="container mx-auto px-6">
+            <div className={cn("text-center max-w-3xl mx-auto", isIntersecting4 && "animate-in fade-in slide-in-from-bottom-12 duration-700")}>
+              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
+                Un plan para cada necesidad
+              </h2>
+              <p className="mt-4 text-lg text-gray-600">
+                Desde un análisis ocasional hasta el uso intensivo, tenemos un plan que se ajusta a ti. Empieza gratis, mejora cuando quieras.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 max-w-6xl mx-auto items-start">
+              {plans.map((plan) => (
+                <Card key={plan.name} className={cn("flex flex-col h-full rounded-2xl", plan.popular ? "border-2 border-primary shadow-2xl relative" : "shadow-lg")}>
+                  {plan.popular && (
+                    <Badge className="absolute -top-3 right-6">⭐ Más Popular</Badge>
+                  )}
+                  <CardHeader className="text-center">
+                    <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                    <CardDescription>{plan.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-1">
+                    <div className="text-center mb-6">
+                      <span className="text-4xl font-extrabold">{plan.price}</span>
+                      <span className="text-muted-foreground"> / mes</span>
+                    </div>
+                    <ul className="space-y-3">
+                      {plan.features.map((feature, index) => (
+                        <li key={index} className="flex items-center gap-3">
+                          {feature.included ? <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" /> : <XCircle className="w-5 h-5 text-muted-foreground flex-shrink-0" />}
+                          <span className={cn(!feature.included && "text-muted-foreground")}>{feature.text}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter className="flex-col">
+                    <Button size="lg" variant={plan.popular ? "default" : "outline"} className="w-full">
+                      {plan.cta}
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
             </div>
           </div>
         </section>
