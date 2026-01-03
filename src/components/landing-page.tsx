@@ -240,35 +240,45 @@ export default function LandingPage() {
         </section>
 
         <section ref={ref3} className={cn("py-20 md:py-32 bg-gray-50 transition-opacity duration-700", isIntersecting3 ? "opacity-100" : "opacity-0")}>
-          <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-16">
+          <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
             <div className={cn("md:w-1/2", isIntersecting3 && "animate-in fade-in slide-in-from-left-16 duration-700")}>
-              <h2 className="text-4xl md:text-6xl font-extrabold leading-tight">
+              <h2 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
                 Amada por quienes se<br />protegen y quienes<br />
                 <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-transparent bg-clip-text">ayudan</span>
               </h2>
             </div>
             <div className={cn("md:w-1/2 max-w-lg", isIntersecting3 && "animate-in fade-in slide-in-from-right-16 duration-700 delay-200")}>
-              <div className="flex gap-3 mb-8">
-                 {['avatar1', 'avatar2', 'avatar3', 'avatar4', 'avatar5'].map((id, index) => {
-                    const image = getImage(id);
-                    if (!image) return null;
-                    return (
-                        <Image key={id} src={image.imageUrl} alt={image.description} width={56} height={56} className={cn("rounded-2xl shadow-md", index === 2 && "scale-110 ring-2 ring-purple-500 z-10")} data-ai-hint={image.imageHint} />
-                    );
-                 })}
-              </div>
-              <blockquote className="text-xl italic text-gray-700 border-l-4 border-primary pl-6 mb-6">
-                “Alumbra me dio la claridad que necesitaba en un momento muy confuso. Por primera vez entendí lo que estaba viviendo y pude actuar. Gracias a esta herramienta hoy estoy fuera de una relación tóxica y más fuerte que nunca.”
-              </blockquote>
-              <p className="font-semibold">
-                María José Ramírez<br />
-                <span className="font-normal text-gray-500">Usuaria desde marzo 2025</span>
-              </p>
+                <div className="bg-white rounded-3xl shadow-2xl p-8">
+                    <div className="flex -space-x-2 mb-6 justify-start">
+                        {['avatar1', 'avatar2', 'avatar3', 'avatar4', 'avatar5'].map((id) => {
+                            const image = getImage(id);
+                            if (!image) return null;
+                            return (
+                                <Image
+                                key={id}
+                                src={image.imageUrl}
+                                alt={image.description}
+                                width={40}
+                                height={40}
+                                className="rounded-full ring-2 ring-white"
+                                data-ai-hint={image.imageHint}
+                                />
+                            );
+                        })}
+                    </div>
+                    <blockquote className="text-base text-gray-600 border-l-4 border-primary/20 pl-4 mb-6">
+                        “Alumbra me dio la claridad que necesitaba en un momento muy confuso. Por primera vez entendí lo que estaba viviendo y pude actuar. Gracias a esta herramienta hoy estoy fuera de una relación tóxica y más fuerte que nunca.”
+                    </blockquote>
+                    <div>
+                        <p className="font-semibold text-gray-800">María José Ramírez</p>
+                        <p className="text-sm text-gray-500">Usuaria desde marzo 2025</p>
+                    </div>
+                </div>
             </div>
           </div>
         </section>
         
-        <section ref={ref4} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700", isIntersecting4 ? "opacity-100" : "opacity-0")}>
+        <section ref={ref4} className={cn("py-20 md:py-24 bg-white transition-opacity duration-700", isIntersecting4 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6">
             <div className={cn("text-center max-w-3xl mx-auto", isIntersecting4 && "animate-in fade-in slide-in-from-bottom-12 duration-700")}>
               <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
