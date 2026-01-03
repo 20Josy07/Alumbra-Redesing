@@ -56,7 +56,7 @@ export default function TeamPage() {
                             Nuestra misión es más que <br /> tecnología, es empatía.
                         </h1>
                         <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
-                           En Alumbra, estamos construyendo la nueva generación de herramientas de bienestar emocional: simples, seguras y ultrarrápidas. Nuestra misión es empoderar a las personas para que pasen de la incertidumbre a la claridad sin fricciones.
+                           En Alumbra, nuestra misión es iluminar conversaciones para proteger el bienestar emocional de las personas, utilizando tecnología basada en inteligencia artificial que analiza interacciones comunicativas para identificar señales tempranas de abuso psicológico. Buscamos empoderar a individuos, instituciones y comunidades con herramientas éticas, confidenciales y accesibles que fomenten relaciones sanas, prevengan la violencia emocional y promuevan una comunicación consciente y respetuosa.
                         </p>
                         <div className="relative h-96 md:h-[600px] w-full max-w-6xl mx-auto bg-gray-100 rounded-3xl shadow-2xl overflow-hidden">
                            {getImage('team-group') && <Image 
