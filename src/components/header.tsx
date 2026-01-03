@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -11,9 +10,24 @@ import { LogOut, Menu } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
+
+type NavLink = {
+  href: string;
+  label: string;
+  key: 'how-it-works' | 'reviews' | 'pricing' | 'team' | 'contact' | 'features';
+};
+
+const navItems: NavLink[] = [
+  { href: '/#how-it-works', label: 'Cómo funciona', key: 'how-it-works' },
+  { href: '/#reviews', label: 'Reseñas', key: 'reviews' },
+  { href: '/#pricing', label: 'Precios', key: 'pricing' },
+  { href: '/team', label: 'Equipo', key: 'team' },
+  { href: '/contact', label: 'Contacto', key: 'contact' },
+];
 
 type HeaderProps = {
-  activeLink?: 'how-it-works' | 'reviews' | 'team' | 'contact';
+  activeLink?: string | null;
 };
 
 export default function Header({ activeLink }: HeaderProps) {
@@ -32,26 +46,20 @@ export default function Header({ activeLink }: HeaderProps) {
 
   const navLinks = (
     <>
-      <li>
-        <Link href="/how-it-works" className={activeLink === 'how-it-works' ? 'text-primary font-semibold transition-colors' : 'hover:text-primary transition-colors'} onClick={() => setIsSheetOpen(false)}>
-          Cómo funciona
-        </Link>
-      </li>
-      <li>
-        <Link href="/reviews" className={activeLink === 'reviews' ? 'text-primary font-semibold transition-colors' : 'hover-text-primary transition-colors'} onClick={() => setIsSheetOpen(false)}>
-          Reseñas
-        </Link>
-      </li>
-      <li>
-        <Link href="/team" className={activeLink === 'team' ? 'text-primary font-semibold transition-colors' : 'hover:text-primary transition-colors'} onClick={() => setIsSheetOpen(false)}>
-          Equipo
-        </Link>
-      </li>
-      <li>
-        <Link href="/contact" className={activeLink === 'contact' ? 'text-primary font-semibold transition-colors' : 'hover:text-primary transition-colors'} onClick={() => setIsSheetOpen(false)}>
-          Contacto
-        </Link>
-      </li>
+      {navItems.map((item) => (
+        <li key={item.key}>
+          <Link 
+            href={item.href} 
+            className={cn(
+              'hover:text-primary transition-colors',
+              activeLink === item.key && 'text-primary font-semibold underline underline-offset-4'
+            )}
+            onClick={() => setIsSheetOpen(false)}
+          >
+            {item.label}
+          </Link>
+        </li>
+      ))}
     </>
   );
 

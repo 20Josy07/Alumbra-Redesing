@@ -12,6 +12,7 @@ import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Badge } from './ui/badge';
+import { useActiveSection } from '@/hooks/use-active-section';
 
 export default function LandingPage() {
   const { ref: ref1, isIntersecting: isIntersecting1 } = useIntersectionObserver({ threshold: 0.1 });
@@ -22,6 +23,13 @@ export default function LandingPage() {
 
   const { user } = useUser();
   const router = useRouter();
+
+  const activeSection = useActiveSection([
+    'features',
+    'how-it-works',
+    'reviews',
+    'pricing',
+  ]);
 
   const handleAnalysisClick = () => {
     if (user) {
@@ -82,7 +90,7 @@ export default function LandingPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-800">
-      <Header />
+      <Header activeLink={activeSection} />
 
       <main className="flex-1">
         <section className="text-center py-20 md:py-32">
@@ -151,7 +159,7 @@ export default function LandingPage() {
             </div>
         </section>
 
-        <section ref={ref1} className={cn("py-20 md:py-24 bg-white transition-opacity duration-700", isIntersecting1 ? "opacity-100" : "opacity-0")}>
+        <section id="features" ref={ref1} className={cn("py-20 md:py-24 bg-white transition-opacity duration-700 scroll-mt-20", isIntersecting1 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6">
             <div className={cn("text-center max-w-3xl mx-auto", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-12 duration-700")}>
               <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
@@ -205,7 +213,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section ref={ref2} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700", isIntersecting2 ? "opacity-100" : "opacity-0")}>
+        <section id="how-it-works" ref={ref2} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700 scroll-mt-20", isIntersecting2 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
             <div className={cn(isIntersecting2 && "animate-in fade-in slide-in-from-left-16 duration-700")}>
               <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">Simplifica tu<br />protección</h2>
@@ -239,7 +247,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section ref={ref3} className={cn("py-20 md:py-32 bg-white transition-opacity duration-700", isIntersecting3 ? "opacity-100" : "opacity-0")}>
+        <section id="reviews" ref={ref3} className={cn("py-20 md:py-32 bg-white transition-opacity duration-700 scroll-mt-20", isIntersecting3 ? "opacity-100" : "opacity-0")}>
             <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
                 <div className={cn("max-w-lg", isIntersecting3 && "animate-in fade-in slide-in-from-left-16 duration-700")}>
                     <h2 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
@@ -278,7 +286,7 @@ export default function LandingPage() {
             </div>
         </section>
         
-        <section ref={ref4} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700", isIntersecting4 ? "opacity-100" : "opacity-0")}>
+        <section id="pricing" ref={ref4} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700 scroll-mt-20", isIntersecting4 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6">
             <div className={cn("text-center max-w-3xl mx-auto", isIntersecting4 && "animate-in fade-in slide-in-from-bottom-12 duration-700")}>
               <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
@@ -351,17 +359,17 @@ export default function LandingPage() {
             <h4 className="font-bold text-white mb-6">Quick Links</h4>
             <ul className="space-y-3 text-sm">
               <li><Link href="/" className="hover:text-white transition-colors text-primary-foreground/80">Home</Link></li>
-              <li><Link href="/how-it-works" className="hover:text-white transition-colors text-primary-foreground/80">Cómo funciona</Link></li>
-              <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Precios</a></li>
-              <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Reseñas</a></li>
-              <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Contacto</a></li>
+              <li><Link href="/#how-it-works" className="hover:text-white transition-colors text-primary-foreground/80">Cómo funciona</Link></li>
+              <li><Link href="/#pricing" className="hover:text-white transition-colors text-primary-foreground/80">Precios</Link></li>
+              <li><Link href="/#reviews" className="hover:text-white transition-colors text-primary-foreground/80">Reseñas</Link></li>
+              <li><Link href="/contact" className="hover:text-white transition-colors text-primary-foreground/80">Contacto</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold text-white mb-6">All Pages</h4>
             <ul className="space-y-3 text-sm">
               <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Sobre nosotros</a></li>
-              <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Equipo</a></li>
+              <li><Link href="/team" className="hover:text-white transition-colors text-primary-foreground/80">Equipo</Link></li>
               <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Blog</a></li>
               <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Privacidad</a></li>
               <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Términos de uso</a></li>
