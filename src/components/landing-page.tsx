@@ -205,7 +205,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section ref={ref2} className={cn("py-20 md:py-24 transition-opacity duration-700", isIntersecting2 ? "opacity-100" : "opacity-0")}>
+        <section ref={ref2} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700", isIntersecting2 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
             <div className={cn(isIntersecting2 && "animate-in fade-in slide-in-from-left-16 duration-700")}>
               <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">Simplifica tu<br />protección</h2>
@@ -239,7 +239,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section ref={ref3} className={cn("py-20 md:py-32 bg-gray-50 transition-opacity duration-700", isIntersecting3 ? "opacity-100" : "opacity-0")}>
+        <section ref={ref3} className={cn("py-20 md:py-32 bg-white transition-opacity duration-700", isIntersecting3 ? "opacity-100" : "opacity-0")}>
             <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
                 <div className={cn("max-w-lg", isIntersecting3 && "animate-in fade-in slide-in-from-left-16 duration-700")}>
                     <h2 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
@@ -278,7 +278,7 @@ export default function LandingPage() {
             </div>
         </section>
         
-        <section ref={ref4} className={cn("py-20 md:py-24 bg-white transition-opacity duration-700", isIntersecting4 ? "opacity-100" : "opacity-0")}>
+        <section ref={ref4} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700", isIntersecting4 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6">
             <div className={cn("text-center max-w-3xl mx-auto", isIntersecting4 && "animate-in fade-in slide-in-from-bottom-12 duration-700")}>
               <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
