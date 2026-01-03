@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/header";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { cn } from "@/lib/utils";
 
 const reviews = [
     {
@@ -72,7 +73,7 @@ export default function ReviewsPage() {
             <main>
                 {/* Hero Section */}
                 <section className="py-20 md:py-28 text-center bg-gray-50">
-                    <div className="container mx-auto px-6">
+                    <div className="container mx-auto px-6 animate-in fade-in-0 slide-in-from-top-12 duration-700">
                         <p className="font-semibold text-primary">RESEÑAS DE USUARIOS</p>
                         <h1 className="text-4xl md:text-6xl font-extrabold mt-2 mb-6 tracking-tight">
                             Historias de claridad y valentía
@@ -88,10 +89,10 @@ export default function ReviewsPage() {
                 <section className="py-20 md:py-24">
                     <div className="container mx-auto px-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {reviews.map((review) => {
+                            {reviews.map((review, index) => {
                                 const image = getImage(review.id);
                                 return (
-                                    <Card key={review.id} className="flex flex-col justify-between p-6 rounded-3xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                                    <Card key={review.id} className="flex flex-col justify-between p-6 rounded-3xl shadow-lg hover:shadow-2xl transition-shadow duration-300 animate-in fade-in-0 slide-in-from-bottom-12 duration-700" style={{ animationDelay: `${index * 100}ms` }}>
                                         <CardContent className="p-0">
                                             <div className="flex items-center mb-4">
                                                 {image && (

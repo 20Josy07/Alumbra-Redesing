@@ -164,7 +164,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
     }
     
     const renderAnalysisForm = () => (
-         <Card className="shadow-lg">
+         <Card className="shadow-lg animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BrainCircuit className="text-primary" />
@@ -211,7 +211,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
 
     return (
         <div className="space-y-8">
-            <div>
+            <div className="animate-in fade-in-0 slide-in-from-top-4 duration-500">
                 <h1 className="text-3xl font-bold tracking-tight">Hola de nuevo, {user?.displayName?.split(' ')[0]}!</h1>
                 <p className="text-muted-foreground">Bienvenido/a a tu espacio seguro. Estamos aquí para ayudarte.</p>
             </div>
@@ -221,7 +221,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
                     {pendingAnalysis ? renderPendingAnalysis() : renderAnalysisForm()}
                 </div>
                 <div className="lg:col-span-1">
-                    <Card>
+                    <Card className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-150">
                         <CardHeader>
                             <CardTitle>Historial Reciente</CardTitle>
                             <CardDescription>Tus últimos 5 análisis guardados.</CardDescription>
@@ -260,7 +260,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
                 </div>
             </div>
             
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-3 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-300">
                <Resources />
             </div>
 

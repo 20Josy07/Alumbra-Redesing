@@ -297,8 +297,8 @@ export default function LandingPage() {
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 max-w-6xl mx-auto items-start">
-              {plans.map((plan) => (
-                <Card key={plan.name} className={cn("flex flex-col h-full rounded-2xl", plan.popular ? "border-2 border-primary shadow-2xl relative" : "shadow-lg")}>
+              {plans.map((plan, index) => (
+                <Card key={plan.name} className={cn("flex flex-col h-full rounded-2xl", plan.popular ? "border-2 border-primary shadow-2xl relative" : "shadow-lg", isIntersecting4 && "animate-in fade-in-0 slide-in-from-bottom-12 duration-700")} style={{ animationDelay: `${index * 150}ms` }}>
                   {plan.popular && (
                     <Badge className="absolute -top-3 right-6">⭐ Más Popular</Badge>
                   )}

@@ -6,6 +6,7 @@ import Header from "@/components/header";
 import { ArrowRight, Linkedin, Instagram, Facebook } from "lucide-react";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 const teamMembers = [
     {
@@ -51,7 +52,7 @@ export default function TeamPage() {
             <main>
                 {/* Mission Hero Section */}
                 <section className="py-20 md:py-28 bg-white">
-                    <div className="container mx-auto px-6 text-center">
+                    <div className="container mx-auto px-6 text-center animate-in fade-in-0 slide-in-from-top-12 duration-700">
                          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
                             Nuestra misión es más que <br /> tecnología, es empatía.
                         </h1>
@@ -131,10 +132,10 @@ export default function TeamPage() {
                 <section className="py-20 md:py-24 bg-gray-50">
                     <div className="container mx-auto px-6">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-center max-w-4xl mx-auto">
-                            {teamMembers.map((member) => {
+                            {teamMembers.map((member, index) => {
                                 const image = getImage(member.id);
                                 return (
-                                    <div key={member.id} className="text-left">
+                                    <div key={member.id} className={cn("text-left animate-in fade-in-0 slide-in-from-bottom-12 duration-700")} style={{ animationDelay: `${index * 150}ms` }}>
                                         <Card className="rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
                                             <CardContent className="p-0">
                                                 {image && (
@@ -198,4 +199,5 @@ export default function TeamPage() {
 }
 
     
+
 

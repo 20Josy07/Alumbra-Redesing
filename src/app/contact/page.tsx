@@ -16,7 +16,7 @@ export default function ContactPage() {
             <main>
                 {/* Hero Section */}
                 <section className="py-20 md:py-28 text-center bg-gray-50">
-                    <div className="container mx-auto px-6">
+                    <div className="container mx-auto px-6 animate-in fade-in-0 slide-in-from-top-12 duration-700">
                         <p className="font-semibold text-primary">CONTACTO</p>
                         <h1 className="text-4xl md:text-6xl font-extrabold mt-2 mb-6 tracking-tight">
                             Estamos aquí para ayudarte
@@ -31,7 +31,7 @@ export default function ContactPage() {
                 <section className="py-20 md:py-24">
                     <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-start">
                         {/* Contact Form */}
-                        <div className="bg-gray-50 p-8 md:p-12 rounded-3xl shadow-lg">
+                        <div className="bg-gray-50 p-8 md:p-12 rounded-3xl shadow-lg animate-in fade-in-0 slide-in-from-left-16 duration-700">
                             <h2 className="text-3xl font-extrabold tracking-tight mb-6">Envíanos un mensaje</h2>
                             <form className="space-y-6">
                                 <div>
@@ -56,7 +56,7 @@ export default function ContactPage() {
                         </div>
 
                         {/* Contact Info */}
-                        <div className="space-y-8">
+                        <div className="space-y-8 animate-in fade-in-0 slide-in-from-right-16 duration-700 delay-150">
                             <h2 className="text-3xl font-extrabold tracking-tight mb-6">Información de Contacto</h2>
                             <div className="flex items-start gap-4">
                                 <Mail className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
