@@ -316,53 +316,55 @@ export default function LandingPage() {
       </main>
       
 
-      <footer ref={ref5} className={cn("bg-gray-900 text-gray-400 py-20 transition-opacity duration-700", isIntersecting5 ? "opacity-100" : "opacity-0")}>
+      <footer ref={ref5} className={cn("bg-white text-gray-800 py-20 transition-opacity duration-700", isIntersecting5 ? "opacity-100" : "opacity-0")}>
         <div className="container mx-auto px-6 grid md:grid-cols-3 gap-12">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <Image src="https://i.postimg.cc/QCys4Rbt/favicon-light.png" alt="Alumbra" width={32} height={32} />
-              <span className="text-2xl font-bold text-white">Alumbra</span>
+              <span className="text-2xl font-bold text-gray-900">Alumbra</span>
             </div>
-            <p className="text-sm leading-relaxed max-w-sm">
+            <p className="text-sm leading-relaxed max-w-sm text-gray-600">
               La primera IA que detecta abuso emocional en conversaciones y te da claridad instantánea para proteger tu bienestar.
             </p>
             <div className="mt-8">
                 <p className="text-xs text-gray-500 mb-4">Follow us on:</p>
-                <div className="flex gap-5">
-                    <a href="#" aria-label="Facebook" className="hover:text-white"><Facebook size={20} /></a>
-                    <a href="#" aria-label="Twitter" className="hover:text-white"><Twitter size={20} /></a>
-                    <a href="#" aria-label="Instagram" className="hover:text-white"><Instagram size={20} /></a>
-                    <a href="#" aria-label="LinkedIn" className="hover:text-white"><Linkedin size={20} /></a>
-                    <a href="#" aria-label="YouTube" className="hover:text-white"><Youtube size={20} /></a>
+                <div className="flex gap-5 text-gray-500">
+                    <a href="#" aria-label="Facebook" className="hover:text-primary"><Facebook size={20} /></a>
+                    <a href="#" aria-label="Twitter" className="hover:text-primary"><Twitter size={20} /></a>
+                    <a href="#" aria-label="Instagram" className="hover:text-primary"><Instagram size={20} /></a>
+                    <a href="#" aria-label="LinkedIn" className="hover:text-primary"><Linkedin size={20} /></a>
+                    <a href="#" aria-label="YouTube" className="hover:text-primary"><Youtube size={20} /></a>
                 </div>
             </div>
           </div>
           <div>
-            <h4 className="font-bold text-white mb-6">Quick Links</h4>
+            <h4 className="font-bold text-gray-900 mb-6">Quick Links</h4>
             <ul className="space-y-3 text-sm">
-              <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
-              <li><Link href="/how-it-works" className="hover:text-white transition-colors">Cómo funciona</Link></li>
-              <li><a href="#" className="hover:text-white transition-colors">Precios</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Reseñas</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Contacto</a></li>
+              <li><Link href="/" className="text-gray-600 hover:text-primary transition-colors">Home</Link></li>
+              <li><Link href="/how-it-works" className="text-gray-600 hover:text-primary transition-colors">Cómo funciona</Link></li>
+              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Precios</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Reseñas</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Contacto</a></li>
             </ul>
           </div>
           <div>
-            <h4 className="font-bold text-white mb-6">All Pages</h4>
+            <h4 className="font-bold text-gray-900 mb-6">All Pages</h4>
             <ul className="space-y-3 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">Sobre nosotros</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Equipo</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Privacidad</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Términos de uso</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">404</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Sobre nosotros</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Equipo</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Blog</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Privacidad</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">Términos de uso</a></li>
+              <li><a href="#" className="text-gray-600 hover:text-primary transition-colors">404</a></li>
             </ul>
           </div>
         </div>
-        <div className="container mx-auto px-6 mt-16 pt-8 border-t border-gray-800 text-center text-sm text-gray-500">
+        <div className="container mx-auto px-6 mt-16 pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
           <p>© 2025 Alumbra. Todos los derechos reservados. <span className="ml-4 opacity-70">Made with love in Colombia</span></p>
         </div>
       </footer>
     </div>
   );
 }
+
+    
