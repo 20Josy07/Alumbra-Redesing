@@ -1,12 +1,15 @@
+'use client';
 import { Firestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import type { AnalysisRecord, AnalysisResult } from '@/types';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
 
 interface AnalysisData extends AnalysisResult {
     title: string;
     originalText: string;
 }
 
-export async function saveAnalysis(db: Firestore, userId: string, analysisData: AnalysisData): Promise<void> {
+export function saveAnalysis(db: Firestore, userId: string, analysisData: AnalysisData) {
   if (!userId) {
     throw new Error('User ID is required to save an analysis.');
   }
@@ -23,5 +26,14 @@ export async function saveAnalysis(db: Firestore, userId: string, analysisData: 
     createdAt: serverTimestamp() as any, // Let Firestore handle the timestamp
   };
 
-  await addDoc(analysesCollection, newAnalysis);
+  addDoc(analysesCollection, newAnalysis)
+    .catch(async (serverError) => {
+        const permissionError = new FirestorePermissionError({
+            path: analysesCollection.path,
+            operation: 'create',
+            requestResourceData: newAnalysis,
+        } satisfies SecurityRuleContext);
+
+        errorEmitter.emit('permission-error', permissionError);
+    });
 }
