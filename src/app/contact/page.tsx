@@ -2,11 +2,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, Send, Instagram, Linkedin, Facebook } from "lucide-react";
+import { Mail, MapPin, Send, Instagram, Linkedin, Facebook } from "lucide-react";
 import Header from "@/components/header";
-import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function ContactPage() {
     return (
@@ -31,60 +30,76 @@ export default function ContactPage() {
                 <section className="py-20 md:py-24">
                     <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-start">
                         {/* Contact Form */}
-                        <div className="bg-gray-50 p-8 md:p-12 rounded-3xl shadow-lg animate-in fade-in-0 slide-in-from-left-16 duration-700">
-                            <h2 className="text-3xl font-extrabold tracking-tight mb-6">Envíanos un mensaje</h2>
-                            <form className="space-y-6">
-                                <div>
-                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Nombre</label>
-                                    <Input id="name" name="name" type="text" placeholder="Tu nombre completo" required />
-                                </div>
-                                <div>
-                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Correo Electrónico</label>
-                                    <Input id="email" name="email" type="email" placeholder="tu@email.com" required />
-                                </div>
-                                <div>
-                                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">Mensaje</label>
-                                    <Textarea id="message" name="message" rows={5} placeholder="Cuéntanos cómo podemos ayudarte..." required />
-                                </div>
-                                <div className="text-right">
-                                    <Button type="submit" size="lg" className="group">
-                                        Enviar Mensaje
-                                        <Send className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                                    </Button>
-                                </div>
-                            </form>
+                        <div className="animate-in fade-in-0 slide-in-from-left-16 duration-700">
+                            <Card className="p-8 md:p-12 rounded-3xl shadow-lg border-none bg-gray-50">
+                                <CardContent className="p-0">
+                                    <h2 className="text-3xl font-extrabold tracking-tight mb-8">Envíanos un mensaje</h2>
+                                    <form className="space-y-6">
+                                        <div>
+                                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Nombre</label>
+                                            <Input id="name" name="name" type="text" placeholder="Tu nombre completo" required />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Correo Electrónico</label>
+                                            <Input id="email" name="email" type="email" placeholder="tu@email.com" required />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">Mensaje</label>
+                                            <Textarea id="message" name="message" rows={5} placeholder="Cuéntanos cómo podemos ayudarte..." required />
+                                        </div>
+                                        <div className="text-right pt-2">
+                                            <Button type="submit" size="lg" className="group">
+                                                Enviar Mensaje
+                                                <Send className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                                            </Button>
+                                        </div>
+                                    </form>
+                                </CardContent>
+                            </Card>
                         </div>
 
                         {/* Contact Info */}
-                        <div className="space-y-8 animate-in fade-in-0 slide-in-from-right-16 duration-700 delay-150">
-                            <h2 className="text-3xl font-extrabold tracking-tight mb-6">Información de Contacto</h2>
-                            <div className="flex items-start gap-4">
-                                <Mail className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                                <div>
-                                    <h3 className="text-lg font-semibold">Correo Electrónico</h3>
-                                    <p className="text-gray-600">Envíanos tus preguntas a nuestro correo de soporte.</p>
-                                    <a href="mailto:soporte@alumbra.com" className="text-primary hover:underline font-medium">soporte@alumbra.com</a>
-                                </div>
-                            </div>
-                            <div className="flex items-start gap-4">
-                                <MapPin className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                                <div>
-                                    <h3 className="text-lg font-semibold">Ubicación</h3>
-                                    <p className="text-gray-600">Estamos basados en Colombia, trabajando para todo el mundo.</p>
-                                    <p className="font-medium">Barranquilla, Colombia</p>
-                                </div>
-                            </div>
-                            <div className="mt-8">
-                                <h3 className="text-lg font-semibold mb-4">Síguenos</h3>
+                        <div className="space-y-8 pt-4 animate-in fade-in-0 slide-in-from-right-16 duration-700 delay-150">
+                             <Card className="bg-transparent border-none shadow-none">
+                                <CardContent className="p-0">
+                                    <div className="flex items-start gap-4">
+                                        <div className="bg-primary/10 p-3 rounded-full">
+                                            <Mail className="w-6 h-6 text-primary flex-shrink-0" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-bold">Correo Electrónico</h3>
+                                            <p className="text-gray-600 mt-1">Envíanos tus preguntas a nuestro correo de soporte.</p>
+                                            <a href="mailto:soporte@alumbra.com" className="text-primary hover:underline font-semibold mt-1 inline-block">soporte@alumbra.com</a>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                             </Card>
+                             <Card className="bg-transparent border-none shadow-none">
+                                <CardContent className="p-0">
+                                    <div className="flex items-start gap-4">
+                                         <div className="bg-primary/10 p-3 rounded-full">
+                                            <MapPin className="w-6 h-6 text-primary flex-shrink-0" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-bold">Ubicación</h3>
+                                            <p className="text-gray-600 mt-1">Estamos basados en Colombia, trabajando para todo el mundo.</p>
+                                            <p className="font-semibold mt-1">Barranquilla, Colombia</p>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            <div className="pt-6">
+                                <h3 className="text-xl font-bold mb-4">Síguenos en Redes</h3>
                                 <div className="flex gap-6">
-                                    <a href="https://www.instagram.com/alumbra.ia/" aria-label="Instagram" className="text-gray-500 hover:text-primary transition-colors">
-                                        <Instagram className="h-6 w-6" />
+                                    <a href="https://www.instagram.com/alumbra.ia/" aria-label="Instagram" className="text-gray-500 hover:text-primary transition-transform hover:scale-110 duration-200">
+                                        <Instagram className="h-7 w-7" />
                                     </a>
-                                     <a href="#" aria-label="LinkedIn" className="text-gray-500 hover:text-primary transition-colors">
-                                        <Linkedin className="h-6 w-6" />
+                                     <a href="#" aria-label="LinkedIn" className="text-gray-500 hover:text-primary transition-transform hover:scale-110 duration-200">
+                                        <Linkedin className="h-7 w-7" />
                                     </a>
-                                     <a href="#" aria-label="Facebook" className="text-gray-500 hover:text-primary transition-colors">
-                                        <Facebook className="h-6 w-6" />
+                                     <a href="#" aria-label="Facebook" className="text-gray-500 hover:text-primary transition-transform hover:scale-110 duration-200">
+                                        <Facebook className="h-7 w-7" />
                                     </a>
                                 </div>
                             </div>
