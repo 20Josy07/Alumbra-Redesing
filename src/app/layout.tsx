@@ -2,7 +2,6 @@ import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
-import '@/ai/dev'; // Import the AI flows to register them
 
 export const metadata: Metadata = {
   title: 'Alumbra',

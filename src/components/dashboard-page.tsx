@@ -2,7 +2,7 @@
 
 import { useUser, useFirestore } from "@/firebase";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
-import { FileText, Clock, Sparkles, AlertCircle, BrainCircuit, Loader, Lock } from "lucide-react";
+import { FileText, Clock, Sparkles, AlertCircle, BrainCircuit, Loader, Lock, ShieldAlert, BarChart, MessageSquareQuote } from "lucide-react";
 import Resources from "./resources";
 import { type AnalysisResult, performAnalysis } from "@/app/actions";
 import { cn } from "@/lib/utils";
@@ -10,16 +10,36 @@ import { Button } from "./ui/button";
 import { saveAnalysis } from "@/firebase/firestore/analyses";
 import { useToast } from "@/hooks/use-toast";
 import { type AnalysisRecord } from "@/types";
-import { useMemo, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { collection, query, orderBy, Timestamp } from "firebase/firestore";
 import { useCollection, useMemoFirebase } from "@/firebase";
 import { Textarea } from "./ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { Progress } from "./ui/progress";
 
 interface DashboardPageProps {
   pendingAnalysis: AnalysisResult | null;
   setPendingAnalysis: (analysis: AnalysisResult | null) => void;
 }
+
+const RiskIndicator = ({ level }: { level: string }) => {
+  const levelInfo = {
+    bajo: { color: "bg-green-500", label: "Bajo" },
+    medio: { color: "bg-yellow-500", label: "Medio" },
+    alto: { color: "bg-orange-500", label: "Alto" },
+    "muy alto": { color: "bg-red-500", label: "Muy Alto" },
+  };
+
+  const { color, label } = levelInfo[level as keyof typeof levelInfo] || { color: "bg-gray-400", label: "Indeterminado" };
+
+  return (
+    <div className="flex items-center gap-2">
+      <div className={cn("w-3 h-3 rounded-full", color)}></div>
+      <span className="font-semibold">{label}</span>
+    </div>
+  );
+};
+
 
 export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: DashboardPageProps) {
     const { user } = useUser();
@@ -113,7 +133,22 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
     const renderPendingAnalysis = () => {
         if (!pendingAnalysis) return null;
         
-        const { abuseAnalysis, summary } = pendingAnalysis;
+        const { rules, score, help } = pendingAnalysis;
+
+        const analysisDetails = [
+            { label: "Insultos Graves", count: rules.severe_insult_count },
+            { label: "Insultos", count: rules.insult_count },
+            { label: "Control", count: rules.control_count },
+            { label: "Gaslighting", count: rules.gaslighting_count },
+            { label: "Amenazas", count: rules.threat_count },
+        ].filter(detail => detail.count > 0);
+
+        const riskColor = {
+            bajo: "text-green-600",
+            medio: "text-yellow-600",
+            alto: "text-orange-600",
+            "muy alto": "text-red-600",
+        }[score.risk_level] || "text-gray-600";
 
         return (
              <Card className="border-primary border-2 animate-in fade-in-0 duration-500">
@@ -123,35 +158,65 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
                     Resultados de tu Análisis
                   </CardTitle>
                   <CardDescription>
-                    Aquí está el análisis completo del texto que proporcionaste. Puedes guardarlo en tu historial o descartarlo.
+                    Aquí está el análisis completo del texto que proporcionaste.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div>
-                    <h3 className="font-bold text-lg flex items-center gap-2">
-                      <Sparkles className="text-primary w-5 h-5" />
-                      Resumen Detallado de la IA
-                    </h3>
-                    <p className="text-muted-foreground mt-1 text-base">{summary.summary}</p>
-                  </div>
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <h3 className="font-bold text-lg flex items-center gap-2">
-                      <AlertCircle className={cn("w-5 h-5", abuseAnalysis.abuseDetected ? 'text-destructive' : 'text-green-600')} />
-                      Detección y Explicación de Abuso
-                    </h3>
-                     <p className={cn("mt-1 text-base", abuseAnalysis.abuseDetected ? 'text-destructive-foreground/90' : 'text-green-700', abuseAnalysis.abuseDetected && 'p-2 bg-destructive/80 rounded-md' )}>
-                        {abuseAnalysis.explanation}
-                    </p>
-                  </div>
-                   <div className="p-4 border-l-4 border-yellow-500 bg-yellow-500/10">
-                     <h3 className="font-bold text-yellow-800">Próximos Pasos y Recomendaciones</h3>
-                     <p className="text-yellow-700 mt-1">
-                         {abuseAnalysis.abuseDetected 
-                            ? "Hemos detectado indicadores preocupantes. Es importante que busques apoyo. Consulta nuestros recursos de ayuda para obtener orientación profesional. Guarda este análisis en tu historial para futuras referencias."
-                            : "No hemos detectado indicadores claros de abuso en este texto, pero tu intuición es importante. Si sigues sintiendo que algo no está bien, considera hablar con un profesional. Revisa nuestros recursos para más información."
-                         }
-                     </p>
-                  </div>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-3">
+                               <ShieldAlert className={cn("w-7 h-7", riskColor)} />
+                                Nivel de Riesgo: <span className={cn("capitalize", riskColor)}>{score.risk_level}</span>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="flex items-center gap-4">
+                                <Progress value={score.score_percent} className="flex-1" />
+                                <span className={cn("text-xl font-bold", riskColor)}>{score.score_percent}%</span>
+                            </div>
+                            <p className="text-muted-foreground">{score.message}</p>
+                        </CardContent>
+                    </Card>
+
+                    {analysisDetails.length > 0 && (
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-xl">
+                                    <BarChart />
+                                    Patrones Detectados
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                                    {analysisDetails.map(detail => (
+                                        <li key={detail.label} className="p-3 bg-muted/50 rounded-md">
+                                            <p className="font-semibold">{detail.label}</p>
+                                            <p className="text-lg font-bold text-primary">{detail.count}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </CardContent>
+                        </Card>
+                    )}
+
+                    <Alert variant="destructive" className="bg-red-50 border-red-200">
+                        <AlertCircle className="h-5 w-5 text-red-600" />
+                        <AlertTitle className="text-red-800 font-bold">{help.title}</AlertTitle>
+                        <AlertDescription className="text-red-700">
+                            {help.message}
+                        </AlertDescription>
+                    </Alert>
+
+                     <div>
+                        <h4 className="font-bold text-base mb-2 flex items-center gap-2">
+                           <MessageSquareQuote />
+                           Texto Original Analizado
+                        </h4>
+                        <blockquote className="border-l-4 border-muted-foreground/20 pl-4 py-2 bg-muted/50 rounded-r-lg max-h-40 overflow-y-auto">
+                            <p className="text-muted-foreground italic text-sm">{lastAnalyzedText}</p>
+                        </blockquote>
+                    </div>
+
                 </CardContent>
                 <CardFooter>
                     <div className="flex flex-col sm:flex-row gap-4 w-full">

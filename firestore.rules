@@ -9,20 +9,19 @@ service cloud.firestore {
     }
 
     function isAnalysisRecord(data) {
-      let requiredKeys = ['userId', 'title', 'originalText', 'createdAt', 'abuseAnalysis', 'summary'];
-      let abuseAnalysisKeys = ['abuseDetected', 'explanation'];
-      let summaryKeys = ['summary'];
+      let requiredKeys = ['userId', 'title', 'originalText', 'createdAt', 'rules', 'score', 'help'];
+      let rulesKeys = ['severe_insults_detected', 'insults_detected', 'control_detected', 'gaslighting_detected', 'threats_detected', 'severe_insult_count', 'insult_count', 'control_count', 'gaslighting_count', 'threat_count'];
+      let scoreKeys = ['score_raw', 'score_percent', 'risk_level', 'message'];
+      let helpKeys = ['title', 'message'];
 
       return data.keys().hasAll(requiredKeys)
         && data.userId is string && data.userId == request.auth.uid
         && data.title is string
         && data.originalText is string
         && data.createdAt is timestamp
-        && data.abuseAnalysis.keys().hasAll(abuseAnalysisKeys)
-        && data.abuseAnalysis.abuseDetected is bool
-        && data.abuseAnalysis.explanation is string
-        && data.summary.keys().hasAll(summaryKeys)
-        && data.summary.summary is string;
+        && data.rules.keys().hasAll(rulesKeys)
+        && data.score.keys().hasAll(scoreKeys)
+        && data.help.keys().hasAll(helpKeys);
     }
     
     // USERS

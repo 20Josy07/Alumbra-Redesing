@@ -27,29 +27,42 @@
           "format": "date-time",
           "description": "The timestamp when the analysis was created."
         },
-        "abuseAnalysis": {
+        "rules": {
           "type": "object",
           "properties": {
-            "abuseDetected": {
-              "type": "boolean"
-            },
-            "explanation": {
-              "type": "string"
-            }
+            "severe_insults_detected": { "type": "array", "items": { "type": "string" } },
+            "insults_detected": { "type": "array", "items": { "type": "string" } },
+            "control_detected": { "type": "array", "items": { "type": "string" } },
+            "gaslighting_detected": { "type": "array", "items": { "type": "string" } },
+            "threats_detected": { "type": "array", "items": { "type": "string" } },
+            "severe_insult_count": { "type": "number" },
+            "insult_count": { "type": "number" },
+            "control_count": { "type": "number" },
+            "gaslighting_count": { "type": "number" },
+            "threat_count": { "type": "number" }
           },
-          "required": ["abuseDetected", "explanation"]
+          "required": ["severe_insult_count", "insult_count", "control_count", "gaslighting_count", "threat_count"]
         },
-        "summary": {
+        "score": {
           "type": "object",
           "properties": {
-            "summary": {
-              "type": "string"
-            }
+            "score_raw": { "type": "number" },
+            "score_percent": { "type": "number" },
+            "risk_level": { "type": "string" },
+            "message": { "type": "string" }
           },
-          "required": ["summary"]
+          "required": ["score_raw", "score_percent", "risk_level", "message"]
+        },
+        "help": {
+            "type": "object",
+            "properties": {
+                "title": { "type": "string" },
+                "message": { "type": "string" }
+            },
+            "required": ["title", "message"]
         }
       },
-      "required": ["userId", "title", "createdAt", "abuseAnalysis", "summary", "originalText"]
+      "required": ["userId", "title", "originalText", "createdAt", "rules", "score", "help"]
     }
   },
   "auth": {

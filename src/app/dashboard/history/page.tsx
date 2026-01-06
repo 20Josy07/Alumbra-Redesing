@@ -6,10 +6,11 @@ import { type AnalysisRecord } from "@/types";
 import { collection, query, orderBy, Timestamp } from "firebase/firestore";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Loader, FileText, Clock, Sparkles, AlertCircle, Inbox } from "lucide-react";
+import { Loader, FileText, Clock, Sparkles, AlertCircle, Inbox, ShieldAlert, BarChart, MessageSquareQuote } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 
 export default function HistoryPage() {
     const { user } = useUser();
@@ -36,6 +37,83 @@ export default function HistoryPage() {
         }
         return 'Fecha inválida';
     };
+    
+    const renderAnalysisContent = (analysis: AnalysisRecord) => {
+        const { rules, score, help } = analysis;
+        const analysisDetails = [
+            { label: "Insultos Graves", count: rules.severe_insult_count },
+            { label: "Insultos", count: rules.insult_count },
+            { label: "Control", count: rules.control_count },
+            { label: "Gaslighting", count: rules.gaslighting_count },
+            { label: "Amenazas", count: rules.threat_count },
+        ].filter(detail => detail.count > 0);
+
+        const riskColor = {
+            bajo: "text-green-600",
+            medio: "text-yellow-600",
+            alto: "text-orange-600",
+            "muy alto": "text-red-600",
+        }[score.risk_level] || "text-gray-600";
+        
+        return (
+            <div className="space-y-6 pt-4 pl-4 border-l-2 ml-2 border-primary/20">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-3">
+                           <ShieldAlert className={cn("w-7 h-7", riskColor)} />
+                            Nivel de Riesgo: <span className={cn("capitalize", riskColor)}>{score.risk_level}</span>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="flex items-center gap-4">
+                            <Progress value={score.score_percent} className="flex-1" />
+                            <span className={cn("text-xl font-bold", riskColor)}>{score.score_percent}%</span>
+                        </div>
+                        <p className="text-muted-foreground">{score.message}</p>
+                    </CardContent>
+                </Card>
+
+                 {analysisDetails.length > 0 && (
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-xl">
+                                <BarChart />
+                                Patrones Detectados
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                                {analysisDetails.map(detail => (
+                                    <li key={detail.label} className="p-3 bg-muted/50 rounded-md">
+                                        <p className="font-semibold">{detail.label}</p>
+                                        <p className="text-lg font-bold text-primary">{detail.count}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </CardContent>
+                    </Card>
+                )}
+
+                <Alert variant="destructive" className="bg-red-50 border-red-200">
+                    <AlertCircle className="h-5 w-5 text-red-600" />
+                    <AlertTitle className="text-red-800 font-bold">{help.title}</AlertTitle>
+                    <AlertDescription className="text-red-700">
+                        {help.message}
+                    </AlertDescription>
+                </Alert>
+                
+                <div>
+                    <h4 className="font-bold text-base mb-2 flex items-center gap-2">
+                        <MessageSquareQuote />
+                        Texto Original Analizado
+                    </h4>
+                    <blockquote className="border-l-4 border-muted-foreground/20 pl-4 py-2 bg-muted/50 rounded-r-lg max-h-40 overflow-y-auto">
+                        <p className="text-muted-foreground italic text-sm">{analysis.originalText}</p>
+                    </blockquote>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="space-y-8">
@@ -73,32 +151,8 @@ export default function HistoryPage() {
                                             </div>
                                         </div>
                                     </AccordionTrigger>
-                                    <AccordionContent className="space-y-6 pt-4 pl-4 border-l-2 ml-2 border-primary/20">
-                                        <div>
-                                            <h4 className="font-bold text-base flex items-center gap-2 mb-2">
-                                                <Sparkles className="text-primary w-5 h-5" />
-                                                Resumen de la IA
-                                            </h4>
-                                            <p className="text-muted-foreground text-base">{analysis.summary.summary}</p>
-                                        </div>
-                                        
-                                        <div className={cn("p-4 rounded-lg", analysis.abuseAnalysis.abuseDetected ? 'bg-destructive/10' : 'bg-green-500/10')}>
-                                            <h4 className="font-bold text-base flex items-center gap-2 mb-2">
-                                                <AlertCircle className={cn("w-5 h-5", analysis.abuseAnalysis.abuseDetected ? 'text-destructive' : 'text-green-600')} />
-                                                Detección de Abuso
-                                            </h4>
-                                             <Badge variant={analysis.abuseAnalysis.abuseDetected ? "destructive" : "default"} className={cn("mb-2", !analysis.abuseAnalysis.abuseDetected && "bg-green-600")}>
-                                                {analysis.abuseAnalysis.abuseDetected ? "Abuso Detectado" : "No se detectó abuso"}
-                                            </Badge>
-                                            <p className={cn(analysis.abuseAnalysis.abuseDetected ? 'text-destructive' : 'text-green-700')}>{analysis.abuseAnalysis.explanation}</p>
-                                        </div>
-                                        
-                                        <div>
-                                            <h4 className="font-bold text-base mb-2">Texto Original Analizado</h4>
-                                            <blockquote className="border-l-4 border-muted-foreground/20 pl-4 py-2 bg-muted/50 rounded-r-lg">
-                                                <p className="text-muted-foreground italic text-sm">{analysis.originalText}</p>
-                                            </blockquote>
-                                        </div>
+                                    <AccordionContent>
+                                        {analysis.score ? renderAnalysisContent(analysis) : <p>Datos de análisis no disponibles.</p>}
                                     </AccordionContent>
                                 </AccordionItem>
                             ))}

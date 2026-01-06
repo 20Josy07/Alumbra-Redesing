@@ -1,9 +1,8 @@
 
 'use server';
 
-import { analyzeText, type AnalysisResult } from "@/ai/analysis-flow";
+import { type AnalysisResult } from "@/types";
 
-// This interface is now imported from analysis-flow.ts
 export type { AnalysisResult };
 
 export async function performAnalysis(text: string): Promise<{ data: AnalysisResult | null; error: string | null }> {
@@ -12,23 +11,35 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
   }
   
   try {
-    const result = await analyzeText(text);
+    const response = await fetch('https://alumbra-api.up.railway.app/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text }),
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.text();
+      console.error("API Error Response:", errorBody);
+      throw new Error(`El servicio de análisis devolvió un error: ${response.statusText}`);
+    }
+
+    const result: AnalysisResult = await response.json();
     
-    if (!result) {
-        throw new Error('El análisis de IA no devolvió un resultado.');
+    if (!result || !result.score || !result.rules || !result.help) {
+        throw new Error('La respuesta del análisis de IA no tiene el formato esperado.');
     }
     
     return { data: result, error: null };
 
   } catch (e: any) {
-    console.error("Error during AI analysis:", e);
+    console.error("Error during API analysis:", e);
     
     let errorMessage = "Ocurrió un error inesperado durante el análisis. Por favor, inténtalo más tarde.";
     if (e.message) {
-        if (e.message.includes('API key not valid')) {
-            errorMessage = "La clave de API para el servicio de IA no es válida. Por favor, verifica la configuración.";
-        } else if (e.message.includes('model not found')) {
-            errorMessage = "El modelo de IA especificado no se pudo encontrar. Por favor, contacta a soporte.";
+        if (e.message.includes('Failed to fetch')) {
+            errorMessage = "No se pudo conectar con el servicio de análisis. Por favor, revisa tu conexión o inténtalo más tarde.";
         } else {
             errorMessage = e.message;
         }

@@ -1,6 +1,5 @@
 import { Firestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import type { AnalysisRecord } from '@/types';
-import type { AnalysisResult } from '@/app/actions';
+import type { AnalysisRecord, AnalysisResult } from '@/types';
 
 interface AnalysisData extends AnalysisResult {
     title: string;
@@ -18,8 +17,9 @@ export async function saveAnalysis(db: Firestore, userId: string, analysisData: 
     userId,
     title: analysisData.title,
     originalText: analysisData.originalText,
-    abuseAnalysis: analysisData.abuseAnalysis,
-    summary: analysisData.summary,
+    rules: analysisData.rules,
+    score: analysisData.score,
+    help: analysisData.help,
     createdAt: serverTimestamp() as any, // Let Firestore handle the timestamp
   };
 
