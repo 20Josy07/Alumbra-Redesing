@@ -45,6 +45,20 @@ export default function LandingPage() {
 
   const plans = [
     {
+      name: "Gratis",
+      price: "$0",
+      description: "Ideal para empezar a conocer la herramienta.",
+      features: [
+        { text: "10 análisis al mes", included: true },
+        { text: "Acceso al analizador de conversaciones", included: true },
+        { text: "Resultados básicos", included: true },
+        { text: "No incluye resultados claros y directos", included: false },
+        { text: "No incluye dashboard de gestión", included: false },
+      ],
+      cta: "Empezar Gratis",
+      popular: false,
+    },
+    {
       name: "Plan Básico",
       price: "$12.000",
       description: "Empieza a analizar sin complicaciones",
@@ -296,7 +310,7 @@ export default function LandingPage() {
                 Desde un análisis ocasional hasta el uso intensivo, tenemos un plan que se ajusta a ti. Empieza gratis, mejora cuando quieras.
               </p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 max-w-6xl mx-auto items-start">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16 max-w-7xl mx-auto items-start">
               {plans.map((plan, index) => (
                 <Card key={plan.name} className={cn("flex flex-col h-full rounded-2xl", plan.popular ? "border-2 border-primary shadow-2xl relative" : "shadow-lg", isIntersecting4 && "animate-in fade-in-0 slide-in-from-bottom-12 duration-700")} style={{ animationDelay: `${index * 150}ms` }}>
                   {plan.popular && (
@@ -309,7 +323,7 @@ export default function LandingPage() {
                   <CardContent className="flex-1">
                     <div className="text-center mb-6">
                       <span className="text-4xl font-extrabold">{plan.price}</span>
-                      <span className="text-muted-foreground"> / mes</span>
+                      {plan.name !== "Gratis" && <span className="text-muted-foreground"> / mes</span>}
                     </div>
                     <ul className="space-y-3">
                       {plan.features.map((feature, index) => (
@@ -384,3 +398,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
