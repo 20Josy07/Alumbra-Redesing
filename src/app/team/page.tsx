@@ -151,7 +151,7 @@ export default function TeamPage() {
                                                 )}
                                                 <div className="p-6">
                                                     <h2 className="text-xl font-bold">{member.name}</h2>
-                                                    <p className="text-gray-500 mt-1 mb-4">{member.role}</p>
+                                                    <p className="text-primary font-semibold mt-1 mb-4">{member.role}</p>
                                                     <div className="flex gap-4 items-center">
                                                          {member.socials.instagram && member.socials.instagram !== '#' && (
                                                             <a href={member.socials.instagram} aria-label={`${member.name} on Instagram`} className="text-gray-400 hover:text-primary transition-colors">
@@ -197,7 +197,3 @@ export default function TeamPage() {
         </div>
     );
 }
-
-    
-
-    
