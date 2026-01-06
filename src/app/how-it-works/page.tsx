@@ -104,7 +104,7 @@ export default function HowItWorksPage() {
                                 <AccordionItem value="item-1">
                                     <AccordionTrigger className="text-lg font-semibold">¿Mi información es privada y segura?</AccordionTrigger>
                                     <AccordionContent className="text-base text-gray-600">
-                                        Absolutamente. Tu privacidad es nuestra máxima prioridad. Todas las conversaciones se analizan de forma anónima y se eliminan de nuestros sistemas inmediatamente después del análisis. No almacenamos tus datos personales ni el contenido de tus chats.
+                                       Absolutamente. Tu privacidad es nuestra máxima prioridad. Todas las conversaciones se analizan de forma anónima y se eliminan de nuestros sistemas inmediatamente después del análisis. Si decides crear una cuenta, tus análisis guardados están protegidos y solo tú puedes acceder a ellos.
                                     </AccordionContent>
                                 </AccordionItem>
                                 <AccordionItem value="item-2">
@@ -123,6 +123,24 @@ export default function HowItWorksPage() {
                                     <AccordionTrigger className="text-lg font-semibold">¿El servicio es realmente gratuito?</AccordionTrigger>
                                     <AccordionContent className="text-base text-gray-600">
                                         Sí, el análisis básico de conversaciones es y siempre será gratuito. Creemos que todo el mundo merece tener acceso a herramientas que protejan su bienestar. En el futuro, podríamos ofrecer funciones avanzadas opcionales con un costo, pero el núcleo de Alumbra permanecerá accesible para todos.
+                                    </AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-5">
+                                    <AccordionTrigger className="text-lg font-semibold">¿Es el análisis 100% preciso?</AccordionTrigger>
+                                    <AccordionContent className="text-base text-gray-600">
+                                        No. La IA es una herramienta increíblemente poderosa, pero no es infalible. Puede haber matices culturales o contextuales que la IA no capte. Alumbra debe usarse como una guía para la reflexión, no como un veredicto final. Tu intuición y juicio son igualmente importantes.
+                                    </AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-6">
+                                    <AccordionTrigger className="text-lg font-semibold">¿Puedo guardar mis resultados?</AccordionTrigger>
+                                    <AccordionContent className="text-base text-gray-600">
+                                        Sí. Si creas una cuenta gratuita, puedes guardar tus análisis en un historial privado. Esto te permite hacer un seguimiento de los patrones a lo largo del tiempo y tener un registro documentado si decides buscar ayuda profesional.
+                                    </AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-7">
+                                    <AccordionTrigger className="text-lg font-semibold">¿Qué hago si la IA detecta abuso?</AccordionTrigger>
+                                    <AccordionContent className="text-base text-gray-600">
+                                        Si Alumbra detecta un riesgo, te proporcionaremos una lista de recursos de ayuda profesional, como líneas de atención y organizaciones de apoyo. Es crucial que hables con un experto. Nuestro informe puede ser un punto de partida útil para esa conversación.
                                     </AccordionContent>
                                 </AccordionItem>
                             </Accordion>
