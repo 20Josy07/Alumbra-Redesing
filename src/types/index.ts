@@ -29,6 +29,7 @@ export interface AnalysisResult {
     rules: AnalysisRules;
     score: AnalysisScore;
     help: AnalysisHelp;
+    ai_suggestion: string;
 }
 
 export interface AnalysisRecord extends AnalysisResult {

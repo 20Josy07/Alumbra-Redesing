@@ -133,7 +133,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
     const renderPendingAnalysis = () => {
         if (!pendingAnalysis) return null;
         
-        const { rules, score, help } = pendingAnalysis;
+        const { rules, score, help, ai_suggestion } = pendingAnalysis;
 
         const analysisDetails = [
             { label: "Insultos Graves", count: rules.severe_insult_count },
@@ -198,6 +198,18 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
                             </CardContent>
                         </Card>
                     )}
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-xl">
+                                <Sparkles className="text-primary"/>
+                                Sugerencia de la IA
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-muted-foreground">{ai_suggestion}</p>
+                        </CardContent>
+                    </Card>
 
                     <Alert variant="destructive" className="bg-red-50 border-red-200">
                         <AlertCircle className="h-5 w-5 text-red-600" />

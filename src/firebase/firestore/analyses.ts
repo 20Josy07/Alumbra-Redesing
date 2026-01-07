@@ -23,6 +23,7 @@ export function saveAnalysis(db: Firestore, userId: string, analysisData: Analys
     rules: analysisData.rules,
     score: analysisData.score,
     help: analysisData.help,
+    ai_suggestion: analysisData.ai_suggestion,
     createdAt: serverTimestamp() as any, // Let Firestore handle the timestamp
   };
 

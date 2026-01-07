@@ -9,7 +9,7 @@ service cloud.firestore {
     }
 
     function isAnalysisRecord(data) {
-      let requiredKeys = ['userId', 'title', 'originalText', 'createdAt', 'rules', 'score', 'help'];
+      let requiredKeys = ['userId', 'title', 'originalText', 'createdAt', 'rules', 'score', 'help', 'ai_suggestion'];
       let rulesKeys = ['severe_insults_detected', 'insults_detected', 'control_detected', 'gaslighting_detected', 'threats_detected', 'severe_insult_count', 'insult_count', 'control_count', 'gaslighting_count', 'threat_count'];
       let scoreKeys = ['score_raw', 'score_percent', 'risk_level', 'message'];
       let helpKeys = ['title', 'message'];
@@ -21,7 +21,8 @@ service cloud.firestore {
         && data.createdAt is timestamp
         && data.rules.keys().hasAll(rulesKeys)
         && data.score.keys().hasAll(scoreKeys)
-        && data.help.keys().hasAll(helpKeys);
+        && data.help.keys().hasAll(helpKeys)
+        && data.ai_suggestion is string;
     }
     
     // USERS

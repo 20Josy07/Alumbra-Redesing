@@ -27,7 +27,7 @@ export async function performAnalysis(text: string): Promise<{ data: AnalysisRes
 
     const result: AnalysisResult = await response.json();
     
-    if (!result || !result.score || !result.rules || !result.help) {
+    if (!result || !result.score || !result.rules || !result.help || !result.ai_suggestion) {
         throw new Error('La respuesta del análisis de IA no tiene el formato esperado.');
     }
     

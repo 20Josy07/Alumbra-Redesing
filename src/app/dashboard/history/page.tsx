@@ -39,7 +39,7 @@ export default function HistoryPage() {
     };
     
     const renderAnalysisContent = (analysis: AnalysisRecord) => {
-        const { rules, score, help } = analysis;
+        const { rules, score, help, ai_suggestion } = analysis;
         const analysisDetails = [
             { label: "Insultos Graves", count: rules.severe_insult_count },
             { label: "Insultos", count: rules.insult_count },
@@ -93,6 +93,18 @@ export default function HistoryPage() {
                         </CardContent>
                     </Card>
                 )}
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-xl">
+                            <Sparkles className="text-primary"/>
+                            Sugerencia de la IA
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground">{ai_suggestion}</p>
+                    </CardContent>
+                </Card>
 
                 <Alert variant="destructive" className="bg-red-50 border-red-200">
                     <AlertCircle className="h-5 w-5 text-red-600" />

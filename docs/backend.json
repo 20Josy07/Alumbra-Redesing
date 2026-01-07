@@ -60,9 +60,13 @@
                 "message": { "type": "string" }
             },
             "required": ["title", "message"]
+        },
+        "ai_suggestion": {
+          "type": "string",
+          "description": "AI-generated suggestion based on the analysis."
         }
       },
-      "required": ["userId", "title", "originalText", "createdAt", "rules", "score", "help"]
+      "required": ["userId", "title", "originalText", "createdAt", "rules", "score", "help", "ai_suggestion"]
     }
   },
   "auth": {
