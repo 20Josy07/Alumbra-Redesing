@@ -177,7 +177,7 @@ export default function LandingPage() {
           <div className="container mx-auto px-6">
             <div className={cn("text-center max-w-3xl mx-auto", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-12 duration-700")}>
               <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
-                La herramienta esencial para proteger tu bienestar emocional
+                La herramienta esencial para proteger el bienestar emocional de tus pacientes.
               </h2>
               <p className="mt-4 text-lg text-gray-600">
                 Todo lo que necesitas para detectar abuso emocional, obtener claridad y protegerte — en una sola plataforma simple y segura.
@@ -402,4 +402,5 @@ export default function LandingPage() {
     
 
     
+
 
