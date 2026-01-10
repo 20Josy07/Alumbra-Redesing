@@ -312,7 +312,7 @@ export default function LandingPage() {
           <div className="container mx-auto px-6">
             <div className={cn("text-center max-w-3xl mx-auto", isIntersecting4 && "animate-in fade-in slide-in-from-bottom-12 duration-700")}>
               <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
-                Un plan para cada necesidad
+                Planes adaptados al uso profesional
               </h2>
               <p className="mt-4 text-lg text-gray-600">
                 Desde un análisis ocasional hasta el uso intensivo, tenemos un plan que se ajusta a ti. Empieza gratis, mejora cuando quieras.
