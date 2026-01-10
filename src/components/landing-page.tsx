@@ -274,8 +274,7 @@ export default function LandingPage() {
             <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
                 <div className={cn("max-w-lg", isIntersecting3 && "animate-in fade-in slide-in-from-left-16 duration-700")}>
                     <h2 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight">
-                        Amada por quienes se<br />protegen y quienes<br />
-                        <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-transparent bg-clip-text">ayudan</span>
+                        Respaldada por profesionales de la salud mental
                     </h2>
                 </div>
                 <div className={cn(isIntersecting3 && "animate-in fade-in slide-in-from-right-16 duration-700 delay-200")}>
@@ -407,5 +406,7 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
