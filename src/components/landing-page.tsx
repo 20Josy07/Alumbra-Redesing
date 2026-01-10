@@ -220,7 +220,7 @@ export default function LandingPage() {
                     data-ai-hint={getImage('feature3')!.imageHint}
                   />}
                 </div>
-                <h3 className="text-xl font-bold mb-2">Soporte en tiempo real</h3>
+                <h3 className="text-xl font-bold mb-2">Apoyo al acompañamiento terapéutico</h3>
                 <p className="text-gray-600">Conecta con recursos de ayuda o profesionales en el momento exacto en que Alumbra detecta un riesgo.</p>
               </div>
             </div>
@@ -402,6 +402,7 @@ export default function LandingPage() {
     
 
     
+
 
 
 
