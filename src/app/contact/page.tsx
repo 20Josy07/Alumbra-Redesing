@@ -18,7 +18,7 @@ export default function ContactPage() {
                     <div className="container mx-auto px-6 animate-in fade-in-0 slide-in-from-top-12 duration-700">
                         <p className="font-semibold text-primary">CONTACTO</p>
                         <h1 className="text-4xl md:text-6xl font-extrabold mt-2 mb-6 tracking-tight">
-                            Estamos aquí para ayudarte
+                            Estamos disponibles para atenderte
                         </h1>
                         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                             ¿Tienes alguna pregunta, comentario o simplemente quieres saludar? Nos encantaría saber de ti.
