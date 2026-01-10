@@ -57,7 +57,7 @@ export default function TeamPage() {
                             Nuestra misión es más que <br /> tecnología, es empatía.
                         </h1>
                         <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
-                           La misión de Alumbra es ofrecer un analizador de conversaciones basado en inteligencia artificial que permita identificar señales de abuso psicológico de manera temprana y responsable. A través de esta plataforma, se busca sensibilizar, apoyar y orientar a los usuarios, promoviendo la reflexión sobre dinámicas comunicativas dañinas y contribuyendo a la prevención de la violencia psicológica, siempre bajo principios de confidencialidad, ética y respeto por el bienestar emocional.
+                           La misión de Alumbra es proporcionar una plataforma de análisis de conversaciones basada en inteligencia artificial, orientada a apoyar el trabajo de profesionales de la salud mental en la identificación temprana de indicadores asociados a abuso psicológico.  La herramienta está diseñada para complementar la evaluación clínica, facilitar la reflexión sobre dinámicas comunicativas complejas y promover un uso ético, confidencial y responsable de la tecnología en contextos terapéuticos.
                         </p>
                         <div className="relative h-96 md:h-[600px] w-full max-w-6xl mx-auto bg-gray-100 rounded-3xl shadow-2xl overflow-hidden">
                            {getImage('team-group') && <Image 
