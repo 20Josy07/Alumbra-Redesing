@@ -1,5 +1,6 @@
+
 'use client';
-import { ArrowRight, CheckCircle2, Facebook, Instagram, Linkedin, Twitter, XCircle, Youtube } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Facebook, Instagram, Linkedin, Twitter, XCircle, Youtube, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from './ui/button';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
@@ -13,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Badge } from './ui/badge';
 import { useActiveSection } from '@/hooks/use-active-section';
+import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 
 export default function LandingPage() {
   const { ref: ref1, isIntersecting: isIntersecting1 } = useIntersectionObserver({ threshold: 0.1 });
@@ -253,9 +255,13 @@ export default function LandingPage() {
                     <p className="text-gray-600 mt-1">Recibe un informe estructurado con indicadores de riesgo y observaciones relevantes, pensado para complementar el criterio profesional y facilitar el trabajo terapéutico.</p>
                   </div>
                 </div>
-                 <p className="text-xs text-muted-foreground pt-4">
-                  Alumbra no emite diagnósticos ni reemplaza la evaluación clínica profesional. Los resultados deben ser interpretados por un especialista en salud mental.
-                </p>
+                 <Alert className="bg-amber-50 border-amber-200 text-amber-900 animate-in fade-in-0 duration-500">
+                    <AlertCircle className="h-5 w-5 text-amber-600" />
+                    <AlertTitle className="font-bold">Nota Importante</AlertTitle>
+                    <AlertDescription className="text-amber-800">
+                      Alumbra no emite diagnósticos ni reemplaza la evaluación clínica profesional. Los resultados deben ser interpretados por un especialista en salud mental.
+                    </AlertDescription>
+                </Alert>
               </div>
             </div>
             <div className={cn("relative h-96 md:h-[600px] w-full bg-gray-200 rounded-3xl", isIntersecting2 && "animate-in fade-in zoom-in-95 duration-700 delay-200")}>
@@ -403,19 +409,3 @@ export default function LandingPage() {
 }
 
     
-
-    
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
