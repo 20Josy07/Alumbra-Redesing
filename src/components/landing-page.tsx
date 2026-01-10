@@ -235,24 +235,27 @@ export default function LandingPage() {
                 <div className="flex gap-6 items-start">
                   <div className="text-2xl font-bold text-primary opacity-50">01</div>
                   <div>
-                    <h3 className="text-xl font-bold">Inicia sesión y ve a tu dashboard</h3>
-                    <p className="text-gray-600 mt-1">Tu espacio seguro para analizar conversaciones.</p>
+                    <h3 className="text-xl font-bold">Inicia sesión y accede a tu panel profesional</h3>
+                    <p className="text-gray-600 mt-1">Un entorno seguro y confidencial diseñado para el análisis de conversaciones en contextos terapéuticos.</p>
                   </div>
                 </div>
                 <div className="flex gap-6 items-start">
                   <div className="text-2xl font-bold text-primary opacity-50">02</div>
                   <div>
-                    <h3 className="text-xl font-bold">Pega tu chat y Alumbra analiza</h3>
-                    <p className="text-gray-600 mt-1">Alumbra detecta patrones de abuso emocional automáticamente, sin que tengas que hacer nada más.</p>
+                    <h3 className="text-xl font-bold">Incorpora la conversación y Alumbra analiza</h3>
+                    <p className="text-gray-600 mt-1">La plataforma identifica patrones comunicativos asociados a posibles dinámicas de abuso psicológico, como apoyo al proceso de evaluación clínica.</p>
                   </div>
                 </div>
                 <div className="flex gap-6 items-start">
                   <div className="text-2xl font-bold text-primary opacity-50">03</div>
                   <div>
-                    <h3 className="text-xl font-bold">Recibes un informe con riesgo y acciones</h3>
-                    <p className="text-gray-600 mt-1">Obtén al instante un reporte claro con puntaje de riesgo, tipo de abuso y pasos concretos para protegerte, listo para usar o compartir.</p>
+                    <h3 className="text-xl font-bold">Obtén un informe orientativo</h3>
+                    <p className="text-gray-600 mt-1">Recibe un informe estructurado con indicadores de riesgo y observaciones relevantes, pensado para complementar el criterio profesional y facilitar el trabajo terapéutico.</p>
                   </div>
                 </div>
+                 <p className="text-xs text-muted-foreground pt-4">
+                  Alumbra no emite diagnósticos ni reemplaza la evaluación clínica profesional. Los resultados deben ser interpretados por un especialista en salud mental.
+                </p>
               </div>
             </div>
             <div className={cn("relative h-96 md:h-[600px] w-full bg-gray-200 rounded-3xl", isIntersecting2 && "animate-in fade-in zoom-in-95 duration-700 delay-200")}>
@@ -413,5 +416,6 @@ export default function LandingPage() {
 
 
     
+
 
 
