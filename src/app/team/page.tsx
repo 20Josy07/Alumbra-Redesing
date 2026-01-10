@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/header";
-import { ArrowRight, Linkedin, Instagram, Facebook } from "lucide-react";
+import { ArrowRight, Linkedin, Instagram, Facebook, Twitter, Youtube } from "lucide-react";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -194,6 +194,56 @@ export default function TeamPage() {
                     </div>
                 </section>
             </main>
+            <footer className="bg-primary text-primary-foreground py-20">
+                <div className="container mx-auto px-6 grid md:grid-cols-3 gap-12">
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <Image src="https://i.postimg.cc/QCys4Rbt/favicon-light.png" alt="Alumbra" width={32} height={32} />
+                      <span className="text-2xl font-bold text-white">Alumbra</span>
+                    </div>
+                    <p className="text-sm leading-relaxed max-w-sm text-primary-foreground/80">
+                      La primera IA que detecta abuso emocional en conversaciones y te da claridad instantánea para proteger tu bienestar.
+                    </p>
+                    <div className="mt-8">
+                        <p className="text-xs text-primary-foreground/60 mb-4">Follow us on:</p>
+                        <div className="flex gap-5 text-primary-foreground/80">
+                            <a href="#" aria-label="Facebook" className="hover:text-white"><Facebook size={20} /></a>
+                            <a href="#" aria-label="Twitter" className="hover:text-white"><Twitter size={20} /></a>
+                            <a href="#" aria-label="Instagram" className="hover:text-white"><Instagram size={20} /></a>
+                            <a href="#" aria-label="LinkedIn" className="hover:text-white"><Linkedin size={20} /></a>
+                            <a href="#" aria-label="YouTube" className="hover:text-white"><Youtube size={20} /></a>
+                        </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white mb-6">Quick Links</h4>
+                    <ul className="space-y-3 text-sm">
+                      <li><Link href="/" className="hover:text-white transition-colors text-primary-foreground/80">Home</Link></li>
+                      <li><Link href="/#how-it-works" className="hover:text-white transition-colors text-primary-foreground/80">Cómo funciona</Link></li>
+                      <li><Link href="/#pricing" className="hover:text-white transition-colors text-primary-foreground/80">Precios</Link></li>
+                      <li><Link href="/#reviews" className="hover:text-white transition-colors text-primary-foreground/80">Reseñas</Link></li>
+                      <li><Link href="/contact" className="hover:text-white transition-colors text-primary-foreground/80">Contacto</Link></li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white mb-6">All Pages</h4>
+                    <ul className="space-y-3 text-sm">
+                      <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Sobre nosotros</a></li>
+                      <li><Link href="/team" className="hover:text-white transition-colors text-primary-foreground/80">Equipo</Link></li>
+                      <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Blog</a></li>
+                      <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Privacidad</a></li>
+                      <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Términos de uso</a></li>
+                      <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">404</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="container mx-auto px-6 mt-16 pt-8 border-t border-primary-foreground/20 text-center text-sm text-primary-foreground/60">
+                  <p>© 2025 Alumbra. Todos los derechos reservados. <span className="ml-4 opacity-70">Made with love in Colombia</span></p>
+                </div>
+              </footer>
         </div>
     );
 }
+
+
+    
