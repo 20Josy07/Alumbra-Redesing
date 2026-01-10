@@ -194,7 +194,7 @@ export default function LandingPage() {
                     data-ai-hint={getImage('feature1')!.imageHint}
                   />}
                 </div>
-                <h3 className="text-xl font-bold mb-2">Pega tu conversación y analiza al instante</h3>
+                <h3 className="text-xl font-bold mb-2">Análisis de conversaciones terapéuticas</h3>
                 <p className="text-gray-600">Detecta abuso emocional al instante con una interfaz simple y humana.</p>
               </div>
               <div className={cn("bg-white p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-200")}>
@@ -402,6 +402,7 @@ export default function LandingPage() {
     
 
     
+
 
 
 
