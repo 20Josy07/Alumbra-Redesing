@@ -31,6 +31,12 @@
       "imageHint": "app screenshot"
     },
     {
+      "id": "analyzer-mockup",
+      "description": "A mockup of the Alumbra analyzer interface.",
+      "imageUrl": "https://i.postimg.cc/9M3SjN1x/Captura-de-pantalla-2024-07-16-a-la-s-12-11-05.png",
+      "imageHint": "analyzer mockup"
+    },
+    {
       "id": "avatar1",
       "description": "A profile picture of a user.",
       "imageUrl": "https://i.pravatar.cc/150?img=1",

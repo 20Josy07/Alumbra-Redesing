@@ -130,7 +130,7 @@ export default function LandingPage() {
         </section>
 
         <section id="analysis-section" className="py-20 md:py-24 bg-gray-50 scroll-mt-20">
-            <div className="container mx-auto px-6 max-w-4xl">
+            <div className="container mx-auto px-6 max-w-5xl">
                 <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
                     Analiza una Conversación Ahora
@@ -140,22 +140,19 @@ export default function LandingPage() {
                 </p>
                 </div>
 
-                <Card className="shadow-2xl relative overflow-hidden">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                    <BrainCircuit className="text-primary" />
-                    Analizador de Abuso Emocional
-                    </CardTitle>
-                    <CardDescription>
-                    Pega la conversación que quieres analizar en el cuadro de texto de tu dashboard.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className="h-40 bg-muted rounded-md flex items-center justify-center p-6">
-                        <p className="text-muted-foreground text-center">Inicia sesión para acceder al analizador.</p>
-                    </div>
-                </CardContent>
-                 <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+                <Card className="shadow-2xl relative overflow-hidden group">
+                  <div className="relative aspect-[16/10] w-full h-full">
+                      {getImage('analyzer-mockup') && (
+                          <Image 
+                              src={getImage('analyzer-mockup')!.imageUrl}
+                              alt={getImage('analyzer-mockup')!.description}
+                              fill
+                              className="object-cover object-top"
+                              data-ai-hint={getImage('analyzer-mockup')!.imageHint}
+                          />
+                      )}
+                  </div>
+                 <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center transition-opacity duration-300 opacity-100 group-hover:opacity-0">
                     <Lock className="w-16 h-16 text-primary mb-4" />
                     <h3 className="text-2xl font-bold mb-2">Función Disponible para Usuarios</h3>
                     <p className="text-gray-600 mb-6 max-w-sm">
@@ -393,9 +390,9 @@ export default function LandingPage() {
               <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Sobre nosotros</a></li>
               <li><Link href="/team" className="hover:text-white transition-colors text-primary-foreground/80">Equipo</Link></li>
               <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Blog</a></li>
-              <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Privacidad</a></li>
-              <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Términos de uso</a></li>
-              <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">404</a></li>
+              <li><a href="#" aria-label="Privacy" className="hover:text-white transition-colors text-primary-foreground/80">Privacidad</a></li>
+              <li><a href="#" aria-label="Terms of use" className="hover:text-white transition-colors text-primary-foreground/80">Términos de uso</a></li>
+              <li><a href="/404" className="hover:text-white transition-colors text-primary-foreground/80">404</a></li>
             </ul>
           </div>
         </div>
@@ -406,15 +403,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    

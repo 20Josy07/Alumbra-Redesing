@@ -228,12 +228,12 @@ export default function TeamPage() {
                   <div>
                     <h4 className="font-bold text-white mb-6">All Pages</h4>
                     <ul className="space-y-3 text-sm">
-                      <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Sobre nosotros</a></li>
+                      <li><a href="#" aria-label="About us" className="hover:text-white transition-colors text-primary-foreground/80">Sobre nosotros</a></li>
                       <li><Link href="/team" className="hover:text-white transition-colors text-primary-foreground/80">Equipo</Link></li>
-                      <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Blog</a></li>
-                      <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Privacidad</a></li>
-                      <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">Términos de uso</a></li>
-                      <li><a href="#" className="hover:text-white transition-colors text-primary-foreground/80">404</a></li>
+                      <li><a href="#" aria-label="Blog" className="hover:text-white transition-colors text-primary-foreground/80">Blog</a></li>
+                      <li><a href="#" aria-label="Privacy" className="hover:text-white transition-colors text-primary-foreground/80">Privacidad</a></li>
+                      <li><a href="#" aria-label="Terms of use" className="hover:text-white transition-colors text-primary-foreground/80">Términos de uso</a></li>
+                      <li><a href="/404" className="hover:text-white transition-colors text-primary-foreground/80">404</a></li>
                     </ul>
                   </div>
                 </div>
