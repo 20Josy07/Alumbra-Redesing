@@ -134,7 +134,7 @@ export default function LandingPage() {
                     Analiza una Conversación Ahora
                 </h2>
                 <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-                    Inicia sesión para obtener un análisis instantáneo, gratuito y 100% anónimo desde tu dashboard personal.
+                    Inicia sesión para acceder a un análisis asistido por inteligencia artificial, diseñado para apoyar la evaluación clínica de conversaciones en contextos terapéuticos. El proceso es confidencial, orientativo y accesible desde tu panel profesional.
                 </p>
                 </div>
 
@@ -402,3 +402,4 @@ export default function LandingPage() {
     
 
     
+
