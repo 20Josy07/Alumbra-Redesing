@@ -115,7 +115,7 @@ export default function LandingPage() {
                 Identifica señales de abuso psicológico en conversaciones
               </h1>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8 animate-in fade-in slide-in-from-top-8 duration-700 delay-200">
-                Analiza interacciones comunicativas de forma asistida por inteligencia artificial para detectar patrones asociados a abuso psicológico, apoyar la evaluación clínica y complementar el criterio profesional en el acompañamiento terapéutico de pacientes.
+                Identifica señales de abuso psicológico mediante inteligencia artificial, apoyando la evaluación clínica y el criterio profesional en el acompañamiento terapéutico.
               </p>
               <div className="animate-in fade-in zoom-in-95 duration-700 delay-300">
                 <Button size="lg" className="group" onClick={handleAnalysisClick}>
@@ -398,5 +398,7 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
