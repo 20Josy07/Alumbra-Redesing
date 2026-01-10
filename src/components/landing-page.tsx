@@ -119,7 +119,7 @@ export default function LandingPage() {
               </p>
               <div className="animate-in fade-in zoom-in-95 duration-700 delay-300">
                 <Button size="lg" className="group" onClick={handleAnalysisClick}>
-                    Analiza ahora • es gratis
+                    Analizar conversación · Acceso profesional
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </div>
