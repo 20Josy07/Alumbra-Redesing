@@ -79,10 +79,10 @@ export default function TeamPage() {
                         </h2>
                         <div className="mt-6 text-lg text-gray-600 space-y-6 text-left">
                             <p>
-                                El bienestar emocional ya no es solo para terapia, se trata de claridad, rapidez y acción. En Alumbra, estamos redefiniendo cómo se obtiene apoyo en la era digital. Creemos que cualquier persona con una duda o una preocupación merece una respuesta clara que le permita actuar.
+                                Alumbra nace a partir de la observación de que muchas personas experimentan malestar psicológico como consecuencia de las dinámicas comunicativas presentes en sus interacciones cotidianas.  Estas conversaciones, cuando son persistentes o dañinas, pueden impactar de forma significativa en el bienestar y la salud mental. Frente a esta realidad, Alumbra fue concebida como una herramienta tecnológica orientada a apoyar el análisis profesional de dichas dinámicas, promoviendo una comprensión más clara y responsable de su influencia en el contexto terapéutico.
                             </p>
                             <p>
-                                Nacimos de la frustración con la falta de herramientas accesibles y discretas. Alumbra fue creada para dar a las personas una forma más inteligente y simple de evaluar su situación. Ya sea que estés analizando una conversación, buscando entender una dinámica o simplemente necesites una segunda opinión, Alumbra es el espacio donde la claridad se encuentra con la acción.
+                                Nuestra plataforma ha sido diseñada para integrarse de forma ética y funcional en la práctica clínica. No pretendemos reemplazar el juicio del terapeuta, sino complementarlo, ofreciendo una perspectiva adicional que pueda enriquecer el proceso de evaluación y acompañamiento. Consideramos que, al facilitar una aproximación estructurada al análisis de las conversaciones, Alumbra puede ser un recurso valioso para profesionales comprometidos con la salud mental de sus pacientes.
                             </p>
                         </div>
                     </div>
