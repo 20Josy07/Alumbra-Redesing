@@ -75,7 +75,7 @@ export default function TeamPage() {
                 <section className="py-20 md:py-24">
                     <div className="container mx-auto px-6 text-center max-w-3xl">
                          <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
-                            De la idea al impacto
+                            Cuando las conversaciones impactan la salud mental
                         </h2>
                         <div className="mt-6 text-lg text-gray-600 space-y-6 text-left">
                             <p>
