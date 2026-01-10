@@ -180,7 +180,7 @@ export default function LandingPage() {
                 La herramienta esencial para proteger el bienestar emocional de tus pacientes
               </h2>
               <p className="mt-4 text-lg text-gray-600">
-                Todo lo que necesitas para detectar abuso emocional, obtener claridad y protegerte — en una sola plataforma simple y segura.
+                Diseñada para apoyar a profesionales de la salud mental en la identificación de patrones comunicativos asociados a abuso psicológico, de forma ética y confidencial.
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-8 mt-16">
@@ -402,6 +402,7 @@ export default function LandingPage() {
     
 
     
+
 
 
 
