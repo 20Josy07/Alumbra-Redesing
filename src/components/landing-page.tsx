@@ -315,7 +315,7 @@ export default function LandingPage() {
                 Planes adaptados al uso profesional
               </h2>
               <p className="mt-4 text-lg text-gray-600">
-                Desde un análisis ocasional hasta el uso intensivo, tenemos un plan que se ajusta a ti. Empieza gratis, mejora cuando quieras.
+                Alumbra ofrece planes pensados para profesionales de la salud mental.
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16 max-w-7xl mx-auto items-start">
@@ -406,6 +406,8 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
 
