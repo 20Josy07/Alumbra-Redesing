@@ -102,45 +102,45 @@ export default function HowItWorksPage() {
                         <div className="max-w-3xl mx-auto mt-12">
                             <Accordion type="single" collapsible className="w-full">
                                 <AccordionItem value="item-1">
-                                    <AccordionTrigger className="text-lg font-semibold">¿Mi información es privada y segura?</AccordionTrigger>
+                                    <AccordionTrigger className="text-lg font-semibold">¿Cómo se garantiza la confidencialidad de los datos de mis pacientes?</AccordionTrigger>
                                     <AccordionContent className="text-base text-gray-600">
-                                       Absolutamente. Tu privacidad es nuestra máxima prioridad. Todas las conversaciones se analizan de forma anónima y se eliminan de nuestros sistemas inmediatamente después del análisis. Si decides crear una cuenta, tus análisis guardados están protegidos y solo tú puedes acceder a ellos.
+                                       La confidencialidad es un pilar fundamental de Alumbra. La plataforma no almacena permanentemente los textos analizados; estos se procesan y eliminan de forma segura. Si utiliza una cuenta profesional, los informes guardados están encriptados y solo usted tiene acceso a ellos, cumpliendo con altos estándares de seguridad para proteger la información sensible.
                                     </AccordionContent>
                                 </AccordionItem>
                                 <AccordionItem value="item-2">
-                                    <AccordionTrigger className="text-lg font-semibold">¿Qué tipo de abuso puede detectar la IA?</AccordionTrigger>
+                                    <AccordionTrigger className="text-lg font-semibold">¿La IA de Alumbra puede emitir un diagnóstico clínico?</AccordionTrigger>
                                     <AccordionContent className="text-base text-gray-600">
-                                        Nuestra IA está entrenada para identificar una amplia gama de tácticas de abuso psicológico y emocional, incluyendo (pero no limitado a) gaslighting, manipulación, control coercitivo, aislamiento, intimidación, amenazas veladas y descalificaciones constantes.
+                                        No, en absoluto. Alumbra es una herramienta de apoyo y no reemplaza el juicio clínico de un profesional. La IA identifica patrones y ofrece indicadores que pueden ser útiles para la evaluación, pero no está diseñada para diagnosticar. El informe debe ser siempre interpretado y contextualizado por un terapeuta calificado.
                                     </AccordionContent>
                                 </AccordionItem>
                                 <AccordionItem value="item-3">
-                                    <AccordionTrigger className="text-lg font-semibold">¿Alumbra reemplaza la terapia o el consejo profesional?</AccordionTrigger>
+                                    <AccordionTrigger className="text-lg font-semibold">¿En qué modelos teóricos se basa el análisis de la IA?</AccordionTrigger>
                                     <AccordionContent className="text-base text.gray-600">
-                                        No. Alumbra es una herramienta de detección y concienciación. Ofrece una primera evaluación para darte claridad, pero no reemplaza el diagnóstico ni el consejo de un profesional de la salud mental o legal. Te animamos a usar nuestro informe como un punto de partida para buscar ayuda calificada si es necesario.
+                                        El modelo de IA ha sido entrenado y supervisado por psicólogos expertos, basándose en la literatura científica sobre violencia psicológica, dinámicas de poder y tácticas de manipulación (como el gaslighting, control coercitivo, etc.). El objetivo es detectar patrones lingüísticos asociados a estos conceptos teóricos.
                                     </AccordionContent>
                                 </AccordionItem>
                                 <AccordionItem value="item-4">
-                                    <AccordionTrigger className="text-lg font-semibold">¿El servicio es realmente gratuito?</AccordionTrigger>
+                                    <AccordionTrigger className="text-lg font-semibold">¿Cómo puedo integrar Alumbra en mi práctica clínica de manera ética?</AccordionTrigger>
                                     <AccordionContent className="text-base text-gray-600">
-                                        Sí, el análisis básico de conversaciones es y siempre será gratuito. Creemos que todo el mundo merece tener acceso a herramientas que protejan su bienestar. En el futuro, podríamos ofrecer funciones avanzadas opcionales con un costo, pero el núcleo de Alumbra permanecerá accesible para todos.
+                                        Alumbra puede usarse como una herramienta de psicoeducación, para explorar la percepción del paciente sobre sus conversaciones, o como un punto de partida para discutir dinámicas específicas. Es crucial obtener el consentimiento informado del paciente para usar la herramienta y discutir sus resultados siempre en el marco de la sesión terapéutica, como un complemento a su evaluación.
                                     </AccordionContent>
                                 </AccordionItem>
                                 <AccordionItem value="item-5">
-                                    <AccordionTrigger className="text-lg font-semibold">¿Es el análisis 100% preciso?</AccordionTrigger>
+                                    <AccordionTrigger className="text-lg font-semibold">¿Qué tan preciso es el análisis y cómo maneja los matices culturales?</AccordionTrigger>
                                     <AccordionContent className="text-base text-gray-600">
-                                        No. La IA es una herramienta increíblemente poderosa, pero no es infalible. Puede haber matices culturales o contextuales que la IA no capte. Alumbra debe usarse como una guía para la reflexión, no como un veredicto final. Tu intuición y juicio son igualmente importantes.
+                                        La IA tiene una alta precisión en la identificación de patrones claros, pero como toda tecnología, no es infalible y puede tener limitaciones con sarcasmos, ironías o contextos culturales muy específicos. Por ello, el informe de Alumbra debe considerarse una hipótesis de trabajo que el profesional debe validar y no un veredicto final.
                                     </AccordionContent>
                                 </AccordionItem>
                                 <AccordionItem value="item-6">
-                                    <AccordionTrigger className="text-lg font-semibold">¿Puedo guardar mis resultados?</AccordionTrigger>
+                                    <AccordionTrigger className="text-lg font-semibold">¿Puedo gestionar los informes de varios pacientes en la plataforma?</AccordionTrigger>
                                     <AccordionContent className="text-base text-gray-600">
-                                        Sí. Si creas una cuenta gratuita, puedes guardar tus análisis en un historial privado. Esto te permite hacer un seguimiento de los patrones a lo largo del tiempo y tener un registro documentado si decides buscar ayuda profesional.
+                                        Sí, los planes profesionales de Alumbra incluyen un dashboard de gestión donde puede guardar, titular y organizar los informes de manera segura y confidencial. Esto le permite llevar un registro estructurado del progreso y los patrones observados a lo largo del tiempo para cada caso.
                                     </AccordionContent>
                                 </AccordionItem>
                                 <AccordionItem value="item-7">
-                                    <AccordionTrigger className="text-lg font-semibold">¿Qué hago si la IA detecta abuso?</AccordionTrigger>
+                                    <AccordionTrigger className="text-lg font-semibold">¿Ofrecen planes para instituciones o clínicas?</AccordionTrigger>
                                     <AccordionContent className="text-base text-gray-600">
-                                        Si Alumbra detecta un riesgo, te proporcionaremos una lista de recursos de ayuda profesional, como líneas de atención y organizaciones de apoyo. Es crucial que hables con un experto. Nuestro informe puede ser un punto de partida útil para esa conversación.
+                                        Sí, ofrecemos soluciones personalizadas para clínicas, universidades y otras instituciones de salud mental. Póngase en contacto con nuestro equipo a través del formulario para discutir sus necesidades y cómo Alumbra puede integrarse en el flujo de trabajo de su organización.
                                     </AccordionContent>
                                 </AccordionItem>
                             </Accordion>
@@ -173,3 +173,4 @@ export default function HowItWorksPage() {
 }
 
     
+
