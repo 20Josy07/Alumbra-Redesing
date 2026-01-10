@@ -112,7 +112,7 @@ export default function LandingPage() {
             <div className="max-w-3xl mx-auto">
               <p className="font-semibold text-primary animate-in fade-in slide-in-from-top-4 duration-700">IA para el análisis de dinámicas comunicativas en contextos terapéuticos</p>
               <h1 className="text-4xl md:text-6xl font-extrabold mt-2 mb-6 tracking-tight animate-in fade-in slide-in-from-top-6 duration-700 delay-100">
-                Detecta el abuso en <br /> solo unos clicks
+                Identifica señales de abuso psicológico en conversaciones
               </h1>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8 animate-in fade-in slide-in-from-top-8 duration-700 delay-200">
                 Analiza, protege y actúa en tiempo real — todo en una plataforma poderosa. Eleva tu bienestar emocional con claridad instantánea y recomendaciones prácticas.
