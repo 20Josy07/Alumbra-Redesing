@@ -297,7 +297,7 @@ export default function LandingPage() {
                             })}
                         </div>
                         <blockquote className="text-base text-gray-600 border-l-4 border-primary/20 pl-4 mb-6">
-                            “Alumbra me dio la claridad que necesitaba en un momento muy confuso. Por primera vez entendí lo que estaba viviendo y pude actuar. Gracias a esta herramienta hoy estoy fuera de una relación tóxica y más fuerte que nunca.”
+                            “Alumbra ha sido una herramienta útil como apoyo en el análisis de dinámicas comunicativas complejas. Su enfoque orientativo facilita la reflexión clínica y complementa el trabajo terapéutico sin reemplazar el juicio profesional.”
                         </blockquote>
                         <div>
                             <p className="font-semibold text-gray-800">María José Ramírez</p>
