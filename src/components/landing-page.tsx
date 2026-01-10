@@ -195,7 +195,7 @@ export default function LandingPage() {
                   />}
                 </div>
                 <h3 className="text-xl font-bold mb-2">Análisis de conversaciones terapéuticas</h3>
-                <p className="text-gray-600">Detecta abuso emocional al instante con una interfaz simple y humana.</p>
+                <p className="text-gray-600">Analiza conversaciones entre pacientes y terceros mediante inteligencia artificial, identificando patrones relevantes que pueden apoyar la evaluación clínica.</p>
               </div>
               <div className={cn("bg-white p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-200")}>
                 <div className="relative h-56 w-full rounded-2xl overflow-hidden mb-6">
@@ -402,6 +402,7 @@ export default function LandingPage() {
     
 
     
+
 
 
 
