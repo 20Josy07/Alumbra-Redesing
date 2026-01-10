@@ -54,7 +54,7 @@ export default function TeamPage() {
                 <section className="py-20 md:py-28 bg-white">
                     <div className="container mx-auto px-6 text-center animate-in fade-in-0 slide-in-from-top-12 duration-700">
                          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
-                            Nuestra misión es más que <br /> tecnología, es empatía.
+                            Tecnología responsable al servicio de la práctica terapéutica
                         </h1>
                         <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
                            La misión de Alumbra es proporcionar una plataforma de análisis de conversaciones basada en inteligencia artificial, orientada a apoyar el trabajo de profesionales de la salud mental en la identificación temprana de indicadores asociados a abuso psicológico.  La herramienta está diseñada para complementar la evaluación clínica, facilitar la reflexión sobre dinámicas comunicativas complejas y promover un uso ético, confidencial y responsable de la tecnología en contextos terapéuticos.
