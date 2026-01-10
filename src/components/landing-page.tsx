@@ -230,7 +230,7 @@ export default function LandingPage() {
         <section id="how-it-works" ref={ref2} className={cn("py-20 md:py-24 bg-gray-50 transition-opacity duration-700 scroll-mt-20", isIntersecting2 ? "opacity-100" : "opacity-0")}>
           <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
             <div className={cn(isIntersecting2 && "animate-in fade-in slide-in-from-left-16 duration-700")}>
-              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">Simplifica tu<br />protección</h2>
+              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">Simplifica el análisis clínico de conversaciones</h2>
               <div className="space-y-8">
                 <div className="flex gap-6 items-start">
                   <div className="text-2xl font-bold text-primary opacity-50">01</div>
@@ -413,4 +413,5 @@ export default function LandingPage() {
 
 
     
+
 
