@@ -110,7 +110,7 @@ export default function LandingPage() {
         <section className="text-center py-20 md:py-32">
           <div className="container mx-auto px-6">
             <div className="max-w-3xl mx-auto">
-              <p className="font-semibold text-primary animate-in fade-in slide-in-from-top-4 duration-700">Analiza una conversación en un entorno profesional</p>
+              <p className="font-semibold text-primary animate-in fade-in slide-in-from-top-4 duration-700">IA para el análisis de dinámicas comunicativas en contextos terapéuticos</p>
               <h1 className="text-4xl md:text-6xl font-extrabold mt-2 mb-6 tracking-tight animate-in fade-in slide-in-from-top-6 duration-700 delay-100">
                 Detecta el abuso en <br /> solo unos clicks
               </h1>
