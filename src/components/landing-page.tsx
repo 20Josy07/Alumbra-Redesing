@@ -208,7 +208,7 @@ export default function LandingPage() {
                   />}
                 </div>
                 <h3 className="text-xl font-bold mb-2">Análisis avanzado de abuso emocional</h3>
-                <p className="text-gray-600">Detecta gaslighting, chantaje emocional y manipulación sutil sin que tengas que entender psicología. Alumbra lo hace por ti en segundos.</p>
+                <p className="text-gray-600">Identifica señales como gaslighting, manipulación emocional o control coercitivo, como apoyo al criterio profesional, no como diagnóstico automático.</p>
               </div>
               <div className={cn("bg-white p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-300")}>
                 <div className="relative h-56 w-full rounded-2xl overflow-hidden mb-6">
@@ -402,6 +402,7 @@ export default function LandingPage() {
     
 
     
+
 
 
 
