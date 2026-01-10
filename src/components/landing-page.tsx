@@ -300,8 +300,8 @@ export default function LandingPage() {
                             “Alumbra ha sido una herramienta útil como apoyo en el análisis de dinámicas comunicativas complejas. Su enfoque orientativo facilita la reflexión clínica y complementa el trabajo terapéutico sin reemplazar el juicio profesional.”
                         </blockquote>
                         <div>
-                            <p className="font-semibold text-gray-800">María José Ramírez</p>
-                            <p className="text-sm text-gray-500">Usuaria desde marzo 2025</p>
+                            <p className="font-semibold text-gray-800">Dra. Laura Martínez</p>
+                            <p className="text-sm text-gray-500">Psicóloga Clínica</p>
                         </div>
                     </div>
                 </div>
@@ -406,6 +406,8 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
 
