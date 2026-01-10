@@ -21,7 +21,7 @@ export default function ContactPage() {
                             Estamos disponibles para atenderte
                         </h1>
                         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                            ¿Tienes alguna pregunta, comentario o simplemente quieres saludar? Nos encantaría saber de ti.
+                            ¿Tienes consultas sobre el uso profesional de la plataforma, acceso institucional o aspectos técnicos? Nuestro equipo estará encantado de atenderte.
                         </p>
                     </div>
                 </section>
