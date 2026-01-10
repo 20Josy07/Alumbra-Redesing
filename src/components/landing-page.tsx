@@ -221,7 +221,7 @@ export default function LandingPage() {
                   />}
                 </div>
                 <h3 className="text-xl font-bold mb-2">Apoyo al acompañamiento terapéutico</h3>
-                <p className="text-gray-600">Conecta con recursos de ayuda o profesionales en el momento exacto en que Alumbra detecta un riesgo.</p>
+                <p className="text-gray-600">Utiliza los resultados como una herramienta complementaria para la reflexión clínica, la psicoeducación del paciente y la toma de decisiones informadas.</p>
               </div>
             </div>
           </div>
@@ -410,3 +410,6 @@ export default function LandingPage() {
 
 
 
+
+
+    
