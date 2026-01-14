@@ -133,7 +133,7 @@ export default function LandingPage() {
                             src={getImage('hero-image')!.imageUrl}
                             alt={getImage('hero-image')!.description}
                             fill
-                            className="object-contain shadow-2xl rounded-2xl"
+                            className="object-contain rounded-2xl"
                             data-ai-hint={getImage('hero-image')!.imageHint}
                         />
                     </div>
@@ -416,5 +416,7 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
