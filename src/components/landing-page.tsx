@@ -144,15 +144,15 @@ export default function LandingPage() {
 
             {/* Mockup */}
             <div className="relative flex justify-center lg:justify-end animate-in fade-in zoom-in-95 duration-700 delay-200">
-              <div className="relative w-[280px] md:w-[340px] lg:w-[380px] rounded-3xl shadow-2xl overflow-hidden border border-gray-200 bg-white">
-                {getImage('alumbra-report') &&
+              <div className="relative w-[280px] md:w-[340px] lg:w-[380px] rounded-3xl overflow-hidden bg-white">
+                {getImage('hero-image') &&
                   <Image
-                      src={getImage('alumbra-report')!.imageUrl}
-                      alt={getImage('alumbra-report')!.description}
+                      src={getImage('hero-image')!.imageUrl}
+                      alt={getImage('hero-image')!.description}
                       width={380}
                       height={685}
                       className="w-full h-auto"
-                      data-ai-hint={getImage('alumbra-report')!.imageHint}
+                      data-ai-hint={getImage('hero-image')!.imageHint}
                   />
                 }
               </div>
