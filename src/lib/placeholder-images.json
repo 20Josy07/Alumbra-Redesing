@@ -43,6 +43,12 @@
       "imageHint": "app mockup"
     },
     {
+      "id": "alumbra-report",
+      "description": "Mockup of the Alumbra report dashboard.",
+      "imageUrl": "https://i.postimg.cc/2jLp0z24/alumbra-report.png",
+      "imageHint": "report dashboard"
+    },
+    {
       "id": "avatar1",
       "description": "A profile picture of a user.",
       "imageUrl": "https://i.pravatar.cc/150?img=1",

@@ -1,6 +1,6 @@
 
 'use client';
-import { ArrowRight, CheckCircle2, Facebook, Instagram, Linkedin, Twitter, XCircle, Youtube, AlertCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Facebook, Instagram, Linkedin, Twitter, XCircle, Youtube, AlertCircle, University, ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from './ui/button';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
@@ -109,35 +109,55 @@ export default function LandingPage() {
       <Header activeLink={activeSection} />
 
       <main className="flex-1">
-        <section className="relative text-center py-20 md:py-32 overflow-hidden">
-          <div className="container mx-auto px-6 grid lg:grid-cols-1 items-center gap-12">
-            <div className="max-w-3xl mx-auto relative z-10">
-              <p className="font-semibold text-primary animate-in fade-in slide-in-from-top-4 duration-700">IA para el análisis de dinámicas comunicativas en contextos terapéuticos</p>
-              <h1 className="text-4xl md:text-6xl font-extrabold mt-2 mb-6 tracking-tight animate-in fade-in slide-in-from-top-6 duration-700 delay-100">
-                Identifica señales de abuso psicológico en conversaciones
-              </h1>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8 animate-in fade-in slide-in-from-top-8 duration-700 delay-200">
-                Identifica señales de abuso psicológico mediante inteligencia artificial, apoyando la evaluación clínica y el criterio profesional en el acompañamiento terapéutico.
+        <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-white">
+          <div className="max-w-7xl mx-auto px-6 py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Texto */}
+            <div className="animate-in fade-in slide-in-from-left-12 duration-700">
+              <p className="text-sm text-primary font-medium mb-4">
+                IA para el análisis de dinámicas comunicativas en contextos terapéuticos
               </p>
-              <div className="animate-in fade-in zoom-in-95 duration-700 delay-300">
+              <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6">
+                Potencia tu diagnóstico clínico con IA especializada en detección de abuso.
+              </h1>
+              <p className="text-gray-600 text-lg max-w-xl mb-8">
+                Detecta patrones de abuso psicológico en minutos. Una herramienta de alta precisión diseñada para psicólogos y terapeutas.
+              </p>
+              <div className="flex items-center gap-4 mb-6">
                 <Button size="lg" className="group" onClick={handleAnalysisClick}>
-                    Analizar conversación · Acceso profesional
-                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  Comenzar análisis profesional
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </div>
+              <p className="text-xs text-gray-500 mb-10">
+                Uso exclusivo para personal cualificado · Prueba gratuita por 3 sesiones
+              </p>
+              {/* Sellos */}
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-4 opacity-70">
+                <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
+                  <University size={16} /> Colegio Psicológico Nacional
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
+                  <ShieldCheck size={16} /> Certificado GDPR / HIPAA
+                </div>
+              </div>
             </div>
-             <div className="absolute hidden lg:block right-0 top-0 h-full w-1/2 animate-in fade-in zoom-in-95 duration-700 delay-300 z-0">
-                {getImage('hero-image') &&
-                    <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[500px] h-[600px] transform-gpu rotate-6">
-                        <Image
-                            src={getImage('hero-image')!.imageUrl}
-                            alt={getImage('hero-image')!.description}
-                            fill
-                            className="object-contain"
-                            data-ai-hint={getImage('hero-image')!.imageHint}
-                        />
-                    </div>
+
+            {/* Mockup */}
+            <div className="relative flex justify-center lg:justify-end animate-in fade-in zoom-in-95 duration-700 delay-200">
+              <div className="relative w-[280px] md:w-[340px] lg:w-[380px] rounded-3xl shadow-2xl overflow-hidden border border-gray-200 bg-white">
+                {getImage('alumbra-report') &&
+                  <Image
+                      src={getImage('alumbra-report')!.imageUrl}
+                      alt={getImage('alumbra-report')!.description}
+                      width={380}
+                      height={685}
+                      className="w-full h-auto"
+                      data-ai-hint={getImage('alumbra-report')!.imageHint}
+                  />
                 }
+              </div>
+              {/* Glow decorativo */}
+              <div className="absolute -z-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl -right-10 -top-10"></div>
             </div>
           </div>
         </section>
@@ -416,9 +436,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
-
-    
-
-    
