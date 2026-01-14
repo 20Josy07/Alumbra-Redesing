@@ -111,7 +111,7 @@ export default function LandingPage() {
       <main className="flex-1">
         <section className="relative text-center lg:text-left py-20 md:py-32 overflow-hidden">
           <div className="container mx-auto px-6 grid lg:grid-cols-2 items-center gap-12">
-            <div className="max-w-3xl mx-auto lg:mx-0">
+            <div className="max-w-3xl mx-auto lg:mx-0 relative z-10">
               <p className="font-semibold text-primary animate-in fade-in slide-in-from-top-4 duration-700">IA para el análisis de dinámicas comunicativas en contextos terapéuticos</p>
               <h1 className="text-4xl md:text-6xl font-extrabold mt-2 mb-6 tracking-tight animate-in fade-in slide-in-from-top-6 duration-700 delay-100">
                 Identifica señales de abuso psicológico en conversaciones
@@ -126,14 +126,14 @@ export default function LandingPage() {
                 </Button>
               </div>
             </div>
-             <div className="relative hidden lg:block h-[500px] w-full animate-in fade-in zoom-in-95 duration-700 delay-300">
+             <div className="absolute hidden lg:block right-0 top-0 h-full w-1/2 animate-in fade-in zoom-in-95 duration-700 delay-300">
                 {getImage('hero-image') &&
                     <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[500px] h-[600px] transform-gpu rotate-6">
                         <Image
                             src={getImage('hero-image')!.imageUrl}
                             alt={getImage('hero-image')!.description}
                             fill
-                            className="object-contain rounded-2xl"
+                            className="object-contain"
                             data-ai-hint={getImage('hero-image')!.imageHint}
                         />
                     </div>
@@ -416,6 +416,8 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
 
