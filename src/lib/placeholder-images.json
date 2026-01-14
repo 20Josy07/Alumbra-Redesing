@@ -37,6 +37,12 @@
       "imageHint": "analyzer mockup"
     },
     {
+      "id": "hero-image",
+      "description": "Mockup of the Alumbra app interface",
+      "imageUrl": "https://i.postimg.cc/8P1whWnc/160shots-so.png",
+      "imageHint": "app mockup"
+    },
+    {
       "id": "avatar1",
       "description": "A profile picture of a user.",
       "imageUrl": "https://i.pravatar.cc/150?img=1",

@@ -109,14 +109,14 @@ export default function LandingPage() {
       <Header activeLink={activeSection} />
 
       <main className="flex-1">
-        <section className="text-center py-20 md:py-32">
-          <div className="container mx-auto px-6">
-            <div className="max-w-3xl mx-auto">
+        <section className="relative text-center lg:text-left py-20 md:py-32 overflow-hidden">
+          <div className="container mx-auto px-6 grid lg:grid-cols-2 items-center gap-12">
+            <div className="max-w-3xl mx-auto lg:mx-0">
               <p className="font-semibold text-primary animate-in fade-in slide-in-from-top-4 duration-700">IA para el análisis de dinámicas comunicativas en contextos terapéuticos</p>
               <h1 className="text-4xl md:text-6xl font-extrabold mt-2 mb-6 tracking-tight animate-in fade-in slide-in-from-top-6 duration-700 delay-100">
                 Identifica señales de abuso psicológico en conversaciones
               </h1>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8 animate-in fade-in slide-in-from-top-8 duration-700 delay-200">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto lg:mx-0 mb-8 animate-in fade-in slide-in-from-top-8 duration-700 delay-200">
                 Identifica señales de abuso psicológico mediante inteligencia artificial, apoyando la evaluación clínica y el criterio profesional en el acompañamiento terapéutico.
               </p>
               <div className="animate-in fade-in zoom-in-95 duration-700 delay-300">
@@ -125,6 +125,19 @@ export default function LandingPage() {
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </div>
+            </div>
+             <div className="relative hidden lg:block h-[500px] w-full animate-in fade-in zoom-in-95 duration-700 delay-300">
+                {getImage('hero-image') &&
+                    <div className="absolute top-1/2 -translate-y-1/2 right-0 w-[500px] h-[600px] transform-gpu rotate-6">
+                        <Image
+                            src={getImage('hero-image')!.imageUrl}
+                            alt={getImage('hero-image')!.description}
+                            fill
+                            className="object-contain shadow-2xl rounded-2xl"
+                            data-ai-hint={getImage('hero-image')!.imageHint}
+                        />
+                    </div>
+                }
             </div>
           </div>
         </section>
@@ -403,3 +416,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
