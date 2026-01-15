@@ -111,23 +111,23 @@ export default function LandingPage() {
       <main className="flex-1">
         <section className="relative overflow-hidden bg-gradient-to-b from-purple-200 via-purple-50 to-white pt-20 pb-28 md:pt-24 md:pb-32">
           <div className="container mx-auto px-6 text-center flex flex-col items-center justify-center">
-            <div className="relative z-10 animate-in fade-in slide-in-from-top-12 duration-700 max-w-2xl">
-              <p className="text-sm text-primary font-medium mb-4">
+            <div className="relative z-10 max-w-2xl">
+              <p className="text-sm text-primary font-medium mb-4 animate-in fade-in slide-in-from-top-12 duration-700 delay-200">
                 IA para el análisis de dinámicas comunicativas en contextos terapéuticos
               </p>
-              <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6">
+              <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6 animate-in fade-in slide-in-from-top-12 duration-700 delay-300">
                 Potencia tu diagnóstico clínico con IA especializada en detección de abuso.
               </h1>
-              <p className="text-gray-600 text-lg mb-8">
+              <p className="text-gray-600 text-lg mb-8 animate-in fade-in slide-in-from-top-12 duration-700 delay-400">
                 Detecta patrones de abuso psicológico en minutos. Una herramienta de alta precisión diseñada para psicólogos y terapeutas.
               </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 animate-in fade-in slide-in-from-top-12 duration-700 delay-500">
                 <Button size="lg" className="group w-full sm:w-auto" onClick={handleAnalysisClick}>
                   Comenzar análisis profesional
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 animate-in fade-in slide-in-from-top-12 duration-700 delay-600">
                 Uso exclusivo para personal cualificado · Prueba gratuita por 3 sesiones
               </p>
             </div>
