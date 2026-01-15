@@ -132,7 +132,7 @@ export default function LandingPage() {
               </p>
             </div>
             
-             <div className="absolute top-[40%] right-[5%] hidden lg:block w-[400px] h-[400px] -z-0">
+             <div className="absolute top-[40%] right-[5%] hidden lg:block w-[500px] h-[500px] -z-0">
                 <Image
                     src="https://i.postimg.cc/bwgjvChS/Gemini-Generated-Image-tukqhotukqhotukq-1-1-removebg-preview.png"
                     alt="Decorative mockup"
@@ -429,6 +429,8 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
 
