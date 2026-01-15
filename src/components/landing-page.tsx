@@ -110,8 +110,8 @@ export default function LandingPage() {
 
       <main className="flex-1">
         <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-white pt-20 pb-10">
-          <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center min-h-[60vh]">
-            <div className="max-w-xl text-center lg:text-left relative z-10 animate-in fade-in slide-in-from-left-12 duration-700">
+          <div className="container mx-auto px-6 text-center flex flex-col items-center justify-center min-h-[60vh]">
+            <div className="relative z-10 animate-in fade-in slide-in-from-top-12 duration-700 max-w-2xl">
               <p className="text-sm text-primary font-medium mb-4">
                 IA para el análisis de dinámicas comunicativas en contextos terapéuticos
               </p>
@@ -121,7 +121,7 @@ export default function LandingPage() {
               <p className="text-gray-600 text-lg mb-8">
                 Detecta patrones de abuso psicológico en minutos. Una herramienta de alta precisión diseñada para psicólogos y terapeutas.
               </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
                 <Button size="lg" className="group w-full sm:w-auto" onClick={handleAnalysisClick}>
                   Comenzar análisis profesional
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -132,29 +132,16 @@ export default function LandingPage() {
               </p>
             </div>
             
-            <div className="absolute top-1/2 right-0 -translate-y-1/2 h-full w-1/2 lg:w-2/5 z-0 hidden md:block">
+            <div className="absolute inset-0 z-0 opacity-20">
               {getImage('hero-image') &&
                   <Image
                       src={getImage('hero-image')!.imageUrl}
                       alt={getImage('hero-image')!.description}
-                      width={800}
-                      height={800}
-                      className="w-full h-full object-contain object-right-bottom opacity-80"
+                      layout="fill"
+                      objectFit="cover"
+                      className="w-full h-full"
                       data-ai-hint={getImage('hero-image')!.imageHint}
                       priority
-                  />
-              }
-            </div>
-
-             <div className="md:hidden relative w-full max-w-sm mx-auto mt-8 h-auto animate-in fade-in zoom-in-95 duration-700 delay-300">
-              {getImage('hero-image') &&
-                  <Image
-                      src={getImage('hero-image')!.imageUrl}
-                      alt={getImage('hero-image')!.description}
-                      width={600}
-                      height={600}
-                      className="w-full h-auto object-contain"
-                      data-ai-hint={getImage('hero-image')!.imageHint}
                   />
               }
             </div>
