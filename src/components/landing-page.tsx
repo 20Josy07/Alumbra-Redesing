@@ -109,7 +109,7 @@ export default function LandingPage() {
       <Header activeLink={activeSection} />
 
       <main className="flex-1">
-        <section className="relative overflow-hidden bg-gradient-to-b from-purple-50 to-white pt-20 pb-10">
+        <section className="relative overflow-hidden bg-gradient-to-b from-purple-200 via-purple-50 to-white pt-20 pb-10">
           <div className="container mx-auto px-6 text-center flex flex-col items-center justify-center">
             <div className="relative z-10 animate-in fade-in slide-in-from-top-12 duration-700 max-w-2xl mb-8">
               <p className="text-sm text-primary font-medium mb-4">
@@ -132,7 +132,7 @@ export default function LandingPage() {
               </p>
             </div>
             
-             <div className="absolute top-[40%] right-[3%] hidden lg:block w-[500px] h-[500px] -z-0">
+             <div className="absolute top-[40%] right-[calc(2%+32px)] hidden lg:block w-[500px] h-[500px] -z-0">
                 <Image
                     src="https://i.postimg.cc/bwgjvChS/Gemini-Generated-Image-tukqhotukqhotukq-1-1-removebg-preview.png"
                     alt="Decorative mockup"
