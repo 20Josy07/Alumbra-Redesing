@@ -78,7 +78,7 @@ export default function Header({ activeLink }: HeaderProps) {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex">
-          <ul className="flex items-center gap-6 text-sm font-medium">
+          <ul className="flex items-center gap-8 text-base font-medium">
             {navLinks}
           </ul>
         </nav>
@@ -142,7 +142,7 @@ export default function Header({ activeLink }: HeaderProps) {
                     </Link>
                 </SheetHeader>
                 <nav className="flex-1 px-6">
-                  <ul className="flex flex-col gap-6 text-lg font-medium">
+                  <ul className="flex flex-col gap-6 text-xl font-medium">
                     {user && (
                          <li>
                             <Link href="/dashboard" className='text-primary font-semibold transition-colors' onClick={() => setIsSheetOpen(false)}>
