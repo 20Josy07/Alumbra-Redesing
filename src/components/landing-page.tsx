@@ -78,7 +78,7 @@ export default function LandingPage() {
       price: "$25.000",
       description: "Más control, más análisis",
       features: [
-        { text: "60 análisis al mes", included: true },
+        { text: "Análisis ilimitados", included: true },
         { text: "Dashboard de gestión básico", included: true },
         { text: "Historial de análisis", included: true },
         { text: "Visualización de resultados", included: true },
@@ -109,7 +109,7 @@ export default function LandingPage() {
       <Header activeLink={activeSection} />
 
       <main className="flex-1">
-        <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-white pt-20 pb-10">
+        <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white pt-20 pb-10">
           <div className="container mx-auto px-6 text-center flex flex-col items-center justify-center">
             <div className="relative z-10 animate-in fade-in slide-in-from-top-12 duration-700 max-w-2xl mb-8">
               <p className="text-sm text-primary font-medium mb-4">
@@ -132,18 +132,15 @@ export default function LandingPage() {
               </p>
             </div>
             
-            <div className="relative w-full max-w-4xl animate-in fade-in duration-700 delay-150">
-              {getImage('hero-image') &&
-                  <Image
-                      src={getImage('hero-image')!.imageUrl}
-                      alt={getImage('hero-image')!.description}
-                      width={1024}
-                      height={632}
-                      className="w-full h-auto"
-                      data-ai-hint={getImage('hero-image')!.imageHint}
-                      priority
-                  />
-              }
+             <div className="absolute top-1/4 right-0 xl:right-[10%] 2xl:right-[15%] hidden lg:block w-[400px] h-[400px] -z-0">
+                <Image
+                    src="https://i.postimg.cc/KzX388bf/Gemini-Generated-Image-tukqhotukqhotukq-(1)-(1).png"
+                    alt="Decorative mockup"
+                    width={1024}
+                    height={632}
+                    className="w-full h-auto object-contain transform -rotate-12 shadow-xl rounded-2xl"
+                    priority
+                />
             </div>
           </div>
            <div className="container mx-auto px-6 mt-12">
@@ -432,6 +429,8 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
 
