@@ -78,7 +78,7 @@ export default function Header({ activeLink }: HeaderProps) {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex">
-          <ul className="flex items-center gap-8 text-base font-medium">
+          <ul className="flex items-center gap-12 text-lg font-medium">
             {navLinks}
           </ul>
         </nav>
