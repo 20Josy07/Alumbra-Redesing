@@ -109,57 +109,51 @@ export default function LandingPage() {
       <Header activeLink={activeSection} />
 
       <main className="flex-1">
-        <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-white">
-          <div className="max-w-7xl mx-auto px-6 py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Texto */}
-            <div className="animate-in fade-in slide-in-from-left-12 duration-700">
-              <p className="text-sm text-primary font-medium mb-4">
-                IA para el análisis de dinámicas comunicativas en contextos terapéuticos
-              </p>
-              <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6">
-                Potencia tu diagnóstico clínico con IA especializada en detección de abuso.
-              </h1>
-              <p className="text-gray-600 text-lg max-w-xl mb-8">
-                Detecta patrones de abuso psicológico en minutos. Una herramienta de alta precisión diseñada para psicólogos y terapeutas.
-              </p>
-              <div className="flex items-center gap-4 mb-6">
-                <Button size="lg" className="group" onClick={handleAnalysisClick}>
-                  Comenzar análisis profesional
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </Button>
-              </div>
-              <p className="text-xs text-gray-500 mb-10">
-                Uso exclusivo para personal cualificado · Prueba gratuita por 3 sesiones
-              </p>
-              {/* Sellos */}
-              <div className="flex flex-wrap items-center gap-x-8 gap-y-4 opacity-70">
-                <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
-                  <University size={16} /> Colegio Psicológico Nacional
+        <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-white pt-20 pb-10">
+            <div className="container mx-auto px-6 text-center flex flex-col items-center">
+                <div className="max-w-4xl animate-in fade-in slide-in-from-top-12 duration-700">
+                    <p className="text-sm text-primary font-medium mb-4">
+                        IA para el análisis de dinámicas comunicativas en contextos terapéuticos
+                    </p>
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6">
+                        Potencia tu diagnóstico clínico con IA especializada en detección de abuso.
+                    </h1>
+                    <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-8">
+                        Detecta patrones de abuso psicológico en minutos. Una herramienta de alta precisión diseñada para psicólogos y terapeutas.
+                    </p>
+                    <div className="flex flex-col items-center gap-4 mb-6">
+                        <Button size="lg" className="group" onClick={handleAnalysisClick}>
+                            Comenzar análisis profesional
+                            <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                        </Button>
+                        <p className="text-xs text-gray-500">
+                            Uso exclusivo para personal cualificado · Prueba gratuita por 3 sesiones
+                        </p>
+                    </div>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
-                  <ShieldCheck size={16} /> Certificado GDPR / HIPAA
-                </div>
-              </div>
-            </div>
 
-            {/* Mockup */}
-            <div className="relative flex justify-center lg:justify-end animate-in fade-in zoom-in-95 duration-700 delay-200">
-              <div className="relative w-[280px] md:w-[340px] lg:w-[380px] rounded-3xl overflow-hidden bg-white">
-                {getImage('hero-image') &&
-                  <Image
-                      src={getImage('hero-image')!.imageUrl}
-                      alt={getImage('hero-image')!.description}
-                      width={380}
-                      height={685}
-                      className="w-full h-auto"
-                      data-ai-hint={getImage('hero-image')!.imageHint}
-                  />
-                }
-              </div>
-              {/* Glow decorativo */}
-              <div className="absolute -z-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl -right-10 -top-10"></div>
+                <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 opacity-70 mb-10 animate-in fade-in duration-700 delay-200">
+                    <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
+                        <University size={16} /> Colegio Psicológico Nacional
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
+                        <ShieldCheck size={16} /> Certificado GDPR / HIPAA
+                    </div>
+                </div>
+
+                <div className="relative w-full max-w-4xl mx-auto mt-4 h-auto animate-in fade-in zoom-in-95 duration-700 delay-300">
+                    {getImage('alumbra-report') &&
+                        <Image
+                            src={getImage('alumbra-report')!.imageUrl}
+                            alt={getImage('alumbra-report')!.description}
+                            width={1024}
+                            height={768}
+                            className="w-full h-auto object-contain"
+                            data-ai-hint={getImage('alumbra-report')!.imageHint}
+                        />
+                    }
+                </div>
             </div>
-          </div>
         </section>
 
         <section id="analysis-section" className="py-20 md:py-24 bg-gray-50 scroll-mt-20">
