@@ -167,33 +167,39 @@ export default function LandingPage() {
                 </div>
 
                 <Card className="shadow-2xl relative overflow-hidden group">
-                  <div className="relative aspect-[16/10] w-full h-full">
-                      {getImage('analyzer-mockup') && (
-                          <Image 
-                              src={getImage('analyzer-mockup')!.imageUrl}
-                              alt={getImage('analyzer-mockup')!.description}
-                              fill
-                              className="object-cover object-top"
-                              data-ai-hint={getImage('analyzer-mockup')!.imageHint}
-                          />
-                      )}
-                  </div>
-                 <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center transition-opacity duration-300 opacity-100 group-hover:opacity-0">
-                    <Lock className="w-16 h-16 text-primary mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">Función Disponible para Usuarios</h3>
-                    <p className="text-gray-600 mb-6 max-w-sm">
-                        Para proteger tu privacidad, el análisis se realiza en tu dashboard personal una vez que has iniciado sesión.
-                    </p>
-                    <Button size="lg" asChild>
-                        <Link href="/login">Inicia Sesión Para Analizar</Link>
-                    </Button>
-                     <p className="text-sm text-muted-foreground mt-4">
-                        ¿No tienes una cuenta?{" "}
-                        <Link href="/signup" className="text-primary font-semibold hover:underline">
-                            Regístrate
-                        </Link>
-                    </p>
-                </div>
+                    <div className="relative aspect-[16/10] w-full h-full">
+                        <Image 
+                            src="https://i.postimg.cc/GmTTvyXx/Whats-App-Image-2026-01-14-at-5-13-17-PM.jpg"
+                            alt="Función disponible para usuarios"
+                            fill
+                            className="object-cover object-center transition-opacity duration-300 group-hover:opacity-0"
+                        />
+                         {getImage('analyzer-mockup') && (
+                            <Image 
+                                src={getImage('analyzer-mockup')!.imageUrl}
+                                alt={getImage('analyzer-mockup')!.description}
+                                fill
+                                className="object-cover object-top opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                                data-ai-hint={getImage('analyzer-mockup')!.imageHint}
+                            />
+                        )}
+                    </div>
+                    <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+                        <Lock className="w-16 h-16 text-primary mb-4" />
+                        <h3 className="text-2xl font-bold mb-2">Función Disponible para Usuarios</h3>
+                        <p className="text-gray-600 mb-6 max-w-sm">
+                            Para proteger tu privacidad, el análisis se realiza en tu dashboard personal una vez que has iniciado sesión.
+                        </p>
+                        <Button size="lg" asChild>
+                            <Link href="/login">Inicia Sesión Para Analizar</Link>
+                        </Button>
+                        <p className="text-sm text-muted-foreground mt-4">
+                            ¿No tienes una cuenta?{" "}
+                            <Link href="/signup" className="text-primary font-semibold hover:underline">
+                                Regístrate
+                            </Link>
+                        </p>
+                    </div>
                 </Card>
             </div>
         </section>
@@ -429,15 +435,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
