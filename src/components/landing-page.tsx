@@ -138,7 +138,7 @@ export default function LandingPage() {
                     alt="Decorative mockup"
                     width={1024}
                     height={632}
-                    className="w-full h-auto object-contain transform -rotate-12 shadow-xl rounded-2xl"
+                    className="w-full h-auto object-contain transform -rotate-12 drop-shadow-xl"
                     priority
                 />
             </div>
