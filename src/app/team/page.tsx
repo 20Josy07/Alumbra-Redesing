@@ -59,7 +59,7 @@ export default function TeamPage() {
                         <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
                            La misión de Alumbra es proporcionar una plataforma de análisis de conversaciones basada en inteligencia artificial, orientada a apoyar el trabajo de profesionales de la salud mental en la identificación temprana de indicadores asociados a abuso psicológico.  La herramienta está diseñada para complementar la evaluación clínica, facilitar la reflexión sobre dinámicas comunicativas complejas y promover un uso ético, confidencial y responsable de la tecnología en contextos terapéuticos.
                         </p>
-                        <div className="relative h-96 md:h-[600px] w-full max-w-6xl mx-auto bg-gray-100 rounded-3xl shadow-2xl overflow-hidden">
+                        <div className="relative h-64 md:h-[600px] w-full max-w-6xl mx-auto bg-gray-100 rounded-3xl shadow-2xl overflow-hidden">
                            {getImage('team-group') && <Image 
                                 src={getImage('team-group')?.imageUrl as string}
                                 alt="Equipo de Alumbra"
@@ -101,7 +101,7 @@ export default function TeamPage() {
                            />}
                         </div>
                         <div>
-                            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">
+                            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-8">
                                 Por qué existimos
                             </h2>
                             <ul className="space-y-6">
@@ -194,7 +194,7 @@ export default function TeamPage() {
                     </div>
                 </section>
             </main>
-            <footer className="bg-primary text-primary-foreground py-20">
+            <footer className="bg-primary text-primary-foreground py-12 md:py-20">
                 <div className="container mx-auto px-6 grid md:grid-cols-3 gap-12">
                   <div>
                     <div className="flex items-center gap-3 mb-4">
@@ -247,3 +247,4 @@ export default function TeamPage() {
 
 
     
+

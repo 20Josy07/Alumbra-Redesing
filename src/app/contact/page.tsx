@@ -169,7 +169,7 @@ export default function ContactPage() {
                     </div>
                 </section>
             </main>
-            <footer className="bg-primary text-primary-foreground py-20">
+            <footer className="bg-primary text-primary-foreground py-12 md:py-20">
                 <div className="container mx-auto px-6 grid md:grid-cols-3 gap-12">
                   <div>
                     <div className="flex items-center gap-3 mb-4">
@@ -222,3 +222,4 @@ export default function ContactPage() {
 
 
     
+

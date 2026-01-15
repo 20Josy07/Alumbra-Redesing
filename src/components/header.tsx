@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -51,7 +52,7 @@ export default function Header({ activeLink }: HeaderProps) {
           <Link 
             href={item.href} 
             className={cn(
-              'hover:text-primary transition-colors',
+              'hover:text-primary transition-colors text-base',
               activeLink === item.key && 'text-primary font-semibold underline underline-offset-4'
             )}
             onClick={() => setIsSheetOpen(false)}
@@ -78,7 +79,7 @@ export default function Header({ activeLink }: HeaderProps) {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex">
-          <ul className="flex items-center gap-12 text-lg font-medium">
+          <ul className="flex items-center gap-8 text-lg font-medium">
             {navLinks}
           </ul>
         </nav>

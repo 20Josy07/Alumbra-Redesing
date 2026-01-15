@@ -110,7 +110,7 @@ export default function LandingPage() {
 
       <main className="flex-1">
         <section className="relative overflow-hidden bg-gradient-to-b from-purple-200 via-purple-50 to-white pt-20 pb-10">
-          <div className="container mx-auto px-6 text-center flex flex-col items-center justify-center">
+          <div className="container mx-auto px-6 text-center flex flex-col items-center justify-center min-h-[50vh] md:min-h-[auto]">
             <div className="relative z-10 animate-in fade-in slide-in-from-top-12 duration-700 max-w-2xl mb-8">
               <p className="text-sm text-primary font-medium mb-4">
                 IA para el análisis de dinámicas comunicativas en contextos terapéuticos
@@ -293,7 +293,7 @@ export default function LandingPage() {
                 </Alert>
               </div>
             </div>
-            <div className={cn("relative h-96 md:h-[600px] w-full bg-gray-200 rounded-3xl", isIntersecting2 && "animate-in fade-in zoom-in-95 duration-700 delay-200")}>
+            <div className={cn("relative h-80 md:h-[600px] w-full bg-gray-200 rounded-3xl", isIntersecting2 && "animate-in fade-in zoom-in-95 duration-700 delay-200")}>
                 {getImage('protection') && <Image src={getImage('protection')!.imageUrl} alt={getImage('protection')!.description} fill className="object-cover rounded-3xl" data-ai-hint={getImage('protection')!.imageHint} />}
             </div>
           </div>
@@ -385,7 +385,7 @@ export default function LandingPage() {
       </main>
       
 
-      <footer ref={ref5} className={cn("bg-primary text-primary-foreground py-20 transition-opacity duration-700", isIntersecting5 ? "opacity-100" : "opacity-0")}>
+      <footer ref={ref5} className={cn("bg-primary text-primary-foreground py-12 md:py-20 transition-opacity duration-700", isIntersecting5 ? "opacity-100" : "opacity-0")}>
         <div className="container mx-auto px-6 grid md:grid-cols-3 gap-12">
           <div>
             <div className="flex items-center gap-3 mb-4">
