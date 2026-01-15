@@ -112,7 +112,7 @@ export default function LandingPage() {
         <section className="relative overflow-hidden bg-gradient-to-b from-purple-200 via-purple-50 to-white pt-20 pb-28 md:pt-24 md:pb-32">
           <div className="container mx-auto px-6 text-center flex flex-col items-center justify-center">
             <div className="relative z-10 max-w-2xl">
-              <p className="text-sm text-primary font-medium mb-4 animate-in fade-in slide-in-from-top-12 duration-700 delay-200">
+              <p className="text-sm text-primary font-bold mb-4 animate-in fade-in slide-in-from-top-12 duration-700 delay-200">
                 IA para el análisis de dinámicas comunicativas en contextos terapéuticos
               </p>
               <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6 animate-in fade-in slide-in-from-top-12 duration-700 delay-300">
