@@ -109,9 +109,9 @@ export default function LandingPage() {
       <Header activeLink={activeSection} />
 
       <main className="flex-1">
-        <section className="relative overflow-hidden bg-gradient-to-b from-purple-200 via-purple-50 to-white pt-20 pb-10">
-          <div className="container mx-auto px-6 text-center flex flex-col items-center justify-center min-h-[50vh] md:min-h-[auto]">
-            <div className="relative z-10 animate-in fade-in slide-in-from-top-12 duration-700 max-w-2xl mb-8">
+        <section className="relative overflow-hidden bg-gradient-to-b from-purple-200 via-purple-50 to-white pt-20 pb-28 md:pt-24 md:pb-32">
+          <div className="container mx-auto px-6 text-center flex flex-col items-center justify-center">
+            <div className="relative z-10 animate-in fade-in slide-in-from-top-12 duration-700 max-w-2xl">
               <p className="text-sm text-primary font-medium mb-4">
                 IA para el análisis de dinámicas comunicativas en contextos terapéuticos
               </p>
@@ -132,18 +132,18 @@ export default function LandingPage() {
               </p>
             </div>
             
-             <div className="absolute top-[40%] right-[calc(2%+32px)] hidden lg:block w-[500px] h-[500px] -z-0">
+             <div className="absolute top-[40%] right-[calc(2%+32px)] hidden lg:block w-[500px] h-[500px] -z-0 animate-in fade-in zoom-in-95 duration-700 delay-300">
                 <Image
                     src="https://i.postimg.cc/bwgjvChS/Gemini-Generated-Image-tukqhotukqhotukq-1-1-removebg-preview.png"
                     alt="Decorative mockup"
-                    width={1024}
-                    height={632}
+                    width={500}
+                    height={500}
                     className="w-full h-auto object-contain transform -rotate-12 drop-shadow-xl"
                     priority
                 />
             </div>
           </div>
-           <div className="container mx-auto px-6 mt-12">
+           <div className="container mx-auto px-6 mt-16 md:mt-24">
                <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 opacity-70 animate-in fade-in duration-700 delay-200">
                     <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
                         <University size={16} /> Colegio Psicológico Nacional
@@ -157,7 +157,7 @@ export default function LandingPage() {
 
         <section id="analysis-section" className="py-20 md:py-24 bg-gray-50 scroll-mt-20">
             <div className="container mx-auto px-6 max-w-5xl">
-                <div className="text-center mb-12">
+                <div className="text-center mb-12 animate-in fade-in-0 slide-in-from-bottom-12 duration-700">
                 <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
                     Analiza una Conversación Ahora
                 </h2>
@@ -166,7 +166,7 @@ export default function LandingPage() {
                 </p>
                 </div>
 
-                <Card className="shadow-2xl relative overflow-hidden group">
+                <Card className="shadow-2xl relative overflow-hidden group animate-in fade-in-0 zoom-in-95 duration-700 delay-200">
                     <div className="relative aspect-[16/10] w-full h-full">
                         <Image 
                             src="https://i.postimg.cc/GmTTvyXx/Whats-App-Image-2026-01-14-at-5-13-17-PM.jpg"
@@ -215,7 +215,7 @@ export default function LandingPage() {
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-8 mt-16">
-              <div className={cn("bg-white p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-100")}>
+              <div className={cn("bg-white p-6 rounded-3xl shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-2", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-100")}>
                 <div className="relative h-56 w-full rounded-2xl overflow-hidden mb-6">
                   {getImage('feature1') && <Image
                     src={getImage('feature1')!.imageUrl}
@@ -228,7 +228,7 @@ export default function LandingPage() {
                 <h3 className="text-xl font-bold mb-2">Análisis de conversaciones terapéuticas</h3>
                 <p className="text-gray-600">Analiza conversaciones entre pacientes y terceros mediante inteligencia artificial, identificando patrones relevantes que pueden apoyar la evaluación clínica.</p>
               </div>
-              <div className={cn("bg-white p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-200")}>
+              <div className={cn("bg-white p-6 rounded-3xl shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-2", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-200")}>
                 <div className="relative h-56 w-full rounded-2xl overflow-hidden mb-6">
                    {getImage('feature2') && <Image
                     src={getImage('feature2')!.imageUrl}
@@ -241,7 +241,7 @@ export default function LandingPage() {
                 <h3 className="text-xl font-bold mb-2">Análisis avanzado de abuso emocional</h3>
                 <p className="text-gray-600">Identifica señales como gaslighting, manipulación emocional o control coercitivo, como apoyo al criterio profesional, no como diagnóstico automático.</p>
               </div>
-              <div className={cn("bg-white p-6 rounded-3xl shadow-lg", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-300")}>
+              <div className={cn("bg-white p-6 rounded-3xl shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-2", isIntersecting1 && "animate-in fade-in slide-in-from-bottom-16 duration-700 delay-300")}>
                 <div className="relative h-56 w-full rounded-2xl overflow-hidden mb-6">
                   {getImage('feature3') && <Image
                     src={getImage('feature3')!.imageUrl}
@@ -263,28 +263,28 @@ export default function LandingPage() {
             <div className={cn(isIntersecting2 && "animate-in fade-in slide-in-from-left-16 duration-700")}>
               <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-8">Simplifica el análisis clínico de conversaciones</h2>
               <div className="space-y-8">
-                <div className="flex gap-6 items-start">
+                <div className="flex gap-6 items-start animate-in fade-in-0 slide-in-from-bottom-8 duration-700 delay-100">
                   <div className="text-2xl font-bold text-primary opacity-50">01</div>
                   <div>
                     <h3 className="text-xl font-bold">Inicia sesión y accede a tu panel profesional</h3>
                     <p className="text-gray-600 mt-1">Un entorno seguro y confidencial diseñado para el análisis de conversaciones en contextos terapéuticos.</p>
                   </div>
                 </div>
-                <div className="flex gap-6 items-start">
+                <div className="flex gap-6 items-start animate-in fade-in-0 slide-in-from-bottom-8 duration-700 delay-200">
                   <div className="text-2xl font-bold text-primary opacity-50">02</div>
                   <div>
                     <h3 className="text-xl font-bold">Incorpora la conversación y Alumbra analiza</h3>
                     <p className="text-gray-600 mt-1">La plataforma identifica patrones comunicativos asociados a posibles dinámicas de abuso psicológico, como apoyo al proceso de evaluación clínica.</p>
                   </div>
                 </div>
-                <div className="flex gap-6 items-start">
+                <div className="flex gap-6 items-start animate-in fade-in-0 slide-in-from-bottom-8 duration-700 delay-300">
                   <div className="text-2xl font-bold text-primary opacity-50">03</div>
                   <div>
                     <h3 className="text-xl font-bold">Obtén un informe orientativo</h3>
                     <p className="text-gray-600 mt-1">Recibe un informe estructurado con indicadores de riesgo y observaciones relevantes, pensado para complementar el criterio profesional y facilitar el trabajo terapéutico.</p>
                   </div>
                 </div>
-                 <Alert className="bg-amber-50 border-amber-200 text-amber-900 animate-in fade-in-0 duration-500">
+                 <Alert className="bg-amber-50 border-amber-200 text-amber-900 animate-in fade-in-0 duration-500 delay-400">
                     <AlertCircle className="h-5 w-5 text-amber-600" />
                     <AlertTitle className="font-bold">Nota Importante</AlertTitle>
                     <AlertDescription className="text-amber-800">
@@ -293,7 +293,7 @@ export default function LandingPage() {
                 </Alert>
               </div>
             </div>
-            <div className={cn("relative h-80 md:h-[600px] w-full bg-gray-200 rounded-3xl", isIntersecting2 && "animate-in fade-in zoom-in-95 duration-700 delay-200")}>
+            <div className={cn("relative h-80 md:h-[600px] w-full bg-gray-200 rounded-3xl shadow-2xl", isIntersecting2 && "animate-in fade-in zoom-in-95 duration-700 delay-200")}>
                 {getImage('protection') && <Image src={getImage('protection')!.imageUrl} alt={getImage('protection')!.description} fill className="object-cover rounded-3xl" data-ai-hint={getImage('protection')!.imageHint} />}
             </div>
           </div>
@@ -307,7 +307,7 @@ export default function LandingPage() {
                     </h2>
                 </div>
                 <div className={cn(isIntersecting3 && "animate-in fade-in slide-in-from-right-16 duration-700 delay-200")}>
-                    <div className="bg-white rounded-3xl shadow-2xl p-8">
+                    <div className="bg-white rounded-3xl shadow-2xl p-8 transition-all duration-300 hover:shadow-primary/20 hover:shadow-2xl">
                         <div className="flex -space-x-2 mb-6 justify-start">
                             {['avatar1', 'avatar2', 'avatar3', 'avatar4', 'avatar5'].map((id) => {
                                 const image = getImage(id);
@@ -386,7 +386,7 @@ export default function LandingPage() {
       
 
       <footer ref={ref5} className={cn("bg-primary text-primary-foreground py-12 md:py-20 transition-opacity duration-700", isIntersecting5 ? "opacity-100" : "opacity-0")}>
-        <div className="container mx-auto px-6 grid md:grid-cols-3 gap-12">
+        <div className="container mx-auto px-6 grid md:grid-cols-3 gap-12 animate-in fade-in-0 slide-in-from-bottom-12 duration-700">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <Image src="https://i.postimg.cc/QCys4Rbt/favicon-light.png" alt="Alumbra" width={32} height={32} />
@@ -435,3 +435,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
