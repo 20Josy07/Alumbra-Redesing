@@ -110,8 +110,8 @@ export default function LandingPage() {
 
       <main className="flex-1">
         <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-white pt-20 pb-10">
-          <div className="container mx-auto px-6 text-center flex flex-col items-center justify-center min-h-[60vh]">
-            <div className="relative z-10 animate-in fade-in slide-in-from-top-12 duration-700 max-w-2xl">
+          <div className="container mx-auto px-6 text-center flex flex-col items-center justify-center">
+            <div className="relative z-10 animate-in fade-in slide-in-from-top-12 duration-700 max-w-2xl mb-8">
               <p className="text-sm text-primary font-medium mb-4">
                 IA para el análisis de dinámicas comunicativas en contextos terapéuticos
               </p>
@@ -132,14 +132,14 @@ export default function LandingPage() {
               </p>
             </div>
             
-            <div className="absolute inset-0 z-0 opacity-20">
+            <div className="relative w-full max-w-4xl animate-in fade-in duration-700 delay-150">
               {getImage('hero-image') &&
                   <Image
                       src={getImage('hero-image')!.imageUrl}
                       alt={getImage('hero-image')!.description}
-                      layout="fill"
-                      objectFit="cover"
-                      className="w-full h-full"
+                      width={1024}
+                      height={632}
+                      className="w-full h-auto"
                       data-ai-hint={getImage('hero-image')!.imageHint}
                       priority
                   />
