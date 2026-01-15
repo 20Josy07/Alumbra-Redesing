@@ -110,48 +110,64 @@ export default function LandingPage() {
 
       <main className="flex-1">
         <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-white pt-20 pb-10">
-            <div className="container mx-auto px-6 text-center flex flex-col items-center">
-                <div className="max-w-4xl animate-in fade-in slide-in-from-top-12 duration-700">
-                    <p className="text-sm text-primary font-medium mb-4">
-                        IA para el análisis de dinámicas comunicativas en contextos terapéuticos
-                    </p>
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6">
-                        Potencia tu diagnóstico clínico con IA especializada en detección de abuso.
-                    </h1>
-                    <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-8">
-                        Detecta patrones de abuso psicológico en minutos. Una herramienta de alta precisión diseñada para psicólogos y terapeutas.
-                    </p>
-                    <div className="flex flex-col items-center gap-4 mb-6">
-                        <Button size="lg" className="group" onClick={handleAnalysisClick}>
-                            Comenzar análisis profesional
-                            <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                        </Button>
-                        <p className="text-xs text-gray-500">
-                            Uso exclusivo para personal cualificado · Prueba gratuita por 3 sesiones
-                        </p>
-                    </div>
-                </div>
+          <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center min-h-[60vh]">
+            <div className="max-w-xl text-center lg:text-left relative z-10 animate-in fade-in slide-in-from-left-12 duration-700">
+              <p className="text-sm text-primary font-medium mb-4">
+                IA para el análisis de dinámicas comunicativas en contextos terapéuticos
+              </p>
+              <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6">
+                Potencia tu diagnóstico clínico con IA especializada en detección de abuso.
+              </h1>
+              <p className="text-gray-600 text-lg mb-8">
+                Detecta patrones de abuso psicológico en minutos. Una herramienta de alta precisión diseñada para psicólogos y terapeutas.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-6">
+                <Button size="lg" className="group w-full sm:w-auto" onClick={handleAnalysisClick}>
+                  Comenzar análisis profesional
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </div>
+              <p className="text-xs text-gray-500">
+                Uso exclusivo para personal cualificado · Prueba gratuita por 3 sesiones
+              </p>
+            </div>
+            
+            <div className="absolute top-1/2 right-0 -translate-y-1/2 h-full w-1/2 lg:w-2/5 z-0 hidden md:block">
+              {getImage('hero-image') &&
+                  <Image
+                      src={getImage('hero-image')!.imageUrl}
+                      alt={getImage('hero-image')!.description}
+                      width={800}
+                      height={800}
+                      className="w-full h-full object-contain object-right-bottom opacity-80"
+                      data-ai-hint={getImage('hero-image')!.imageHint}
+                      priority
+                  />
+              }
+              <div className="absolute inset-0 bg-gradient-to-l from-white/20 via-white/80 to-white"></div>
+            </div>
 
-                <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 opacity-70 mb-10 animate-in fade-in duration-700 delay-200">
+             <div className="md:hidden relative w-full max-w-sm mx-auto mt-8 h-auto animate-in fade-in zoom-in-95 duration-700 delay-300">
+              {getImage('hero-image') &&
+                  <Image
+                      src={getImage('hero-image')!.imageUrl}
+                      alt={getImage('hero-image')!.description}
+                      width={600}
+                      height={600}
+                      className="w-full h-auto object-contain"
+                      data-ai-hint={getImage('hero-image')!.imageHint}
+                  />
+              }
+            </div>
+          </div>
+           <div className="container mx-auto px-6 mt-12">
+               <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 opacity-70 animate-in fade-in duration-700 delay-200">
                     <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
                         <University size={16} /> Colegio Psicológico Nacional
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
                         <ShieldCheck size={16} /> Certificado GDPR / HIPAA
                     </div>
-                </div>
-
-                <div className="relative w-full max-w-4xl mx-auto mt-4 h-auto animate-in fade-in zoom-in-95 duration-700 delay-300">
-                    {getImage('alumbra-report') &&
-                        <Image
-                            src={getImage('alumbra-report')!.imageUrl}
-                            alt={getImage('alumbra-report')!.description}
-                            width={1024}
-                            height={768}
-                            className="w-full h-auto object-contain"
-                            data-ai-hint={getImage('alumbra-report')!.imageHint}
-                        />
-                    }
                 </div>
             </div>
         </section>
@@ -430,3 +446,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
