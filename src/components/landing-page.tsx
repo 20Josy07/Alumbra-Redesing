@@ -144,7 +144,6 @@ export default function LandingPage() {
                       priority
                   />
               }
-              <div className="absolute inset-0 bg-gradient-to-l from-white/20 via-white/80 to-white"></div>
             </div>
 
              <div className="md:hidden relative w-full max-w-sm mx-auto mt-8 h-auto animate-in fade-in zoom-in-95 duration-700 delay-300">
@@ -446,5 +445,7 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
 
     
