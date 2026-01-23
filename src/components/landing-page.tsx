@@ -1,4 +1,3 @@
-
 'use client';
 import { ArrowRight, CheckCircle2, Facebook, Instagram, Linkedin, Twitter, XCircle, Youtube, AlertCircle, University, ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
@@ -15,6 +14,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Badge } from './ui/badge';
 import { useActiveSection } from '@/hooks/use-active-section';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { useEffect, useState } from 'react';
 
 export default function LandingPage() {
   const { ref: ref1, isIntersecting: isIntersecting1 } = useIntersectionObserver({ threshold: 0.1 });
@@ -25,6 +25,12 @@ export default function LandingPage() {
 
   const { user } = useUser();
   const router = useRouter();
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const activeSection = useActiveSection([
     'features',
@@ -293,8 +299,26 @@ export default function LandingPage() {
                 </Alert>
               </div>
             </div>
-            <div className={cn("relative h-80 md:h-[600px] w-full bg-gray-200 rounded-3xl shadow-2xl", isIntersecting2 && "animate-in fade-in zoom-in-95 duration-700 delay-200")}>
-                {getImage('protection') && <Image src={getImage('protection')!.imageUrl} alt={getImage('protection')!.description} fill className="object-cover rounded-3xl" data-ai-hint={getImage('protection')!.imageHint} />}
+            <div className={cn("relative w-full rounded-3xl shadow-2xl overflow-hidden", isIntersecting2 && "animate-in fade-in zoom-in-95 duration-700 delay-200")}>
+                {isClient ? (
+                    <div dangerouslySetInnerHTML={{ __html: `
+                        <style>
+                            wistia-player[media-id='47mr7cajt1']:not(:defined) { 
+                                background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/47mr7cajt1/swatch'); 
+                                display: block; 
+                                filter: blur(5px); 
+                                padding-top: 56.25%; 
+                            }
+                        </style>
+                        <script src="https://fast.wistia.com/player.js" async></script>
+                        <script src="https://fast.wistia.com/embed/47mr7cajt1.js" async type="module"></script>
+                        <wistia-player media-id="47mr7cajt1" aspect="1.7777777777777777"></wistia-player>
+                    `}} />
+                ) : (
+                    <div className="w-full aspect-video flex items-center justify-center bg-gray-200">
+                         {/* Placeholder while client is mounting */}
+                    </div>
+                )}
             </div>
           </div>
         </section>
@@ -435,5 +459,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
