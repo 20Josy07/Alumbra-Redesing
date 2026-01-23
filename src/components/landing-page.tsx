@@ -302,17 +302,12 @@ export default function LandingPage() {
             <div className={cn("relative w-full rounded-3xl shadow-2xl overflow-hidden", isIntersecting2 && "animate-in fade-in zoom-in-95 duration-700 delay-200")}>
                 {isClient ? (
                     <div dangerouslySetInnerHTML={{ __html: `
-                        <style>
-                            wistia-player[media-id='47mr7cajt1']:not(:defined) { 
-                                background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/47mr7cajt1/swatch'); 
-                                display: block; 
-                                filter: blur(5px); 
-                                padding-top: 56.25%; 
-                            }
-                        </style>
-                        <script src="https://fast.wistia.com/player.js" async></script>
-                        <script src="https://fast.wistia.com/embed/47mr7cajt1.js" async type="module"></script>
-                        <wistia-player media-id="47mr7cajt1" aspect="1.7777777777777777"></wistia-player>
+                      <div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+                        <div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
+                          <iframe src="https://fast.wistia.net/embed/iframe/47mr7cajt1?seo=false&videoFoam=true" title="VN20260123_135851 Video" allow="autoplay; fullscreen" allowtransparency="true" frameborder="0" scrolling="no" class="wistia_embed" name="wistia_embed" msallowfullscreen width="100%" height="100%"></iframe>
+                        </div>
+                      </div>
+                      <script src="https://fast.wistia.net/assets/external/E-v1.js" async></script>
                     `}} />
                 ) : (
                     <div className="w-full aspect-video flex items-center justify-center bg-gray-200">
