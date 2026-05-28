@@ -1,10 +1,9 @@
 import { firebaseApp } from './config';
-import { Auth, getAuth } from 'firebase/auth';
-import { Firestore, getFirestore } from 'firebase/firestore';
-import { useCollection } from './firestore/use-collection';
-import { useDoc } from './firestore/use-doc';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 import { useMemo } from 'react';
 import type { DocumentReference, Query } from 'firebase/firestore';
+import type { DependencyList } from 'react';
 
 export function initializeFirebase() {
   const app = firebaseApp;
@@ -27,7 +26,7 @@ export { useDoc } from './firestore/use-doc';
  */
 export function useMemoFirebase<T extends DocumentReference | Query>(
   factory: () => T | null,
-  deps: React.DependencyList
+  deps: DependencyList
 ) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return useMemo(factory, deps);

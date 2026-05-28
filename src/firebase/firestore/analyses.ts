@@ -9,7 +9,7 @@ interface AnalysisData extends AnalysisResult {
     originalText: string;
 }
 
-export function saveAnalysis(db: Firestore, userId: string, analysisData: AnalysisData) {
+export async function saveAnalysis(db: Firestore, userId: string, analysisData: AnalysisData) {
   if (!userId) {
     throw new Error('User ID is required to save an analysis.');
   }
@@ -24,17 +24,20 @@ export function saveAnalysis(db: Firestore, userId: string, analysisData: Analys
     score: analysisData.score,
     help: analysisData.help,
     ai_suggestion: analysisData.ai_suggestion,
-    createdAt: serverTimestamp() as any, // Let Firestore handle the timestamp
+    createdAt: serverTimestamp(),
   };
 
-  addDoc(analysesCollection, newAnalysis)
-    .catch(async (serverError) => {
-        const permissionError = new FirestorePermissionError({
-            path: analysesCollection.path,
-            operation: 'create',
-            requestResourceData: newAnalysis,
-        } satisfies SecurityRuleContext);
+  try {
+    return await addDoc(analysesCollection, newAnalysis);
+  } catch (serverError) {
+    const permissionError = new FirestorePermissionError({
+      path: analysesCollection.path,
+      operation: 'create',
+      requestResourceData: newAnalysis,
+      originalError: serverError,
+    } satisfies SecurityRuleContext);
 
-        errorEmitter.emit('permission-error', permissionError);
-    });
+    errorEmitter.emit('permission-error', permissionError);
+    throw permissionError;
+  }
 }

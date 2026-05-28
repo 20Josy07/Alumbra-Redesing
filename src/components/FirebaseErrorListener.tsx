@@ -7,9 +7,14 @@ import { FirestorePermissionError } from '@/firebase/errors';
 export function FirebaseErrorListener() {
   useEffect(() => {
     const handleError = (error: FirestorePermissionError) => {
-      // Throwing the error here will cause it to be picked up by
-      // the Next.js development error overlay.
-      throw error;
+      if (process.env.NODE_ENV === 'development') {
+        // Keep detailed diagnostics visible while developing.
+        console.error(error);
+        return;
+      }
+
+      // In production we report the error without breaking the app shell.
+      console.error('Firestore permission error:', error);
     };
 
     errorEmitter.on('permission-error', handleError);

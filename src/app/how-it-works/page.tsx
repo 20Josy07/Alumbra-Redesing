@@ -1,7 +1,7 @@
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Bot, FileText, LifeBuoy, Lock, ClipboardPaste, BrainCircuit } from "lucide-react";
+import { ArrowRight, FileText, LifeBuoy, ClipboardPaste, BrainCircuit } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/header";
@@ -115,7 +115,7 @@ export default function HowItWorksPage() {
                                 </AccordionItem>
                                 <AccordionItem value="item-3">
                                     <AccordionTrigger className="text-lg font-semibold">¿En qué modelos teóricos se basa el análisis de la IA?</AccordionTrigger>
-                                    <AccordionContent className="text-base text.gray-600">
+                                    <AccordionContent className="text-base text-gray-600">
                                         El modelo de IA ha sido entrenado y supervisado por psicólogos expertos, basándose en la literatura científica sobre violencia psicológica, dinámicas de poder y tácticas de manipulación (como el gaslighting, control coercitivo, etc.). El objetivo es detectar patrones lingüísticos asociados a estos conceptos teóricos.
                                     </AccordionContent>
                                 </AccordionItem>

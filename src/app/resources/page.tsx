@@ -1,10 +1,9 @@
 
 'use client'
 
-import Resources from "@/components/resources";
 import Header from "@/components/header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Globe, Phone, MessageCircle } from "lucide-react";
+import { Globe, Phone } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 const internationalResources = [

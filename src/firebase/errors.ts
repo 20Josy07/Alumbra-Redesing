@@ -1,7 +1,8 @@
 export type SecurityRuleContext = {
     path: string;
     operation: 'get' | 'list' | 'create' | 'update' | 'delete';
-    requestResourceData?: any;
+    requestResourceData?: unknown;
+    originalError?: unknown;
   };
   
   export class FirestorePermissionError extends Error {

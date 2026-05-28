@@ -1,225 +1,252 @@
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, MapPin, Send, Instagram, Linkedin, Facebook, Twitter, Youtube } from "lucide-react";
 import Header from "@/components/header";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 export default function ContactPage() {
-    return (
-        <div className="bg-white text-gray-800">
-            <Header activeLink="contact" />
+  const faqs = [
+    {
+      q: "¿Cómo se garantiza la confidencialidad de los datos de mis pacientes?",
+      a: "La confidencialidad es un pilar fundamental de Alumbra. La plataforma no almacena permanentemente los textos analizados; estos se procesan y eliminan de forma segura. Si utiliza una cuenta profesional, los informes guardados están encriptados y solo usted tiene acceso a ellos.",
+    },
+    {
+      q: "¿La IA de Alumbra puede emitir un diagnóstico clínico?",
+      a: "No, en absoluto. Alumbra es una herramienta de apoyo y no reemplaza el juicio clínico de un profesional. La IA identifica patrones y ofrece indicadores útiles, pero el informe debe ser siempre interpretado por un terapeuta calificado.",
+    },
+    {
+      q: "¿En qué modelos teóricos se basa el análisis de la IA?",
+      a: "El modelo ha sido entrenado por psicólogos expertos, basándose en la literatura científica sobre violencia psicológica, dinámicas de poder y tácticas de manipulación (gaslighting, control coercitivo, etc.).",
+    },
+    {
+      q: "¿Cómo puedo integrar Alumbra en mi práctica clínica de manera ética?",
+      a: "Alumbra puede usarse como herramienta de psicoeducación o punto de partida para discutir dinámicas específicas. Es crucial obtener el consentimiento informado del paciente y contextualizar los resultados en el marco terapéutico.",
+    },
+    {
+      q: "¿Qué tan preciso es el análisis y cómo maneja los matices culturales?",
+      a: "La IA tiene alta precisión, pero puede tener limitaciones con sarcasmos o contextos culturales muy específicos. Por ello, el informe debe considerarse una hipótesis de trabajo que el profesional valida, no un veredicto final.",
+    },
+    {
+      q: "¿Pueden gestionar informes de varios pacientes?",
+      a: "Sí, los planes profesionales incluyen un dashboard donde puede guardar, titular y organizar los informes de manera segura para llevar un registro estructurado del progreso de cada caso.",
+    },
+    {
+      q: "¿Ofrecen planes para instituciones o clínicas?",
+      a: "Sí, ofrecemos soluciones personalizadas para clínicas, universidades e instituciones de salud mental. Contáctenos a través del formulario para discutir sus necesidades específicas.",
+    },
+  ];
 
-            <main>
-                {/* Hero Section */}
-                <section className="py-20 md:py-28 text-center bg-primary/5">
-                    <div className="container mx-auto px-6 animate-in fade-in-0 slide-in-from-top-12 duration-700">
-                        <p className="font-semibold text-primary">CONTACTO</p>
-                        <h1 className="text-4xl md:text-6xl font-extrabold mt-2 mb-6 tracking-tight">
-                            Estamos disponibles para atenderte
-                        </h1>
-                        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                            ¿Tienes consultas sobre el uso profesional de la plataforma, acceso institucional o aspectos técnicos? Nuestro equipo estará encantado de atenderte.
-                        </p>
-                    </div>
-                </section>
+  return (
+    <div className="bg-white text-gray-900 min-h-screen">
+      <Header activeLink="contact" />
 
-                {/* Contact Form & Info Section */}
-                <section className="py-20 md:py-24">
-                    <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-start">
-                        {/* Contact Form */}
-                        <div className="animate-in fade-in-0 slide-in-from-left-16 duration-700">
-                            <Card className="p-8 md:p-12 rounded-3xl shadow-lg border-none bg-gray-50">
-                                <CardContent className="p-0">
-                                    <h2 className="text-3xl font-extrabold tracking-tight mb-8">Envíanos un mensaje</h2>
-                                    <form className="space-y-6">
-                                        <div>
-                                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Nombre</label>
-                                            <Input id="name" name="name" type="text" placeholder="Tu nombre completo" required />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Correo Electrónico</label>
-                                            <Input id="email" name="email" type="email" placeholder="tu@email.com" required />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">Mensaje</label>
-                                            <Textarea id="message" name="message" rows={5} placeholder="Cuéntanos cómo podemos ayudarte..." required />
-                                        </div>
-                                        <div className="text-right pt-2">
-                                            <Button type="submit" size="lg" className="group">
-                                                Enviar Mensaje
-                                                <Send className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                                            </Button>
-                                        </div>
-                                    </form>
-                                </CardContent>
-                            </Card>
-                        </div>
+      <main>
+        {/* ── Hero ─────────────────────────────────────────────────── */}
+        <section className="relative overflow-hidden py-24 md:py-32 text-center hero-mesh">
+          {/* Orbs */}
+          <div className="absolute top-[-20%] left-[-5%] w-96 h-96 rounded-full bg-purple-200/25 blur-3xl pointer-events-none animate-orb" />
+          <div className="absolute bottom-[-10%] right-[-5%] w-80 h-80 rounded-full bg-violet-200/20 blur-3xl pointer-events-none" />
 
-                        {/* Contact Info */}
-                        <div className="space-y-8 pt-4 animate-in fade-in-0 slide-in-from-right-16 duration-700 delay-150">
-                             <Card className="bg-transparent border-none shadow-none">
-                                <CardContent className="p-0">
-                                    <div className="flex items-start gap-4">
-                                        <div className="bg-primary/10 p-4 rounded-full">
-                                            <Mail className="w-8 h-8 text-primary flex-shrink-0" />
-                                        </div>
-                                        <div>
-                                            <h3 className="text-xl font-bold">Correo Electrónico</h3>
-                                            <p className="text-gray-600 mt-1">Envíanos tus preguntas a nuestro correo de soporte.</p>
-                                            <a href="mailto:soporte@alumbra.com" className="text-primary hover:text-primary/80 font-semibold mt-1 inline-block">soporte@alumbra.com</a>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                             </Card>
-                             <Card className="bg-transparent border-none shadow-none">
-                                <CardContent className="p-0">
-                                    <div className="flex items-start gap-4">
-                                         <div className="bg-primary/10 p-4 rounded-full">
-                                            <MapPin className="w-8 h-8 text-primary flex-shrink-0" />
-                                        </div>
-                                        <div>
-                                            <h3 className="text-xl font-bold">Ubicación</h3>
-                                            <p className="text-gray-600 mt-1">Estamos basados en Colombia, trabajando para todo el mundo.</p>
-                                            <p className="font-semibold mt-1">Barranquilla, Colombia</p>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
+          <div className="container mx-auto px-6 relative z-10 animate-in fade-in-0 slide-in-from-top-8 duration-700">
+            <Badge variant="secondary" className="mb-4 bg-purple-100 text-primary border-purple-200 font-semibold">
+              Contacto
+            </Badge>
+            <h1 className="text-5xl md:text-6xl font-black mt-2 mb-6 tracking-tight leading-tight">
+              Estamos aquí para{' '}
+              <span className="text-gradient">ayudarte</span>
+            </h1>
+            <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
+              ¿Tienes consultas sobre el uso profesional, acceso institucional o aspectos técnicos?
+              Nuestro equipo estará encantado de atenderte.
+            </p>
+          </div>
+        </section>
 
-                            <div className="pt-6">
-                                <h3 className="text-xl font-bold mb-4">Síguenos en Redes</h3>
-                                <div className="flex gap-6">
-                                    <a href="https://www.instagram.com/alumbra.ia/" aria-label="Instagram" className="text-primary hover:text-primary/80 transition-transform hover:scale-110 duration-200">
-                                        <Instagram className="h-7 w-7" />
-                                    </a>
-                                     <a href="#" aria-label="LinkedIn" className="text-primary hover:text-primary/80 transition-transform hover:scale-110 duration-200">
-                                        <Linkedin className="h-7 w-7" />
-                                    </a>
-                                     <a href="#" aria-label="Facebook" className="text-primary hover:text-primary/80 transition-transform hover:scale-110 duration-200">
-                                        <Facebook className="h-7 w-7" />
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+        {/* ── Form & Info ─────────────────────────────────────────── */}
+        <section className="py-20 md:py-24">
+          <div className="container mx-auto px-6 grid md:grid-cols-2 gap-14 items-start max-w-5xl">
+
+            {/* Form */}
+            <div className="animate-in fade-in-0 slide-in-from-left-12 duration-700">
+              <div className="relative rounded-3xl overflow-hidden border border-purple-100/80 shadow-xl bg-white">
+                <div className="h-1 bg-gradient-to-r from-primary via-violet-400 to-purple-300" />
+                <div className="p-8 md:p-10">
+                  <h2 className="text-2xl font-black tracking-tight mb-8 text-gray-900">Envíanos un mensaje</h2>
+                  <form className="space-y-5">
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-1.5">Nombre</label>
+                      <Input
+                        id="name" name="name" type="text" placeholder="Tu nombre completo" required
+                        className="h-12 rounded-2xl border-gray-200 focus:border-primary bg-purple-50/30 text-sm"
+                      />
                     </div>
-                </section>
-                
-                {/* FAQ Section */}
-                <section className="py-20 md:py-24 bg-gray-50">
-                    <div className="container mx-auto px-6">
-                        <div className="text-center max-w-3xl mx-auto">
-                            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
-                                Preguntas Frecuentes
-                            </h2>
-                            <p className="mt-4 text-lg text-gray-600">
-                                Resolvemos tus dudas más importantes sobre Alumbra. Tu tranquilidad es nuestra prioridad.
-                            </p>
-                        </div>
-                        <div className="max-w-3xl mx-auto mt-12">
-                            <Accordion type="single" collapsible className="w-full">
-                                <AccordionItem value="item-1">
-                                    <AccordionTrigger className="text-lg font-semibold hover:text-primary">¿Cómo se garantiza la confidencialidad de los datos de mis pacientes?</AccordionTrigger>
-                                    <AccordionContent className="text-base text-gray-600">
-                                       La confidencialidad es un pilar fundamental de Alumbra. La plataforma no almacena permanentemente los textos analizados; estos se procesan y eliminan de forma segura. Si utiliza una cuenta profesional, los informes guardados están encriptados y solo usted tiene acceso a ellos, cumpliendo con altos estándares de seguridad para proteger la información sensible.
-                                    </AccordionContent>
-                                </AccordionItem>
-                                <AccordionItem value="item-2">
-                                    <AccordionTrigger className="text-lg font-semibold hover:text-primary">¿La IA de Alumbra puede emitir un diagnóstico clínico?</AccordionTrigger>
-                                    <AccordionContent className="text-base text-gray-600">
-                                        No, en absoluto. Alumbra es una herramienta de apoyo y no reemplaza el juicio clínico de un profesional. La IA identifica patrones y ofrece indicadores que pueden ser útiles para la evaluación, pero no está diseñada para diagnosticar. El informe debe ser siempre interpretado y contextualizado por un terapeuta calificado.
-                                    </AccordionContent>
-                                </AccordionItem>
-                                <AccordionItem value="item-3">
-                                    <AccordionTrigger className="text-lg font-semibold hover:text-primary">¿En qué modelos teóricos se basa el análisis de la IA?</AccordionTrigger>
-                                    <AccordionContent className="text-base text.gray-600">
-                                        El modelo de IA ha sido entrenado y supervisado por psicólogos expertos, basándose en la literatura científica sobre violencia psicológica, dinámicas de poder y tácticas de manipulación (como el gaslighting, control coercitivo, etc.). El objetivo es detectar patrones lingüísticos asociados a estos conceptos teóricos.
-                                    </AccordionContent>
-                                </AccordionItem>
-                                <AccordionItem value="item-4">
-                                    <AccordionTrigger className="text-lg font-semibold hover:text-primary">¿Cómo puedo integrar Alumbra en mi práctica clínica de manera ética?</AccordionTrigger>
-                                    <AccordionContent className="text-base text-gray-600">
-                                        Alumbra puede usarse como una herramienta de psicoeducación, para explorar la percepción del paciente sobre sus conversaciones, o como un punto de partida para discutir dinámicas específicas. Es crucial obtener el consentimiento informado del paciente para usar la herramienta y discutir sus resultados siempre en el marco de la sesión terapéutica, como un complemento a su evaluación.
-                                    </AccordionContent>
-                                </AccordionItem>
-                                <AccordionItem value="item-5">
-                                    <AccordionTrigger className="text-lg font-semibold hover:text-primary">¿Qué tan preciso es el análisis y cómo maneja los matices culturales?</AccordionTrigger>
-                                    <AccordionContent className="text-base text-gray-600">
-                                        La IA tiene una alta precisión en la identificación de patrones claros, pero como toda tecnología, no es infalible y puede tener limitaciones con sarcasmos, ironías o contextos culturales muy específicos. Por ello, el informe de Alumbra debe considerarse una hipótesis de trabajo que el profesional debe validar y no un veredicto final.
-                                    </AccordionContent>
-                                </AccordionItem>
-                                <AccordionItem value="item-6">
-                                    <AccordionTrigger className="text-lg font-semibold hover:text-primary">¿Puedo gestionar los informes de varios pacientes en la plataforma?</AccordionTrigger>
-                                    <AccordionContent className="text-base text-gray-600">
-                                        Sí, los planes profesionales de Alumbra incluyen un dashboard de gestión donde puede guardar, titular y organizar los informes de manera segura y confidencial. Esto le permite llevar un registro estructurado del progreso y los patrones observados a lo largo del tiempo para cada caso.
-                                    </AccordionContent>
-                                </AccordionItem>
-                                <AccordionItem value="item-7">
-                                    <AccordionTrigger className="text-lg font-semibold hover:text-primary">¿Ofrecen planes para instituciones o clínicas?</AccordionTrigger>
-                                    <AccordionContent className="text-base text-gray-600">
-                                        Sí, ofrecemos soluciones personalizadas para clínicas, universidades y otras instituciones de salud mental. Póngase en contacto con nuestro equipo a través del formulario para discutir sus necesidades y cómo Alumbra puede integrarse en el flujo de trabajo de su organización.
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
-                        </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1.5">Correo Electrónico</label>
+                      <Input
+                        id="email" name="email" type="email" placeholder="tu@email.com" required
+                        className="h-12 rounded-2xl border-gray-200 focus:border-primary bg-purple-50/30 text-sm"
+                      />
                     </div>
-                </section>
-            </main>
-            <footer className="bg-primary text-primary-foreground py-12 md:py-20">
-                <div className="container mx-auto px-6 grid md:grid-cols-3 gap-12">
-                  <div>
-                    <div className="flex items-center gap-3 mb-4">
-                      <Image src="https://i.postimg.cc/QCys4Rbt/favicon-light.png" alt="Alumbra" width={32} height={32} />
-                      <span className="text-2xl font-bold text-white">Alumbra</span>
+                    <div>
+                      <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-1.5">Mensaje</label>
+                      <Textarea
+                        id="message" name="message" rows={5}
+                        placeholder="Cuéntanos cómo podemos ayudarte..."
+                        required
+                        className="rounded-2xl border-gray-200 focus:border-primary bg-purple-50/30 text-sm resize-none"
+                      />
                     </div>
-                    <p className="text-sm leading-relaxed max-w-sm text-primary-foreground/80">
-                      La primera IA que detecta abuso emocional en conversaciones y te da claridad instantánea para proteger tu bienestar.
-                    </p>
-                    <div className="mt-8">
-                        <p className="text-xs text-primary-foreground/60 mb-4">Follow us on:</p>
-                        <div className="flex gap-5 text-primary-foreground/80">
-                            <a href="#" aria-label="Facebook" className="hover:text-white"><Facebook size={20} /></a>
-                            <a href="#" aria-label="Twitter" className="hover:text-white"><Twitter size={20} /></a>
-                            <a href="#" aria-label="Instagram" className="hover:text-white"><Instagram size={20} /></a>
-                            <a href="#" aria-label="LinkedIn" className="hover:text-white"><Linkedin size={20} /></a>
-                            <a href="#" aria-label="YouTube" className="hover:text-white"><Youtube size={20} /></a>
-                        </div>
+                    <div className="pt-1">
+                      <Button
+                        type="submit" size="lg"
+                        className="w-full h-12 rounded-2xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 font-bold shadow-md glow-purple-sm group"
+                      >
+                        Enviar Mensaje
+                        <Send className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </Button>
                     </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            {/* Info */}
+            <div className="space-y-6 pt-2 animate-in fade-in-0 slide-in-from-right-12 duration-700 delay-150">
+              {[
+                {
+                  icon: Mail,
+                  title: 'Correo Electrónico',
+                  desc: 'Envíanos tus preguntas a nuestro correo de soporte.',
+                  link: { href: 'mailto:soporte@alumbra.com', label: 'soporte@alumbra.com' },
+                  color: 'from-primary to-violet-500',
+                },
+                {
+                  icon: MapPin,
+                  title: 'Ubicación',
+                  desc: 'Estamos basados en Colombia, trabajando para todo el mundo.',
+                  link: { href: '#', label: 'Barranquilla, Colombia' },
+                  color: 'from-violet-500 to-fuchsia-500',
+                },
+              ].map(({ icon: Icon, title, desc, link, color }) => (
+                <div key={title} className="flex items-start gap-4 p-5 rounded-2xl bg-purple-50/60 border border-purple-100/60">
+                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center shadow-md flex-shrink-0`}>
+                    <Icon className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-white mb-6">Quick Links</h4>
-                    <ul className="space-y-3 text-sm">
-                      <li><Link href="/" className="hover:text-white transition-colors text-primary-foreground/80">Home</Link></li>
-                      <li><Link href="/#how-it-works" className="hover:text-white transition-colors text-primary-foreground/80">Cómo funciona</Link></li>
-                      <li><Link href="/#pricing" className="hover:text-white transition-colors text-primary-foreground/80">Precios</Link></li>
-                      <li><Link href="/#reviews" className="hover:text-white transition-colors text-primary-foreground/80">Reseñas</Link></li>
-                      <li><Link href="/contact" className="hover:text-white transition-colors text-primary-foreground/80">Contacto</Link></li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-white mb-6">All Pages</h4>
-                    <ul className="space-y-3 text-sm">
-                      <li><a href="#" aria-label="About us" className="hover:text-white transition-colors text-primary-foreground/80">Sobre nosotros</a></li>
-                      <li><Link href="/team" className="hover:text-white transition-colors text-primary-foreground/80">Equipo</Link></li>
-                      <li><a href="#" aria-label="Blog" className="hover:text-white transition-colors text-primary-foreground/80">Blog</a></li>
-                      <li><a href="#" aria-label="Privacy" className="hover:text-white transition-colors text-primary-foreground/80">Privacidad</a></li>
-                      <li><a href="#" aria-label="Terms of use" className="hover:text-white transition-colors text-primary-foreground/80">Términos de uso</a></li>
-                      <li><a href="/404" className="hover:text-white transition-colors text-primary-foreground/80">404</a></li>
-                    </ul>
+                    <h3 className="text-base font-black text-gray-900">{title}</h3>
+                    <p className="text-sm text-gray-500 mt-0.5 mb-2 leading-relaxed">{desc}</p>
+                    <a href={link.href} className="text-sm text-primary font-bold hover:underline">{link.label}</a>
                   </div>
                 </div>
-                <div className="container mx-auto px-6 mt-16 pt-8 border-t border-primary-foreground/20 text-center text-sm text-primary-foreground/60">
-                  <p>© 2025 Alumbra. Todos los derechos reservados. <span className="ml-4 opacity-70">Made with love in Colombia</span></p>
+              ))}
+
+              {/* Social */}
+              <div className="p-5 rounded-2xl bg-purple-50/60 border border-purple-100/60">
+                <h3 className="text-base font-black text-gray-900 mb-4">Síguenos en Redes</h3>
+                <div className="flex gap-3">
+                  {[
+                    { icon: Instagram, href: 'https://www.instagram.com/alumbra.ia/', label: 'Instagram' },
+                    { icon: Linkedin, href: '#', label: 'LinkedIn' },
+                    { icon: Facebook, href: '#', label: 'Facebook' },
+                  ].map(({ icon: Icon, href, label }) => (
+                    <a
+                      key={label} href={href} aria-label={label}
+                      className="w-10 h-10 rounded-xl bg-white border border-purple-100 flex items-center justify-center text-primary hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 shadow-sm"
+                    >
+                      <Icon className="w-5 h-5" />
+                    </a>
+                  ))}
                 </div>
-              </footer>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── FAQ ─────────────────────────────────────────────────── */}
+        <section className="py-20 md:py-24" style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f0ff 50%, #faf5ff 100%)' }}>
+          <div className="container mx-auto px-6 max-w-3xl">
+            <div className="text-center mb-12">
+              <Badge variant="secondary" className="mb-4 bg-purple-100 text-primary border-purple-200 font-semibold">
+                FAQ
+              </Badge>
+              <h2 className="text-4xl md:text-5xl font-black tracking-tight">
+                Preguntas{' '}
+                <span className="text-gradient">Frecuentes</span>
+              </h2>
+              <p className="mt-4 text-lg text-gray-500 leading-relaxed">
+                Resolvemos tus dudas más importantes. Tu tranquilidad es nuestra prioridad.
+              </p>
+            </div>
+
+            <Accordion type="single" collapsible className="w-full space-y-2">
+              {faqs.map((faq, i) => (
+                <AccordionItem
+                  key={i}
+                  value={`item-${i}`}
+                  className="border border-purple-100/70 rounded-2xl overflow-hidden bg-white px-0 hover:border-purple-200 transition-colors shadow-sm"
+                >
+                  <AccordionTrigger className="px-6 py-4 text-left font-bold text-sm text-gray-900 hover:text-primary hover:no-underline [&[data-state=open]]:text-primary transition-colors">
+                    {faq.q}
+                  </AccordionTrigger>
+                  <AccordionContent className="px-6 pb-5 text-sm text-gray-500 leading-relaxed">
+                    {faq.a}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </section>
+      </main>
+
+      {/* ── Footer ──────────────────────────────────────────────────── */}
+      <footer className="section-dark-purple text-white">
+        <div className="container mx-auto px-6 pt-16 pb-8">
+          <div className="grid md:grid-cols-3 gap-10 pb-12 border-b border-white/10">
+            <div>
+              <div className="flex items-center gap-2.5 mb-5">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-violet-400 flex items-center justify-center shadow-lg">
+                  <Image src="https://i.postimg.cc/QCys4Rbt/favicon-light.png" alt="Alumbra" width={18} height={18} className="brightness-0 invert" />
+                </div>
+                <span className="text-xl font-black text-white">Alumbra</span>
+              </div>
+              <p className="text-sm text-purple-300/80 leading-relaxed max-w-xs mb-8">
+                La primera IA que detecta abuso emocional en conversaciones.
+              </p>
+              <div className="flex gap-3">
+                {[Facebook, Twitter, Instagram, Linkedin, Youtube].map((Icon, i) => (
+                  <a key={i} href="#" className="w-9 h-9 rounded-xl bg-white/8 border border-white/12 flex items-center justify-center text-purple-300 hover:text-white hover:bg-white/15 transition-all">
+                    <Icon size={16} />
+                  </a>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="font-bold text-white text-sm mb-5 uppercase tracking-wider">Navegación</h4>
+              <ul className="space-y-3 text-sm">
+                {[['/', 'Inicio'], ['/#how-it-works', 'Cómo funciona'], ['/#pricing', 'Precios'], ['/#reviews', 'Reseñas'], ['/contact', 'Contacto']].map(([href, label]) => (
+                  <li key={href}><Link href={href} className="text-purple-300/80 hover:text-white transition-colors">{label}</Link></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold text-white text-sm mb-5 uppercase tracking-wider">Legal</h4>
+              <ul className="space-y-3 text-sm">
+                {[['/team', 'Equipo'], ['#', 'Sobre nosotros'], ['#', 'Blog'], ['#', 'Privacidad'], ['#', 'Términos de uso']].map(([href, label]) => (
+                  <li key={label}><Link href={href} className="text-purple-300/80 hover:text-white transition-colors">{label}</Link></li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-purple-400/60">
+            <p>© 2025 Alumbra · Todos los derechos reservados</p>
+            <p>Made with ❤️ in Colombia</p>
+          </div>
         </div>
-    );
+      </footer>
+    </div>
+  );
 }
-
-
-    
-
