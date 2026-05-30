@@ -220,25 +220,25 @@ export default function LandingPage() {
                 </div>
 
                 {/* Social proof */}
-                <div className="flex items-center gap-4 animate-in fade-in duration-700 delay-400">
-                  <div className="flex -space-x-2.5">
-                    {['avatar1', 'avatar2', 'avatar3', 'avatar4'].map((id) => {
-                      const img = getImage(id);
-                      return img ? (
-                        <Image key={id} src={img.imageUrl} alt={img.description} width={36} height={36} className="rounded-full ring-2 ring-white/15 object-cover" />
-                      ) : (
-                        <div key={id} className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-violet-400 ring-2 ring-white/15" />
-                      );
-                    })}
-                  </div>
-                  <div>
-                    <div className="flex gap-0.5 mb-0.5">
-                      {[...Array(5)].map((_, i) => <Star key={i} size={11} className="fill-amber-400 text-amber-400" />)}
+                <div className="flex flex-col items-start gap-3 animate-in fade-in duration-700 delay-400">
+                  <div className="flex items-center gap-3">
+                    <div className="flex -space-x-2.5">
+                      {['avatar1', 'avatar2', 'avatar3', 'avatar4'].map((id) => {
+                        const img = getImage(id);
+                        return img ? (
+                          <Image key={id} src={img.imageUrl} alt={img.description} width={36} height={36} className="w-9 h-9 rounded-full ring-2 ring-white/15 object-cover" />
+                        ) : (
+                          <div key={id} className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-violet-400 ring-2 ring-white/15" />
+                        );
+                      })}
                     </div>
-                    <p className="text-xs text-purple-300/70 font-medium">
-                      <span className="font-black text-white">+500</span> profesionales de la salud confían en Alumbra
-                    </p>
+                    <div className="flex gap-0.5">
+                      {[...Array(5)].map((_, i) => <Star key={i} size={13} className="fill-amber-400 text-amber-400" />)}
+                    </div>
                   </div>
+                  <p className="text-sm text-purple-300/70 font-medium">
+                    <span className="font-black text-white">+500</span> profesionales de la salud confían en Alumbra
+                  </p>
                 </div>
               </div>
 
