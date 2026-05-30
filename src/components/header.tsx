@@ -41,23 +41,20 @@ export default function Header({ activeLink }: HeaderProps) {
 
   /* ── Logo / Wordmark ─────────────────────────────────────── */
   const Logo = ({ sm }: { sm?: boolean }) => (
-    <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-      <div className={cn(
-        'rounded-xl bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center shadow-md',
-        'transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/30',
-        sm ? 'w-7 h-7' : 'w-8 h-8'
-      )}>
-        <Image
-          src="https://i.postimg.cc/QCys4Rbt/favicon-light.png"
-          alt="Alumbra"
-          width={sm ? 14 : 16}
-          height={sm ? 14 : 16}
-          className="brightness-0 invert"
-        />
-      </div>
+    <Link href="/" className="flex items-center gap-2 shrink-0 group">
+      <Image
+        src="https://i.postimg.cc/QCys4Rbt/favicon-light.png"
+        alt="Alumbra"
+        width={sm ? 32 : 40}
+        height={sm ? 32 : 40}
+        className={cn(
+          'object-contain transition-transform duration-300 group-hover:scale-110',
+          sm ? 'w-8 h-8' : 'w-10 h-10'
+        )}
+      />
       <span className={cn(
         'font-wordmark font-extrabold tracking-tight text-gray-900 transition-colors group-hover:text-primary',
-        sm ? 'text-[1.1rem]' : 'text-[1.25rem]'
+        sm ? 'text-[1.15rem]' : 'text-[1.3rem]'
       )}>
         Alumbra
       </span>

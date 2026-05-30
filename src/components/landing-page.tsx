@@ -130,10 +130,7 @@ export default function LandingPage() {
 
   const { user } = useUser();
   const router = useRouter();
-  const [isClient, setIsClient] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-
-  useEffect(() => { setIsClient(true); }, []);
 
   useEffect(() => {
     const t = setInterval(() => setActiveTestimonial(p => (p + 1) % testimonials.length), 5000);
@@ -252,95 +249,61 @@ export default function LandingPage() {
                 <div className="absolute -inset-8 bg-gradient-to-br from-primary/18 via-violet-500/12 to-fuchsia-500/8 rounded-3xl blur-3xl pointer-events-none" />
 
                 {/* Ventana tipo app */}
-                <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_30px_80px_-15px_rgba(139,92,246,0.35)] backdrop-blur-sm"
-                  style={{ background: 'rgba(15, 8, 35, 0.75)' }}
+                <div className="relative rounded-[20px] overflow-hidden border border-white/10 shadow-[0_40px_100px_-20px_rgba(139,92,246,0.45)]"
+                  style={{ background: 'linear-gradient(165deg, rgba(20,12,42,0.92) 0%, rgba(14,8,30,0.92) 100%)' }}
                 >
-                  {/* Barra de chrome (browser) */}
-                  <div className="flex items-center gap-3 px-4 py-3 border-b border-white/6"
-                    style={{ background: 'rgba(255,255,255,0.04)' }}
-                  >
+                  {/* Barra superior */}
+                  <div className="flex items-center gap-3 px-5 py-3.5 border-b border-white/[0.06]">
                     <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-red-400/50" />
-                      <div className="w-3 h-3 rounded-full bg-amber-400/50" />
-                      <div className="w-3 h-3 rounded-full bg-green-400/50" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-white/15" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-white/15" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-white/15" />
                     </div>
-                    <div className="flex-1 mx-4 bg-white/6 border border-white/6 rounded-md px-3 py-1 flex items-center gap-2">
-                      <Lock className="w-2.5 h-2.5 text-green-400/60 flex-shrink-0" />
-                      <span className="text-[10px] text-purple-400/50 font-mono">alumbra.ia/dashboard</span>
+                    <div className="flex-1 mx-2 bg-white/[0.04] rounded-lg px-3 py-1.5 flex items-center justify-center gap-1.5">
+                      <Lock className="w-3 h-3 text-emerald-400/70 flex-shrink-0" />
+                      <span className="text-[11px] text-white/40 font-medium tracking-wide">alumbra.ia</span>
                     </div>
                   </div>
 
-                  {/* Cuerpo del mockup */}
-                  <div className="p-5 space-y-4">
+                  {/* Cuerpo */}
+                  <div className="p-6 space-y-5">
 
                     {/* Header del analizador */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center shadow-lg">
-                          <Brain className="w-3.5 h-3.5 text-white" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-black text-white leading-none">Análisis en curso</p>
-                          <p className="text-[9px] text-purple-400/60 mt-0.5">Conversación #47 · WhatsApp</p>
-                        </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center shadow-lg shadow-primary/30">
+                        <Brain className="w-4.5 h-4.5 text-white" />
                       </div>
-                      <div className="flex items-center gap-1.5 bg-green-500/12 border border-green-400/20 rounded-full px-2.5 py-1">
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                        <span className="text-[9px] font-bold text-green-300">En vivo</span>
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-white leading-tight">Analizador de conversaciones</p>
+                        <p className="text-[11px] text-white/40">Detección de patrones en tiempo real</p>
                       </div>
                     </div>
 
                     {/* Burbujas de chat */}
-                    <div className="space-y-2.5 bg-white/3 rounded-xl p-3.5 border border-white/5">
+                    <div className="space-y-3">
 
-                      {/* Mensaje 1 — normal */}
-                      <div className="flex gap-2 items-end">
-                        <div className="w-5 h-5 rounded-full bg-sky-500/30 border border-sky-400/30 inline-flex items-center justify-center flex-shrink-0">
-                          <span className="text-[7px] font-black text-sky-300">J</span>
+                      {/* Mensaje con gaslighting */}
+                      <div className="flex gap-2.5 items-start">
+                        <div className="w-6 h-6 rounded-full bg-white/10 inline-flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span className="text-[9px] font-bold text-white/70">J</span>
                         </div>
-                        <div className="bg-white/7 rounded-xl rounded-bl-sm px-2.5 py-1.5 max-w-[70%]">
-                          <p className="text-[10px] text-purple-100/90 leading-relaxed">¿Podemos hablar sobre lo de ayer?</p>
+                        <div className="flex-1 space-y-1.5">
+                          <div className="bg-white/[0.07] rounded-2xl rounded-tl-md px-3.5 py-2.5">
+                            <p className="text-[13px] text-white/90 leading-snug">Siempre exageras todo. Nadie más se queja de mí.</p>
+                          </div>
+                          <div className="inline-flex items-center gap-1.5 bg-red-500/15 border border-red-400/20 rounded-full pl-1.5 pr-2.5 py-0.5">
+                            <span className="w-3.5 h-3.5 rounded-full bg-red-500 inline-flex items-center justify-center">
+                              <AlertCircle className="w-2.5 h-2.5 text-white" />
+                            </span>
+                            <span className="text-[10px] font-semibold text-red-300">Gaslighting detectado</span>
+                          </div>
                         </div>
                       </div>
 
-                      {/* Mensaje 2 — Gaslighting, rojo */}
-                      <div className="flex gap-2 items-end">
-                        <div className="w-5 h-5 rounded-full bg-sky-500/30 border border-sky-400/30 inline-flex items-center justify-center flex-shrink-0">
-                          <span className="text-[7px] font-black text-sky-300">J</span>
-                        </div>
-                        <div className="relative bg-red-500/14 border border-red-400/22 rounded-xl rounded-bl-sm px-2.5 py-1.5 max-w-[82%]">
-                          <span className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full bg-red-500 inline-flex items-center justify-center shadow-md">
-                            <AlertCircle className="w-2 h-2 text-white" />
-                          </span>
-                          <p className="text-[10px] leading-relaxed">
-                            <span className="text-red-300 font-semibold underline decoration-red-400/40 decoration-dotted">Siempre exageras todo.</span>
-                            {' '}<span className="text-purple-200/80">Nadie más se queja de mí.</span>
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Respuesta — víctima */}
-                      <div className="flex gap-2 items-end justify-end">
-                        <div className="bg-primary/18 border border-primary/18 rounded-xl rounded-br-sm px-2.5 py-1.5 max-w-[55%]">
-                          <p className="text-[10px] text-purple-100/80 leading-relaxed">Ok... quizás tienes razón.</p>
-                        </div>
-                        <div className="w-5 h-5 rounded-full bg-primary/40 border border-primary/30 inline-flex items-center justify-center flex-shrink-0">
-                          <span className="text-[7px] font-black text-purple-200">M</span>
-                        </div>
-                      </div>
-
-                      {/* Mensaje 3 — minimización, ámbar */}
-                      <div className="flex gap-2 items-end">
-                        <div className="w-5 h-5 rounded-full bg-sky-500/30 border border-sky-400/30 inline-flex items-center justify-center flex-shrink-0">
-                          <span className="text-[7px] font-black text-sky-300">J</span>
-                        </div>
-                        <div className="relative bg-amber-500/12 border border-amber-400/22 rounded-xl rounded-bl-sm px-2.5 py-1.5 max-w-[80%]">
-                          <span className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full bg-amber-500 inline-flex items-center justify-center shadow-md">
-                            <AlertCircle className="w-2 h-2 text-white" />
-                          </span>
-                          <p className="text-[10px] text-amber-200/90 leading-relaxed">
-                            Te lo estás imaginando. Eso <span className="font-semibold underline decoration-amber-400/40 decoration-dotted">nunca pasó así.</span>
-                          </p>
+                      {/* Respuesta de la víctima */}
+                      <div className="flex justify-end">
+                        <div className="bg-primary/25 rounded-2xl rounded-tr-md px-3.5 py-2.5 max-w-[70%]">
+                          <p className="text-[13px] text-white/85 leading-snug">Ok… quizás tienes razón.</p>
                         </div>
                       </div>
                     </div>
@@ -349,31 +312,29 @@ export default function LandingPage() {
                     <div className="divider-gradient" />
 
                     {/* Resultado del análisis */}
-                    <div className="rounded-xl border border-red-400/18 overflow-hidden"
-                      style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.10) 0%, rgba(220,38,38,0.06) 100%)' }}
+                    <div className="rounded-2xl border border-white/[0.08] p-4"
+                      style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.12) 0%, rgba(139,92,246,0.08) 100%)' }}
                     >
-                      <div className="flex items-center justify-between px-3.5 py-2.5 border-b border-red-400/12">
-                        <div className="flex items-center gap-1.5">
-                          <Shield className="w-3.5 h-3.5 text-red-400" />
-                          <span className="text-[10px] font-black text-red-300 uppercase tracking-wider">Nivel de Riesgo</span>
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <Shield className="w-4 h-4 text-red-400" />
+                          <span className="text-xs font-bold text-white/80">Nivel de riesgo</span>
                         </div>
-                        <span className="text-[10px] font-black text-red-300 bg-red-500/15 px-2 py-0.5 rounded-full border border-red-400/18">
-                          ALTO · 78%
-                        </span>
+                        <span className="text-lg font-black text-red-400 leading-none">Alto</span>
                       </div>
-                      <div className="px-3.5 py-2.5 space-y-2">
-                        {/* Barra de progreso */}
-                        <div className="h-1.5 bg-white/6 rounded-full overflow-hidden">
-                          <div className="h-full w-[78%] bg-gradient-to-r from-red-500 to-orange-400 rounded-full" />
-                        </div>
-                        {/* Tags de patrones */}
-                        <div className="flex flex-wrap gap-1.5">
-                          {['Gaslighting', 'Minimización', 'Control coercitivo'].map(tag => (
-                            <span key={tag} className="text-[9px] font-semibold bg-white/5 border border-white/8 text-purple-300/80 px-2 py-0.5 rounded-full">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
+
+                      {/* Barra de progreso */}
+                      <div className="h-2 bg-white/[0.08] rounded-full overflow-hidden mb-3">
+                        <div className="h-full w-[78%] bg-gradient-to-r from-red-500 to-orange-400 rounded-full" />
+                      </div>
+
+                      {/* Tags de patrones */}
+                      <div className="flex flex-wrap gap-1.5">
+                        {['Gaslighting', 'Minimización', 'Control coercitivo'].map(tag => (
+                          <span key={tag} className="text-[10px] font-medium bg-white/[0.06] border border-white/10 text-white/70 px-2.5 py-1 rounded-full">
+                            {tag}
+                          </span>
+                        ))}
                       </div>
                     </div>
 
@@ -843,30 +804,89 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Video */}
+              {/* Visual del flujo — 3 capas que muestran la transformación */}
               <div className={cn('relative', isIntersecting2 && 'animate-in fade-in zoom-in-95 duration-700 delay-300')}>
-                <div className="absolute -inset-6 bg-gradient-to-br from-primary/20 to-violet-400/15 rounded-[36px] blur-3xl" />
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/10">
-                  {isClient ? (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: `
-                          <div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
-                            <div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
-                              <iframe src="https://fast.wistia.net/embed/iframe/47mr7cajt1?seo=false&videoFoam=true" title="Alumbra Demo" allow="autoplay; fullscreen" allowtransparency="true" frameborder="0" scrolling="no" class="wistia_embed" name="wistia_embed" msallowfullscreen width="100%" height="100%"></iframe>
-                            </div>
-                          </div>
-                          <script src="https://fast.wistia.net/assets/external/E-v1.js" async></script>
-                        `,
-                      }}
-                    />
-                  ) : (
-                    <div className="w-full aspect-video bg-gradient-to-br from-purple-900 to-violet-900 flex items-center justify-center">
-                      <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center">
-                        <Play className="w-8 h-8 text-white fill-white ml-1" />
+                {/* Glow ambiental */}
+                <div className="absolute -inset-8 bg-gradient-to-br from-primary/25 to-violet-400/15 rounded-[40px] blur-3xl pointer-events-none" />
+
+                <div className="relative space-y-3">
+
+                  {/* Paso 1 — Entrada: conversación cruda */}
+                  <div className="glass-dark rounded-2xl p-5 border border-white/10 shadow-xl">
+                    <div className="flex items-center gap-2 mb-3">
+                      <MessageCircle className="w-3.5 h-3.5 text-purple-300" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-purple-300/60">Conversación</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-start">
+                        <span className="bg-white/8 rounded-xl rounded-bl-sm px-3 py-1.5 max-w-[75%] text-[11px] text-purple-100/80">
+                          Siempre exageras, nadie más se queja de ti.
+                        </span>
+                      </div>
+                      <div className="flex justify-end">
+                        <span className="bg-primary/20 rounded-xl rounded-br-sm px-3 py-1.5 max-w-[60%] text-[11px] text-purple-100/70">
+                          Quizás tienes razón...
+                        </span>
                       </div>
                     </div>
-                  )}
+                  </div>
+
+                  {/* Conector con flecha animada */}
+                  <div className="flex items-center justify-center gap-2 py-0.5">
+                    <span className="h-px w-10 bg-gradient-to-r from-transparent to-primary/50" />
+                    <span className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center shadow-lg animate-breathe">
+                      <Sparkles className="w-3.5 h-3.5 text-white" />
+                    </span>
+                    <span className="h-px w-10 bg-gradient-to-l from-transparent to-primary/50" />
+                  </div>
+
+                  {/* Paso 2 — Procesamiento IA */}
+                  <div className="glass-dark rounded-2xl p-4 border border-white/10 shadow-xl">
+                    <div className="flex items-center gap-2.5">
+                      <Brain className="w-4 h-4 text-violet-300 animate-pulse" />
+                      <span className="text-[11px] text-purple-200/80 font-medium">Alumbra analiza los patrones…</span>
+                      <span className="ml-auto flex gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-pulse" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-pulse [animation-delay:200ms]" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-pulse [animation-delay:400ms]" />
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Conector */}
+                  <div className="flex items-center justify-center gap-2 py-0.5">
+                    <span className="h-px w-10 bg-gradient-to-r from-transparent to-red-400/40" />
+                    <ArrowRight className="w-4 h-4 text-purple-300/60 rotate-90" />
+                    <span className="h-px w-10 bg-gradient-to-l from-transparent to-red-400/40" />
+                  </div>
+
+                  {/* Paso 3 — Resultado / insight */}
+                  <div className="rounded-2xl border border-red-400/20 overflow-hidden shadow-2xl"
+                    style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.12) 0%, rgba(139,92,246,0.10) 100%)' }}
+                  >
+                    <div className="flex items-center justify-between px-5 py-3 border-b border-white/8">
+                      <div className="flex items-center gap-2">
+                        <Shield className="w-4 h-4 text-red-400" />
+                        <span className="text-[11px] font-black text-red-300 uppercase tracking-wider">Informe orientativo</span>
+                      </div>
+                      <span className="text-[11px] font-black text-red-300 bg-red-500/15 px-2.5 py-0.5 rounded-full border border-red-400/20">
+                        Riesgo ALTO · 78%
+                      </span>
+                    </div>
+                    <div className="px-5 py-4 space-y-3">
+                      <div className="h-2 bg-white/8 rounded-full overflow-hidden">
+                        <div className="h-full w-[78%] bg-gradient-to-r from-red-500 to-orange-400 rounded-full" />
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {['Gaslighting', 'Minimización', 'Control coercitivo'].map(tag => (
+                          <span key={tag} className="text-[10px] font-semibold bg-white/6 border border-white/10 text-purple-200/80 px-2.5 py-1 rounded-full">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -1080,48 +1100,72 @@ export default function LandingPage() {
             10. CTA FINAL
         ══════════════════════════════════════════════════════════ */}
         <section className="py-20 bg-white">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <div className="relative overflow-hidden rounded-3xl p-12 md:p-16 text-center shadow-2xl glow-purple"
-              style={{ background: 'linear-gradient(135deg, hsl(262,83%,50%) 0%, hsl(275,70%,55%) 50%, hsl(262,83%,45%) 100%)' }}
+          <div className="container mx-auto px-6 max-w-5xl">
+            <Reveal
+              className="relative overflow-hidden rounded-[32px] px-8 py-14 md:px-16 md:py-20 text-center shadow-2xl glow-purple"
+              style={{ background: 'linear-gradient(140deg, hsl(262,80%,52%) 0%, hsl(275,68%,56%) 45%, hsl(258,75%,46%) 100%)' }}
             >
-              <div className="absolute top-[-40%] right-[-10%] w-80 h-80 rounded-full bg-white/8 blur-3xl pointer-events-none" />
-              <div className="absolute bottom-[-40%] left-[-10%] w-80 h-80 rounded-full bg-violet-300/15 blur-3xl pointer-events-none" />
+              {/* Decoración de fondo */}
+              <div className="absolute top-[-45%] right-[-12%] w-96 h-96 rounded-full bg-white/10 blur-3xl pointer-events-none animate-breathe" />
+              <div className="absolute bottom-[-45%] left-[-12%] w-96 h-96 rounded-full bg-fuchsia-300/15 blur-3xl pointer-events-none" />
+              <div
+                className="absolute inset-0 opacity-[0.04] pointer-events-none"
+                style={{
+                  backgroundImage:
+                    'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)',
+                  backgroundSize: '48px 48px',
+                }}
+              />
 
               <div className="relative z-10">
-                <div className="inline-flex items-center gap-2 bg-white/15 border border-white/20 rounded-full px-4 py-1.5 text-xs text-white font-bold mb-6">
+                <div className="inline-flex items-center gap-2 bg-white/15 border border-white/25 rounded-full px-4 py-1.5 text-xs text-white font-bold mb-7 backdrop-blur-sm">
                   <Sparkles size={12} />
-                  Empieza gratis hoy
+                  Plan gratuito disponible
                 </div>
-                <h2 className="text-3xl md:text-5xl font-black text-white mb-5 leading-tight tracking-tight">
-                  Ilumina lo que el abuso<br />oculta en las conversaciones.
+
+                <h2 className="text-3xl md:text-5xl font-black text-white mb-5 leading-[1.08] tracking-tight">
+                  Ilumina lo que el abuso<br className="hidden sm:block" /> oculta en las conversaciones.
                 </h2>
-                <p className="text-purple-200 mb-10 text-lg max-w-xl mx-auto leading-relaxed">
+
+                <p className="text-purple-100/85 mb-9 text-lg max-w-xl mx-auto leading-relaxed">
                   Únete a más de 500 profesionales del área de la salud
                   que ya usan Alumbra para proteger el bienestar de quienes atienden.
                 </p>
+
+                {/* Beneficios — coherentes con el plan Gratis */}
+                <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-10">
+                  {[
+                    '10 análisis gratis al mes',
+                    'Sin tarjeta de crédito',
+                    'Cancela cuando quieras',
+                  ].map((feat) => (
+                    <span key={feat} className="inline-flex items-center gap-1.5 text-sm text-white/90 font-medium">
+                      <CheckCircle2 className="w-4 h-4 text-green-300 flex-shrink-0" />
+                      {feat}
+                    </span>
+                  ))}
+                </div>
+
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Button
                     size="lg"
-                    className="sheen-hover rounded-2xl px-10 h-14 bg-white text-primary hover:bg-purple-50 font-black shadow-xl text-base"
+                    className="sheen-hover group rounded-2xl px-10 h-14 bg-white text-primary hover:bg-white font-black shadow-xl text-base"
                     onClick={handleCta}
                   >
-                    Empezar gratis · sin tarjeta
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    Empezar gratis ahora
+                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Button>
                   <Button
                     size="lg"
                     variant="outline"
-                    className="rounded-2xl px-8 h-14 border-white/25 text-white hover:bg-white/12 font-bold text-base"
+                    className="rounded-2xl px-8 h-14 border-white/30 bg-white/5 text-white hover:bg-white/15 hover:text-white font-bold text-base backdrop-blur-sm"
                     asChild
                   >
                     <Link href="/contact">Hablar con el equipo</Link>
                   </Button>
                 </div>
-                <p className="text-xs text-purple-300/60 mt-6">
-                  3 análisis gratis al registrarte · Sin permanencia · Cancela cuando quieras
-                </p>
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
       </main>
