@@ -18,8 +18,8 @@ import { cn } from "@/lib/utils";
 const navMain = [
   { href: '/dashboard', icon: Home, label: 'Inicio' },
   { href: '/dashboard/history', icon: History, label: 'Historial' },
-  { href: '#', icon: User, label: 'Mi Perfil' },
-  { href: '#', icon: Settings, label: 'Configuración' },
+  { href: '/dashboard/profile', icon: User, label: 'Mi Perfil' },
+  { href: '/dashboard/settings', icon: Settings, label: 'Configuración' },
 ];
 
 const navSecondary = [

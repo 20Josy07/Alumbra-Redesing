@@ -5,8 +5,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import {
   FileText, Clock, Sparkles, AlertCircle, BrainCircuit,
   Loader, Lock, ShieldAlert, BarChart, MessageSquareQuote,
-  TrendingUp, Activity, Zap, ChevronRight
+  TrendingUp, ShieldCheck, Zap, ChevronRight, History as HistoryIcon,
+  Wand2, ArrowRight
 } from "lucide-react";
+import Link from "next/link";
 import Resources from "./resources";
 import { type AnalysisResult, performAnalysis } from "@/app/actions";
 import { cn } from "@/lib/utils";
@@ -15,7 +17,8 @@ import { Button } from "./ui/button";
 import { saveAnalysis } from "@/firebase/firestore/analyses";
 import { useToast } from "@/hooks/use-toast";
 import { type AnalysisRecord } from "@/types";
-import { useState, useTransition } from "react";
+import type { Timestamp } from "firebase/firestore";
+import { useState, useTransition, useMemo } from "react";
 import { collection, query, orderBy } from "firebase/firestore";
 import { useCollection, useMemoFirebase } from "@/firebase";
 import { Textarea } from "./ui/textarea";
@@ -43,6 +46,39 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
   }, [user, firestore]);
 
   const { data: analyses, loading: loadingAnalyses } = useCollection<AnalysisRecord>(analysesQuery);
+
+  // ── Stats reales calculadas desde Firestore ──
+  const toDate = (r: AnalysisRecord): Date | null => {
+    const ts = r.createdAt as Timestamp | undefined;
+    return ts && typeof ts.toDate === 'function' ? ts.toDate() : null;
+  };
+
+  const stats = useMemo(() => {
+    const list = analyses ?? [];
+    const now = new Date();
+    const thisMonth = list.filter((r) => {
+      const d = toDate(r);
+      return d && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+    }).length;
+    const highRisk = list.filter((r) =>
+      ['alto', 'muy alto'].includes((r.score?.risk_level || '').toLowerCase())
+    ).length;
+    const lastDate = list[0] ? toDate(list[0]) : null;
+    const lastLabel = lastDate
+      ? lastDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })
+      : '—';
+    return { total: list.length, thisMonth, highRisk, lastLabel };
+  }, [analyses]);
+
+  const EXAMPLE_TEXT =
+    'Siempre exageras todo, nadie más se queja de mí. Estás loca, eso nunca pasó. No puedes salir sin mi permiso y si me dejas te vas a arrepentir.';
+
+  const greeting = (() => {
+    const h = new Date().getHours();
+    if (h < 12) return 'Buenos días';
+    if (h < 19) return 'Buenas tardes';
+    return 'Buenas noches';
+  })();
 
   const handleAnalysis = async () => {
     setError(null);
@@ -220,13 +256,46 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Textarea
-            placeholder="Pega aquí el texto de WhatsApp, SMS, email u otra conversación..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            disabled={isPending}
-            className="text-sm min-h-[140px] rounded-2xl border-purple-100 focus:border-primary bg-purple-50/30 resize-none leading-relaxed"
-          />
+          <div className="relative">
+            <Textarea
+              placeholder="Pega aquí el texto de WhatsApp, SMS, email u otra conversación..."
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              disabled={isPending}
+              className="text-sm min-h-[150px] rounded-2xl border-purple-100 focus:border-primary bg-purple-50/30 resize-none leading-relaxed pb-8"
+            />
+            {/* Contador de caracteres */}
+            <span className={cn(
+              'absolute bottom-3 right-4 text-xs font-medium tabular-nums',
+              text.trim().length < 20 ? 'text-gray-300' : 'text-primary'
+            )}>
+              {text.trim().length} / 20 mín.
+            </span>
+          </div>
+
+          {/* Atajos */}
+          <div className="flex items-center gap-2 mt-3">
+            <button
+              type="button"
+              onClick={() => setText(EXAMPLE_TEXT)}
+              disabled={isPending}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary bg-purple-50 hover:bg-purple-100 border border-purple-200/60 rounded-full px-3 py-1.5 transition-colors disabled:opacity-50"
+            >
+              <Wand2 className="w-3 h-3" />
+              Probar con un ejemplo
+            </button>
+            {text && (
+              <button
+                type="button"
+                onClick={() => setText('')}
+                disabled={isPending}
+                className="text-xs font-medium text-gray-400 hover:text-gray-600 px-2 py-1.5 transition-colors disabled:opacity-50"
+              >
+                Limpiar
+              </button>
+            )}
+          </div>
+
           {error && (
             <Alert variant="destructive" className="mt-4 rounded-2xl">
               <AlertCircle className="h-4 w-4" />
@@ -273,44 +342,67 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
     </div>
   );
 
-  const totalAnalyses = analyses?.length || 0;
-
   return (
-    <div className="space-y-7 max-w-[1400px]">
+    <div className="space-y-6 max-w-[1400px]">
 
-      {/* ── Welcome header ──────────────────────────────────────── */}
-      <div className="animate-in fade-in-0 slide-in-from-top-4 duration-500">
-        <div className="flex items-center justify-between flex-wrap gap-4">
+      {/* ── Hero band ───────────────────────────────────────────── */}
+      <div className="relative overflow-hidden rounded-3xl p-6 sm:p-8 shadow-lg animate-in fade-in-0 slide-in-from-top-4 duration-500"
+        style={{ background: 'linear-gradient(135deg, hsl(262 60% 22%) 0%, hsl(270 55% 28%) 50%, hsl(262 65% 20%) 100%)' }}
+      >
+        {/* Orbs decorativos */}
+        <div className="absolute top-[-40%] right-[-5%] w-72 h-72 rounded-full bg-primary/25 blur-3xl pointer-events-none animate-breathe" />
+        <div className="absolute bottom-[-50%] left-[20%] w-64 h-64 rounded-full bg-fuchsia-500/15 blur-3xl pointer-events-none" />
+        <div
+          className="absolute inset-0 opacity-[0.05] pointer-events-none"
+          style={{
+            backgroundImage: 'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+        />
+
+        <div className="relative z-10 flex items-start justify-between flex-wrap gap-4">
           <div>
-            <h1 className="text-2xl font-black tracking-tight text-gray-900">
-              Hola de nuevo, {user?.displayName?.split(' ')[0]} 👋
+            <Badge className="bg-white/15 text-purple-100 border border-white/20 px-3 py-1 text-[11px] font-bold rounded-full mb-3 backdrop-blur-sm">
+              <Sparkles className="w-3 h-3 mr-1.5" />
+              Panel Profesional
+            </Badge>
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+              {greeting}, {user?.displayName?.split(' ')[0] || 'profesional'} 👋
             </h1>
-            <p className="text-sm text-gray-400 mt-1">Tu espacio seguro para el análisis clínico de conversaciones.</p>
+            <p className="text-sm text-purple-200/80 mt-1.5 max-w-md">
+              Tu espacio seguro para el análisis de conversaciones. Pega un texto y descubre los patrones en segundos.
+            </p>
           </div>
-          <Badge className="bg-gradient-to-r from-primary to-violet-500 text-white border-0 px-4 py-1.5 text-xs font-bold rounded-full shadow-sm">
-            <Sparkles className="w-3 h-3 mr-1.5" />
-            Panel Profesional
-          </Badge>
+
+          <Button asChild variant="secondary"
+            className="bg-white text-primary hover:bg-purple-50 rounded-xl font-bold shadow-md h-10 px-4"
+          >
+            <Link href="/dashboard/history">
+              <HistoryIcon className="w-4 h-4 mr-1.5" />
+              Ver historial
+            </Link>
+          </Button>
         </div>
       </div>
 
       {/* ── Quick stats ─────────────────────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-100">
         {[
-          { label: 'Análisis guardados', value: totalAnalyses.toString(), icon: FileText, color: 'from-primary to-violet-500' },
-          { label: 'Este mes', value: '—', icon: TrendingUp, color: 'from-violet-500 to-purple-600' },
-          { label: 'Precisión media', value: '98%', icon: Activity, color: 'from-purple-500 to-fuchsia-500' },
-          { label: 'Última sesión', value: 'Hoy', icon: Clock, color: 'from-fuchsia-500 to-pink-500' },
-        ].map(({ label, value, icon: Icon, color }) => (
-          <Card key={label} className="rounded-2xl border border-purple-100/60 shadow-sm hover:shadow-md transition-shadow">
+          { label: 'Análisis totales', value: stats.total.toString(), icon: FileText, color: 'from-primary to-violet-500', hint: 'guardados en tu historial' },
+          { label: 'Este mes', value: stats.thisMonth.toString(), icon: TrendingUp, color: 'from-violet-500 to-purple-600', hint: 'realizados este mes' },
+          { label: 'Riesgo alto', value: stats.highRisk.toString(), icon: ShieldAlert, color: 'from-rose-500 to-red-500', hint: 'casos que requieren atención' },
+          { label: 'Último análisis', value: stats.lastLabel, icon: Clock, color: 'from-fuchsia-500 to-pink-500', hint: 'fecha más reciente' },
+        ].map(({ label, value, icon: Icon, color, hint }) => (
+          <Card key={label} className="group rounded-2xl border border-purple-100/60 shadow-sm card-lift">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-3">
                 <p className="text-xs text-gray-400 font-medium">{label}</p>
-                <div className={cn('w-8 h-8 rounded-xl bg-gradient-to-br flex items-center justify-center shadow-sm', color)}>
+                <div className={cn('w-9 h-9 rounded-xl bg-gradient-to-br flex items-center justify-center shadow-sm transition-transform group-hover:scale-110', color)}>
                   <Icon className="w-4 h-4 text-white" />
                 </div>
               </div>
-              <p className="text-2xl font-black text-gray-900">{value}</p>
+              <p className="text-3xl font-black text-gray-900 leading-none">{value}</p>
+              <p className="text-[11px] text-gray-400 mt-1.5">{hint}</p>
             </CardContent>
           </Card>
         ))}
@@ -338,25 +430,34 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
                   <Loader className="w-5 h-5 animate-spin text-primary" />
                 </div>
               ) : (
-                <ul className="space-y-2">
+                <>
                   {analyses && analyses.length > 0 ? (
-                    analyses.slice(0, 5).map((analysis) => (
-                      <li key={analysis.id}>
-                        <div className="flex items-center gap-3 p-3 rounded-2xl hover:bg-purple-50/70 transition-colors group cursor-pointer">
-                          <div className="w-9 h-9 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
-                            <FileText className="w-4 h-4 text-primary" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-gray-800 truncate">{analysis.title}</p>
-                            <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
-                              <Clock className="w-3 h-3" />
-                              {formatAnalysisDate(analysis.createdAt)}
-                            </p>
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-primary transition-colors flex-shrink-0" />
-                        </div>
-                      </li>
-                    ))
+                    <ul className="space-y-1">
+                      {analyses.slice(0, 5).map((analysis) => {
+                        const risk = (analysis.score?.risk_level || '').toLowerCase();
+                        const dot = risk === 'muy alto' || risk === 'alto'
+                          ? 'bg-red-500'
+                          : risk === 'medio' ? 'bg-amber-500' : 'bg-green-500';
+                        return (
+                          <li key={analysis.id}>
+                            <Link href="/dashboard/history" className="flex items-center gap-3 p-2.5 rounded-2xl hover:bg-purple-50/70 transition-colors group">
+                              <div className="relative w-9 h-9 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
+                                <FileText className="w-4 h-4 text-primary" />
+                                <span className={cn('absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full ring-2 ring-white', dot)} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-semibold text-gray-800 truncate">{analysis.title}</p>
+                                <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+                                  <Clock className="w-3 h-3" />
+                                  {formatAnalysisDate(analysis.createdAt)}
+                                </p>
+                              </div>
+                              <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
                   ) : (
                     <div className="text-center py-8">
                       <div className="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center mx-auto mb-3">
@@ -366,8 +467,33 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
                       <p className="text-xs text-gray-300 mt-1">Tus análisis aparecerán aquí</p>
                     </div>
                   )}
-                </ul>
+
+                  {analyses && analyses.length > 5 && (
+                    <Link
+                      href="/dashboard/history"
+                      className="mt-3 flex items-center justify-center gap-1.5 text-xs font-bold text-primary hover:gap-2.5 transition-all py-2"
+                    >
+                      Ver todo el historial
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  )}
+                </>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Tarjeta de privacidad */}
+          <Card className="rounded-3xl border border-purple-100/60 bg-gradient-to-br from-purple-50/70 to-white shadow-sm animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-200">
+            <CardContent className="p-5 flex items-start gap-3">
+              <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center shadow-sm flex-shrink-0">
+                <ShieldCheck className="w-4 h-4 text-primary" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-gray-900">Tu privacidad, protegida</p>
+                <p className="text-xs text-gray-500 leading-relaxed mt-1">
+                  Los textos se procesan de forma segura y no se comparten. Tú decides qué guardar.
+                </p>
+              </div>
             </CardContent>
           </Card>
         </div>
