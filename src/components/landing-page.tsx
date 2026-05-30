@@ -144,7 +144,7 @@ export default function LandingPage() {
   const getImage = (id: string) => PlaceHolderImages.find(img => img.id === id);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white text-gray-900 overflow-x-hidden">
+    <div className="flex flex-col min-h-screen bg-white text-gray-900 overflow-x-clip">
       <Header activeLink={activeSection} />
 
       <main className="flex-1">
