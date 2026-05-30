@@ -171,8 +171,8 @@ export default function LandingPage() {
             <div className="absolute top-[30%] right-[20%] w-[300px] h-[300px] rounded-full bg-fuchsia-500/8 blur-[80px] animate-orb-reverse" />
           </div>
 
-          <div className="container mx-auto px-6 relative z-10 py-20 pb-28">
-            <div className="grid lg:grid-cols-[1fr_1.1fr] gap-14 items-center">
+          <div className="container mx-auto px-6 relative z-10 pt-14 pb-10 lg:py-20 lg:pb-28">
+            <div className="grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-14 items-center">
 
               {/* ── Columna izquierda: texto ── */}
               <div className="space-y-8 max-w-xl">
@@ -371,19 +371,19 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Trust bar */}
-          <div className="absolute bottom-0 left-0 right-0 border-t border-white/6 z-10"
+          {/* Trust bar — en flujo en móvil, fijado abajo solo en desktop */}
+          <div className="relative lg:absolute lg:bottom-0 left-0 right-0 border-t border-white/[0.07] z-10 mt-10 lg:mt-0"
             style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(12px)' }}
           >
-            <div className="container mx-auto px-6 py-3.5 flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
-              <span className="text-[10px] text-purple-400/40 font-semibold uppercase tracking-widest hidden sm:block">Avalado por</span>
+            <div className="container mx-auto px-6 py-4 flex flex-wrap items-center justify-center gap-x-6 sm:gap-x-8 gap-y-2.5">
+              <span className="text-[10px] text-purple-400/40 font-semibold uppercase tracking-widest w-full text-center sm:w-auto">Avalado por</span>
               {[
                 { icon: ShieldCheck, text: 'Certificado GDPR / HIPAA' },
                 { icon: Award, text: 'Colegio Psicológico Nacional' },
                 { icon: TrendingUp, text: '98% de precisión validada' },
               ].map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-1.5 text-sm text-purple-300/55 font-medium">
-                  <Icon size={13} className="text-primary/60" />
+                <div key={text} className="flex items-center gap-1.5 text-xs sm:text-sm text-purple-300/55 font-medium">
+                  <Icon size={13} className="text-primary/60 flex-shrink-0" />
                   {text}
                 </div>
               ))}
