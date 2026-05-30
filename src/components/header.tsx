@@ -65,7 +65,7 @@ export default function Header({ activeLink }: HeaderProps) {
   );
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-gray-200/60 shadow-sm shadow-black/[0.04]">
+    <header className="sticky top-0 z-50 w-full bg-white/60 backdrop-blur-2xl backdrop-saturate-150 border-b border-gray-200/50 shadow-sm shadow-black/[0.04] supports-[backdrop-filter]:bg-white/60">
       <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
 
         {/* Logo */}
