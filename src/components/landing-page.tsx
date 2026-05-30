@@ -13,6 +13,7 @@ import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import Header from './header';
+import { Reveal } from './reveal';
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -202,7 +203,7 @@ export default function LandingPage() {
                 <div className="flex flex-col sm:flex-row gap-3 animate-in fade-in duration-700 delay-300">
                   <Button
                     size="lg"
-                    className="group h-14 px-8 text-base rounded-2xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 shadow-2xl glow-purple-sm font-bold text-white border-0"
+                    className="group sheen-hover h-14 px-8 text-base rounded-2xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 shadow-2xl glow-purple-sm font-bold text-white border-0"
                     onClick={handleCta}
                   >
                     Analizar ahora · es gratis
@@ -457,7 +458,7 @@ export default function LandingPage() {
           <div className="container mx-auto px-6 max-w-5xl">
 
             {/* Statement central */}
-            <div className="text-center mb-16">
+            <Reveal className="text-center mb-16">
               <p className="text-xs font-bold uppercase tracking-widest text-primary/70 mb-5">
                 El problema que enfrentamos
               </p>
@@ -471,7 +472,7 @@ export default function LandingPage() {
                 Las palabras tienen un poder que el ojo humano no puede procesar en tiempo real.
                 Alumbra detecta los patrones ocultos para que puedas enfocarte en lo que importa.
               </p>
-            </div>
+            </Reveal>
 
             {/* Stats — tarjetas con acento de borde izquierdo + entrada escalonada */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -508,7 +509,7 @@ export default function LandingPage() {
           )}
         >
           <div className="container mx-auto px-6">
-            <div className="text-center max-w-2xl mx-auto mb-16">
+            <Reveal className="text-center max-w-2xl mx-auto mb-16">
               <Badge variant="secondary" className="mb-4 bg-purple-100 text-primary border-purple-200 font-bold">
                 ¿Para quién es?
               </Badge>
@@ -520,7 +521,7 @@ export default function LandingPage() {
                 Cualquier profesional del área de la salud que necesite entender dinámicas
                 comunicativas complejas encontrará en Alumbra un aliado indispensable.
               </p>
-            </div>
+            </Reveal>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
               {professions.map(({ label, icon: Icon }, i) => (
@@ -565,7 +566,7 @@ export default function LandingPage() {
           className="py-24 scroll-mt-20 bg-white"
         >
           <div className="container mx-auto px-6">
-            <div className="text-center max-w-2xl mx-auto mb-16">
+            <Reveal className="text-center max-w-2xl mx-auto mb-16">
               <Badge variant="secondary" className="mb-4 bg-purple-100 text-primary border-purple-200 font-bold">
                 Qué hace Alumbra
               </Badge>
@@ -573,7 +574,7 @@ export default function LandingPage() {
                 Todo lo que necesitas para{' '}
                 <span className="text-gradient">ver lo invisible</span>
               </h2>
-            </div>
+            </Reveal>
 
             {/* Bento grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
@@ -703,7 +704,7 @@ export default function LandingPage() {
         ══════════════════════════════════════════════════════════ */}
         <section id="analysis-section" className="py-24 bg-white scroll-mt-20">
           <div className="container mx-auto px-6 max-w-5xl">
-            <div className="text-center mb-12">
+            <Reveal className="text-center mb-12">
               <Badge variant="secondary" className="mb-4 bg-purple-100 text-primary border-purple-200 font-bold">
                 Pruébalo ahora
               </Badge>
@@ -715,7 +716,7 @@ export default function LandingPage() {
                 Inicia sesión y analiza tu primera conversación de forma gratuita.
                 El proceso es 100% confidencial y toma menos de un minuto.
               </p>
-            </div>
+            </Reveal>
 
             <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-purple-200/50 border border-purple-100/60 group">
               <div className="relative aspect-[16/10] w-full">
@@ -881,7 +882,7 @@ export default function LandingPage() {
           className={cn('py-24 scroll-mt-20 bg-white transition-all duration-700', isIntersecting3 ? 'opacity-100' : 'opacity-0')}
         >
           <div className="container mx-auto px-6 max-w-5xl">
-            <div className="text-center mb-14">
+            <Reveal className="text-center mb-14">
               <Badge variant="secondary" className="mb-4 bg-purple-100 text-primary border-purple-200 font-bold">
                 Testimonios
               </Badge>
@@ -889,7 +890,7 @@ export default function LandingPage() {
                 Lo que dicen los{' '}
                 <span className="text-gradient">profesionales</span>
               </h2>
-            </div>
+            </Reveal>
 
             {/* Big testimonial */}
             <div className="relative rounded-3xl overflow-hidden border border-purple-100/70 shadow-xl">
@@ -1101,7 +1102,7 @@ export default function LandingPage() {
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Button
                     size="lg"
-                    className="rounded-2xl px-10 h-14 bg-white text-primary hover:bg-purple-50 font-black shadow-xl text-base"
+                    className="sheen-hover rounded-2xl px-10 h-14 bg-white text-primary hover:bg-purple-50 font-black shadow-xl text-base"
                     onClick={handleCta}
                   >
                     Empezar gratis · sin tarjeta

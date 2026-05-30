@@ -140,6 +140,27 @@ body {
   to   { transform: scaleX(1); transform-origin: left; }
 }
 
+/* ─── Apple-grade keyframes ─── */
+@keyframes blur-reveal {
+  from { opacity: 0; transform: translateY(28px) scale(0.985); filter: blur(10px); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);     filter: blur(0); }
+}
+
+@keyframes sheen {
+  0%   { transform: translateX(-150%) skewX(-20deg); }
+  60%, 100% { transform: translateX(250%) skewX(-20deg); }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1);    opacity: 0.9; }
+  50%       { transform: scale(1.04); opacity: 1; }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ─── Utility Classes ─── */
 @layer utilities {
   .animate-float { animation: float 7s ease-in-out infinite; }
@@ -154,6 +175,22 @@ body {
   .animate-scale-in { animation: fade-in-scale 0.5s cubic-bezier(0.16,1,0.3,1) both; }
   .animate-glow-pulse { animation: glow-pulse 2.5s ease-in-out infinite; }
   .animate-nav-underline { animation: nav-underline 0.25s ease both; }
+  .animate-blur-reveal { animation: blur-reveal 0.9s cubic-bezier(0.16,1,0.3,1) both; }
+  .animate-breathe { animation: breathe 6s ease-in-out infinite; }
+  .animate-rise-in { animation: rise-in 0.8s cubic-bezier(0.16,1,0.3,1) both; }
+
+  /* Sheen — barrido de luz al hover (botones premium) */
+  .sheen-hover { position: relative; overflow: hidden; }
+  .sheen-hover::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 50%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform: translateX(-150%) skewX(-20deg);
+    pointer-events: none;
+  }
+  .sheen-hover:hover::after { animation: sheen 0.9s cubic-bezier(0.16,1,0.3,1); }
 
   /* Shimmer text — solo para el wordmark del nav en hover */
   .wordmark-shimmer {
@@ -231,13 +268,13 @@ body {
     background: linear-gradient(155deg, hsl(262 40% 7%) 0%, hsl(275 35% 11%) 100%);
   }
 
-  /* Card hover lift */
+  /* Card hover lift — refinado con easing Apple */
   .card-lift {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.5s cubic-bezier(0.16,1,0.3,1);
   }
   .card-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 50px rgba(139, 92, 246, 0.15), 0 8px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-6px);
+    box-shadow: 0 24px 60px -12px rgba(139, 92, 246, 0.22), 0 8px 24px -8px rgba(0, 0, 0, 0.10);
   }
 
   /* Number accent */
@@ -261,3 +298,47 @@ body {
 ::-webkit-scrollbar-track { background: hsl(262 20% 97%); }
 ::-webkit-scrollbar-thumb { background: hsl(262 83% 75%); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: hsl(262 83% 58%); }
+
+/* ─── Apple-grade polish global ─── */
+
+/* Selección de texto con la marca */
+::selection { background: hsl(262.1 83.3% 57.8% / 0.18); color: hsl(262 60% 25%); }
+
+/* Quita el flash azul al tocar en móvil + render de texto más fino */
+* { -webkit-tap-highlight-color: transparent; }
+html { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+/* Micro-interacción universal: todo lo clickeable responde al press
+   con un easing suave (sin tocar el layout). */
+@layer base {
+  a, button, [role="button"], .card-lift {
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  /* Press físico tipo iOS en botones y enlaces interactivos */
+  button:active:not(:disabled),
+  [role="button"]:active {
+    transform: scale(0.97);
+  }
+  button, [role="button"] {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+/* Focus ring elegante y accesible */
+@layer base {
+  :focus-visible {
+    outline: 2px solid hsl(262.1 83.3% 57.8% / 0.6);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* Respeta usuarios que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
