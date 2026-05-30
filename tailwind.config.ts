@@ -17,8 +17,11 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['Inter', 'sans-serif'],
-        headline: ['Inter', 'sans-serif'],
+        sans: ['var(--font-jakarta)', 'sans-serif'],
+        body: ['var(--font-jakarta)', 'sans-serif'],
+        headline: ['var(--font-jakarta)', 'sans-serif'],
+        wordmark: ['var(--font-jakarta)', 'sans-serif'],
+        inter: ['var(--font-inter)', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {

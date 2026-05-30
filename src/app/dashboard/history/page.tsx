@@ -180,17 +180,18 @@ export default function HistoryPage() {
                   className="border border-purple-100/70 rounded-2xl overflow-hidden px-0 bg-white hover:border-purple-200 transition-colors"
                 >
                   <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-purple-50/50 [&[data-state=open]]:bg-purple-50/50 rounded-2xl transition-colors">
-                    <div className="flex items-center gap-4 text-left flex-1">
-                      <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
+                    {/* Usar solo span/elementos inline dentro de <button> */}
+                    <span className="flex items-center gap-4 text-left flex-1">
+                      <span className="w-10 h-10 rounded-xl bg-purple-100 inline-flex items-center justify-center flex-shrink-0">
                         <FileText className="w-5 h-5 text-primary" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-gray-900 text-sm">{analysis.title}</h3>
-                        <p className="text-xs text-gray-400 flex items-center gap-1.5 mt-0.5">
+                      </span>
+                      <span className="flex-1 min-w-0 flex flex-col">
+                        <span className="font-bold text-gray-900 text-sm">{analysis.title}</span>
+                        <span className="text-xs text-gray-400 inline-flex items-center gap-1.5 mt-0.5">
                           <Clock className="w-3 h-3" />
                           {formatAnalysisDate(analysis.createdAt)}
-                        </p>
-                      </div>
+                        </span>
+                      </span>
                       {analysis.score && (
                         <Badge
                           variant="outline"
@@ -202,7 +203,7 @@ export default function HistoryPage() {
                           {analysis.score.risk_level}
                         </Badge>
                       )}
-                    </div>
+                    </span>
                   </AccordionTrigger>
                   <AccordionContent className="px-5 pb-5">
                     {analysis.score

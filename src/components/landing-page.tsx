@@ -150,58 +150,59 @@ export default function LandingPage() {
       <main className="flex-1">
 
         {/* ══════════════════════════════════════════════════════════
-            1. HERO — editorial, emocional, centrado
+            1. HERO — dark cinematic, product mockup
         ══════════════════════════════════════════════════════════ */}
-        <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
-
-          {/* Background split */}
-          <div className="absolute inset-0 flex">
-            <div className="w-full lg:w-1/2 hero-mesh" />
+        <section
+          className="relative min-h-[96vh] flex flex-col justify-center overflow-hidden font-inter"
+          style={{ background: 'linear-gradient(155deg, hsl(262 45% 6%) 0%, hsl(270 42% 9%) 50%, hsl(258 38% 7%) 100%)' }}
+        >
+          {/* ── Fondo: malla + orbs animados ── */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            {/* Grid sutil */}
             <div
-              className="hidden lg:block w-1/2"
-              style={{ background: 'linear-gradient(135deg, hsl(262 40% 7%) 0%, hsl(275 35% 12%) 100%)' }}
+              className="absolute inset-0 opacity-[0.035]"
+              style={{
+                backgroundImage:
+                  'linear-gradient(rgba(139,92,246,1) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,1) 1px, transparent 1px)',
+                backgroundSize: '64px 64px',
+              }}
             />
+            {/* Orbs */}
+            <div className="absolute top-[-25%] left-[-12%] w-[700px] h-[700px] rounded-full bg-primary/12 blur-[120px] animate-orb" />
+            <div className="absolute bottom-[-20%] right-[-8%] w-[600px] h-[600px] rounded-full bg-violet-500/10 blur-[100px] animate-pulse-glow" />
+            <div className="absolute top-[30%] right-[20%] w-[300px] h-[300px] rounded-full bg-fuchsia-500/8 blur-[80px] animate-orb-reverse" />
           </div>
 
-          {/* Orbs */}
-          <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-purple-300/15 blur-3xl animate-orb pointer-events-none" />
-          <div className="absolute bottom-[-5%] left-[40%] w-[400px] h-[400px] rounded-full bg-violet-400/10 blur-3xl pointer-events-none" />
+          <div className="container mx-auto px-6 relative z-10 py-20 pb-28">
+            <div className="grid lg:grid-cols-[1fr_1.1fr] gap-14 items-center">
 
-          <div className="container mx-auto px-6 relative z-10 pt-12 pb-32">
-            <div className="grid lg:grid-cols-2 gap-0 items-center min-h-[75vh]">
+              {/* ── Columna izquierda: texto ── */}
+              <div className="space-y-8 max-w-xl">
 
-              {/* ── Left: texto ─────────────────────────────────── */}
-              <div className="py-12 pr-0 lg:pr-16">
-                {/* Eyebrow */}
-                <div className="inline-flex items-center gap-2 bg-purple-100 text-primary rounded-full px-4 py-1.5 text-xs font-bold mb-8 animate-in fade-in slide-in-from-top-4 duration-700 border border-purple-200/60">
-                  <Sparkles size={12} />
+                {/* Badge eyebrow */}
+                <div className="inline-flex items-center gap-2 bg-white/8 text-purple-200 border border-white/12 rounded-full px-4 py-1.5 text-xs font-bold backdrop-blur-sm animate-in fade-in slide-in-from-top-4 duration-700">
+                  <Sparkles size={11} className="text-primary" />
                   IA para el área de la salud
                 </div>
 
                 {/* Headline */}
-                <h1 className="text-[52px] md:text-[64px] lg:text-[72px] font-black leading-[0.97] tracking-tight mb-8 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
-                  Lo que las{' '}
-                  <span className="relative inline-block">
-                    <span className="text-gradient">palabras</span>
-                    <span
-                      className="absolute -bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-primary to-violet-400 rounded-full"
-                      aria-hidden="true"
-                    />
-                  </span>
-                  <br />
-                  ocultan,<br />
-                  <span className="text-gray-400 font-black">Alumbra</span> lo revela.
+                <h1 className="text-[52px] md:text-[64px] lg:text-[70px] font-black leading-[0.95] tracking-tight text-white animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
+                  Ilumina lo que<br />
+                  el abuso oculta<br />
+                  <span className="text-gradient">en las palabras.</span>
                 </h1>
 
-                <p className="text-lg text-gray-500 leading-relaxed mb-10 max-w-lg animate-in fade-in duration-700 delay-200">
+                {/* Descripción */}
+                <p className="text-lg text-purple-200/65 leading-relaxed animate-in fade-in duration-700 delay-200">
                   La primera IA que detecta patrones de abuso emocional en conversaciones.
                   Diseñada para todos los profesionales del área de la salud que trabajan con personas.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-3 mb-14 animate-in fade-in duration-700 delay-300">
+                {/* CTAs */}
+                <div className="flex flex-col sm:flex-row gap-3 animate-in fade-in duration-700 delay-300">
                   <Button
                     size="lg"
-                    className="group h-14 px-8 text-base rounded-2xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 shadow-xl glow-purple-sm font-bold"
+                    className="group h-14 px-8 text-base rounded-2xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 shadow-2xl glow-purple-sm font-bold text-white border-0"
                     onClick={handleCta}
                   >
                     Analizar ahora · es gratis
@@ -210,7 +211,7 @@ export default function LandingPage() {
                   <Button
                     size="lg"
                     variant="ghost"
-                    className="h-14 px-8 text-base rounded-2xl text-gray-600 hover:text-primary hover:bg-purple-50 font-semibold"
+                    className="h-14 px-8 text-base rounded-2xl text-purple-200 hover:text-white hover:bg-white/10 font-semibold border border-white/10 hover:border-white/20"
                     asChild
                   >
                     <Link href="#how-it-works">
@@ -220,96 +221,207 @@ export default function LandingPage() {
                   </Button>
                 </div>
 
-                {/* Inline social proof */}
+                {/* Social proof */}
                 <div className="flex items-center gap-4 animate-in fade-in duration-700 delay-400">
                   <div className="flex -space-x-2.5">
                     {['avatar1', 'avatar2', 'avatar3', 'avatar4'].map((id) => {
                       const img = getImage(id);
-                      if (!img) return (
-                        <div key={id} className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-violet-400 ring-2 ring-white flex items-center justify-center text-white text-xs font-bold" />
-                      );
-                      return (
-                        <Image key={id} src={img.imageUrl} alt={img.description} width={36} height={36} className="rounded-full ring-2 ring-white object-cover" />
+                      return img ? (
+                        <Image key={id} src={img.imageUrl} alt={img.description} width={36} height={36} className="rounded-full ring-2 ring-white/15 object-cover" />
+                      ) : (
+                        <div key={id} className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-violet-400 ring-2 ring-white/15" />
                       );
                     })}
                   </div>
                   <div>
                     <div className="flex gap-0.5 mb-0.5">
-                      {[...Array(5)].map((_, i) => <Star key={i} size={12} className="fill-amber-400 text-amber-400" />)}
+                      {[...Array(5)].map((_, i) => <Star key={i} size={11} className="fill-amber-400 text-amber-400" />)}
                     </div>
-                    <p className="text-xs text-gray-500 font-medium"><span className="font-black text-gray-800">+500</span> profesionales de la salud ya usan Alumbra</p>
+                    <p className="text-xs text-purple-300/70 font-medium">
+                      <span className="font-black text-white">+500</span> profesionales de la salud confían en Alumbra
+                    </p>
                   </div>
                 </div>
               </div>
 
-              {/* ── Right: visual oscuro ─────────────────────────── */}
-              <div className="relative hidden lg:flex items-center justify-center h-[580px] pl-10">
-                {/* Centered illustration */}
-                <div className="relative animate-float-slow z-10">
-                  <Image
-                    src="https://i.postimg.cc/bwgjvChS/Gemini-Generated-Image-tukqhotukqhotukq-1-1-removebg-preview.png"
-                    alt="Alumbra IA"
-                    width={380}
-                    height={380}
-                    className="w-full h-auto object-contain drop-shadow-2xl brightness-110"
-                    priority
-                  />
-                </div>
+              {/* ── Columna derecha: mockup del producto ── */}
+              <div className="relative hidden lg:block animate-in fade-in zoom-in-95 duration-700 delay-200">
 
-                {/* Floating insight cards */}
-                <div className="absolute top-12 left-0 glass-dark rounded-2xl px-4 py-3 border border-white/10 animate-float shadow-xl z-20">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-red-500/20 border border-red-400/30 flex items-center justify-center">
-                      <AlertCircle className="w-4 h-4 text-red-400" />
+                {/* Glow ambiental detrás del mockup */}
+                <div className="absolute -inset-8 bg-gradient-to-br from-primary/18 via-violet-500/12 to-fuchsia-500/8 rounded-3xl blur-3xl pointer-events-none" />
+
+                {/* Ventana tipo app */}
+                <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_30px_80px_-15px_rgba(139,92,246,0.35)] backdrop-blur-sm"
+                  style={{ background: 'rgba(15, 8, 35, 0.75)' }}
+                >
+                  {/* Barra de chrome (browser) */}
+                  <div className="flex items-center gap-3 px-4 py-3 border-b border-white/6"
+                    style={{ background: 'rgba(255,255,255,0.04)' }}
+                  >
+                    <div className="flex gap-1.5">
+                      <div className="w-3 h-3 rounded-full bg-red-400/50" />
+                      <div className="w-3 h-3 rounded-full bg-amber-400/50" />
+                      <div className="w-3 h-3 rounded-full bg-green-400/50" />
                     </div>
-                    <div>
-                      <p className="text-xs font-bold text-white">Patrón detectado</p>
-                      <p className="text-[10px] text-purple-300">Control coercitivo · Alta frecuencia</p>
+                    <div className="flex-1 mx-4 bg-white/6 border border-white/6 rounded-md px-3 py-1 flex items-center gap-2">
+                      <Lock className="w-2.5 h-2.5 text-green-400/60 flex-shrink-0" />
+                      <span className="text-[10px] text-purple-400/50 font-mono">alumbra.ia/dashboard</span>
                     </div>
+                  </div>
+
+                  {/* Cuerpo del mockup */}
+                  <div className="p-5 space-y-4">
+
+                    {/* Header del analizador */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center shadow-lg">
+                          <Brain className="w-3.5 h-3.5 text-white" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-black text-white leading-none">Análisis en curso</p>
+                          <p className="text-[9px] text-purple-400/60 mt-0.5">Conversación #47 · WhatsApp</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1.5 bg-green-500/12 border border-green-400/20 rounded-full px-2.5 py-1">
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                        <span className="text-[9px] font-bold text-green-300">En vivo</span>
+                      </div>
+                    </div>
+
+                    {/* Burbujas de chat */}
+                    <div className="space-y-2.5 bg-white/3 rounded-xl p-3.5 border border-white/5">
+
+                      {/* Mensaje 1 — normal */}
+                      <div className="flex gap-2 items-end">
+                        <div className="w-5 h-5 rounded-full bg-sky-500/30 border border-sky-400/30 inline-flex items-center justify-center flex-shrink-0">
+                          <span className="text-[7px] font-black text-sky-300">J</span>
+                        </div>
+                        <div className="bg-white/7 rounded-xl rounded-bl-sm px-2.5 py-1.5 max-w-[70%]">
+                          <p className="text-[10px] text-purple-100/90 leading-relaxed">¿Podemos hablar sobre lo de ayer?</p>
+                        </div>
+                      </div>
+
+                      {/* Mensaje 2 — Gaslighting, rojo */}
+                      <div className="flex gap-2 items-end">
+                        <div className="w-5 h-5 rounded-full bg-sky-500/30 border border-sky-400/30 inline-flex items-center justify-center flex-shrink-0">
+                          <span className="text-[7px] font-black text-sky-300">J</span>
+                        </div>
+                        <div className="relative bg-red-500/14 border border-red-400/22 rounded-xl rounded-bl-sm px-2.5 py-1.5 max-w-[82%]">
+                          <span className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full bg-red-500 inline-flex items-center justify-center shadow-md">
+                            <AlertCircle className="w-2 h-2 text-white" />
+                          </span>
+                          <p className="text-[10px] leading-relaxed">
+                            <span className="text-red-300 font-semibold underline decoration-red-400/40 decoration-dotted">Siempre exageras todo.</span>
+                            {' '}<span className="text-purple-200/80">Nadie más se queja de mí.</span>
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Respuesta — víctima */}
+                      <div className="flex gap-2 items-end justify-end">
+                        <div className="bg-primary/18 border border-primary/18 rounded-xl rounded-br-sm px-2.5 py-1.5 max-w-[55%]">
+                          <p className="text-[10px] text-purple-100/80 leading-relaxed">Ok... quizás tienes razón.</p>
+                        </div>
+                        <div className="w-5 h-5 rounded-full bg-primary/40 border border-primary/30 inline-flex items-center justify-center flex-shrink-0">
+                          <span className="text-[7px] font-black text-purple-200">M</span>
+                        </div>
+                      </div>
+
+                      {/* Mensaje 3 — minimización, ámbar */}
+                      <div className="flex gap-2 items-end">
+                        <div className="w-5 h-5 rounded-full bg-sky-500/30 border border-sky-400/30 inline-flex items-center justify-center flex-shrink-0">
+                          <span className="text-[7px] font-black text-sky-300">J</span>
+                        </div>
+                        <div className="relative bg-amber-500/12 border border-amber-400/22 rounded-xl rounded-bl-sm px-2.5 py-1.5 max-w-[80%]">
+                          <span className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full bg-amber-500 inline-flex items-center justify-center shadow-md">
+                            <AlertCircle className="w-2 h-2 text-white" />
+                          </span>
+                          <p className="text-[10px] text-amber-200/90 leading-relaxed">
+                            Te lo estás imaginando. Eso <span className="font-semibold underline decoration-amber-400/40 decoration-dotted">nunca pasó así.</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Separador */}
+                    <div className="divider-gradient" />
+
+                    {/* Resultado del análisis */}
+                    <div className="rounded-xl border border-red-400/18 overflow-hidden"
+                      style={{ background: 'linear-gradient(135deg, rgba(239,68,68,0.10) 0%, rgba(220,38,38,0.06) 100%)' }}
+                    >
+                      <div className="flex items-center justify-between px-3.5 py-2.5 border-b border-red-400/12">
+                        <div className="flex items-center gap-1.5">
+                          <Shield className="w-3.5 h-3.5 text-red-400" />
+                          <span className="text-[10px] font-black text-red-300 uppercase tracking-wider">Nivel de Riesgo</span>
+                        </div>
+                        <span className="text-[10px] font-black text-red-300 bg-red-500/15 px-2 py-0.5 rounded-full border border-red-400/18">
+                          ALTO · 78%
+                        </span>
+                      </div>
+                      <div className="px-3.5 py-2.5 space-y-2">
+                        {/* Barra de progreso */}
+                        <div className="h-1.5 bg-white/6 rounded-full overflow-hidden">
+                          <div className="h-full w-[78%] bg-gradient-to-r from-red-500 to-orange-400 rounded-full" />
+                        </div>
+                        {/* Tags de patrones */}
+                        <div className="flex flex-wrap gap-1.5">
+                          {['Gaslighting', 'Minimización', 'Control coercitivo'].map(tag => (
+                            <span key={tag} className="text-[9px] font-semibold bg-white/5 border border-white/8 text-purple-300/80 px-2 py-0.5 rounded-full">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
 
-                <div className="absolute bottom-20 right-[-20px] glass-dark rounded-2xl px-4 py-3 border border-white/10 animate-float-delayed shadow-xl z-20">
+                {/* Floating badge — arriba derecha */}
+                <div className="absolute -top-5 -right-5 glass-dark rounded-2xl px-3.5 py-2.5 border border-white/12 shadow-2xl animate-float z-20">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-green-500/20 border border-green-400/30 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-xl bg-green-500/18 border border-green-400/22 flex items-center justify-center">
                       <CheckCircle2 className="w-4 h-4 text-green-400" />
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-white">Informe generado</p>
-                      <p className="text-[10px] text-purple-300">Listo para descargar</p>
+                      <p className="text-[10px] font-black text-white leading-none">Informe listo</p>
+                      <p className="text-[9px] text-purple-300/60 mt-0.5">en 47 segundos</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="absolute bottom-48 left-[-10px] glass-dark rounded-2xl px-4 py-3 border border-white/10 z-20">
+                {/* Floating badge — abajo izquierda */}
+                <div className="absolute -bottom-5 -left-5 glass-dark rounded-2xl px-3.5 py-2.5 border border-white/12 shadow-2xl animate-float-delayed z-20">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-primary/30 border border-primary/30 flex items-center justify-center">
-                      <Sparkles className="w-4 h-4 text-purple-300" />
+                    <div className="w-8 h-8 rounded-xl bg-primary/25 border border-primary/25 flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-purple-300" />
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-white">IA analizando</p>
-                      <p className="text-[10px] text-purple-300">98% de precisión</p>
+                      <p className="text-[10px] font-black text-white leading-none">3 patrones detectados</p>
+                      <p className="text-[9px] text-purple-300/60 mt-0.5">IA · 98% precisión</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Glow behind illustration */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-violet-500/10 rounded-3xl blur-3xl" />
               </div>
             </div>
           </div>
 
-          {/* Bottom trust bar */}
-          <div className="absolute bottom-0 left-0 right-0 bg-white/70 backdrop-blur-md border-t border-purple-100/60 z-10">
+          {/* Trust bar */}
+          <div className="absolute bottom-0 left-0 right-0 border-t border-white/6 z-10"
+            style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(12px)' }}
+          >
             <div className="container mx-auto px-6 py-3.5 flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
-              <span className="text-[10px] text-gray-400 font-semibold uppercase tracking-widest">Avalado por</span>
+              <span className="text-[10px] text-purple-400/40 font-semibold uppercase tracking-widest hidden sm:block">Avalado por</span>
               {[
                 { icon: ShieldCheck, text: 'Certificado GDPR / HIPAA' },
                 { icon: Award, text: 'Colegio Psicológico Nacional' },
                 { icon: TrendingUp, text: '98% de precisión validada' },
               ].map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-1.5 text-sm text-gray-500 font-medium">
-                  <Icon size={14} className="text-primary/70" />
+                <div key={text} className="flex items-center gap-1.5 text-sm text-purple-300/55 font-medium">
+                  <Icon size={13} className="text-primary/60" />
                   {text}
                 </div>
               ))}
@@ -320,18 +432,18 @@ export default function LandingPage() {
         {/* ══════════════════════════════════════════════════════════
             2. TICKER — profesiones que usan Alumbra
         ══════════════════════════════════════════════════════════ */}
-        <div className="py-10 bg-gradient-to-b from-purple-50/60 to-white border-y border-purple-100/40 overflow-hidden">
-          <p className="text-center text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">
+        <div className="py-8 bg-white border-b border-gray-100 overflow-hidden">
+          <p className="text-center text-xs font-bold uppercase tracking-widest text-gray-400 mb-5">
             Diseñado para profesionales de la salud como tú
           </p>
           <div className="relative flex overflow-x-hidden">
             <div className="flex animate-ticker whitespace-nowrap gap-0">
-              {[...professions, ...professions].map((p, i) => (
+              {[...professions, ...professions].map(({ label, icon: PIcon }, i) => (
                 <div key={i} className="inline-flex items-center gap-2.5 mx-8 text-gray-500">
                   <div className="w-8 h-8 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
-                    <p.icon className="w-4 h-4 text-primary" />
+                    <PIcon className="w-4 h-4 text-primary" />
                   </div>
-                  <span className="text-sm font-semibold">{p.label}</span>
+                  <span className="text-sm font-semibold">{label}</span>
                 </div>
               ))}
             </div>
@@ -339,46 +451,50 @@ export default function LandingPage() {
         </div>
 
         {/* ══════════════════════════════════════════════════════════
-            3. PROBLEMA — dark editorial section
+            3. PROBLEMA — sección blanca con statement editorial
         ══════════════════════════════════════════════════════════ */}
-        <section className="relative overflow-hidden py-28 section-dark-purple">
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(139,92,246,0.08),transparent)]" />
+        <section className="py-24 bg-white">
+          <div className="container mx-auto px-6 max-w-5xl">
 
-          <div className="container mx-auto px-6 relative z-10">
-            {/* Big statement */}
-            <div className="max-w-4xl mx-auto text-center mb-20">
-              <p className="text-primary font-bold text-sm uppercase tracking-widest mb-6">El problema que enfrentamos</p>
-              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[0.97] tracking-tight">
-                El abuso emocional
-                <br />
-                <span className="text-gradient-light">es invisible.</span>
-                <br />
-                <span className="text-white/40">Hasta que lo analizas.</span>
+            {/* Statement central */}
+            <div className="text-center mb-16">
+              <p className="text-xs font-bold uppercase tracking-widest text-primary/70 mb-5">
+                El problema que enfrentamos
+              </p>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.0] tracking-tight text-gray-900">
+                El abuso emocional{' '}
+                <span className="text-gradient">es invisible.</span>
+                <br className="hidden md:block" />
+                {' '}Hasta que lo analizas.
               </h2>
-              <p className="mt-8 text-lg text-purple-300/80 max-w-2xl mx-auto leading-relaxed">
-                Las palabras tienen un poder que el ojo humano a veces no puede procesar en tiempo real.
-                Alumbra analiza los patrones ocultos en las conversaciones para que tú puedas
-                enfocarte en lo que importa: ayudar a las personas.
+              <p className="mt-6 text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                Las palabras tienen un poder que el ojo humano no puede procesar en tiempo real.
+                Alumbra detecta los patrones ocultos para que puedas enfocarte en lo que importa.
               </p>
             </div>
 
-            {/* Stats grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            {/* Stats — tarjetas con acento de borde izquierdo + entrada escalonada */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { value: '1 de 3', label: 'personas experimenta abuso emocional en sus relaciones', color: 'from-red-500/20 to-red-600/10' },
-                { value: '70%', label: 'de los casos pasa desapercibido en consultas de salud', color: 'from-amber-500/20 to-amber-600/10' },
-                { value: '98%', label: 'de precisión en la detección de patrones con Alumbra', color: 'from-green-500/20 to-green-600/10' },
-                { value: '<3 min', label: 'para obtener un informe completo de la conversación', color: 'from-primary/20 to-violet-600/10' },
+                { value: '1 de 3', label: 'personas experimenta abuso emocional en sus relaciones', accent: 'border-red-400',   bg: 'bg-red-50/60',    num: 'text-red-500'   },
+                { value: '70%',    label: 'de los casos pasa desapercibido en consultas de salud',   accent: 'border-amber-400', bg: 'bg-amber-50/60',  num: 'text-amber-500' },
+                { value: '98%',    label: 'de precisión en la detección de patrones con Alumbra',    accent: 'border-green-400', bg: 'bg-green-50/60',  num: 'text-green-600' },
+                { value: '<3 min', label: 'para obtener un informe completo de la conversación',      accent: 'border-primary',   bg: 'bg-purple-50/60', num: 'text-gradient'  },
               ].map((s, i) => (
-                <div key={i} className={`glass-dark rounded-2xl p-6 bg-gradient-to-br ${s.color} border border-white/8`}>
-                  <p className="text-3xl font-black text-white mb-2">{s.value}</p>
-                  <p className="text-xs text-purple-300/80 leading-relaxed">{s.label}</p>
+                <div
+                  key={i}
+                  className={`${s.bg} border border-gray-100 border-l-4 ${s.accent} rounded-2xl p-6 animate-fade-up`}
+                  style={{ animationDelay: `${i * 100}ms` }}
+                >
+                  <p className={`text-3xl font-black mb-2 ${s.num === 'text-gradient' ? 'text-gradient' : s.num}`}>
+                    {s.value}
+                  </p>
+                  <p className="text-xs text-gray-500 leading-relaxed">{s.label}</p>
                 </div>
               ))}
             </div>
+
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
         </section>
 
         {/* ══════════════════════════════════════════════════════════
@@ -412,9 +528,9 @@ export default function LandingPage() {
                   key={label}
                   className={cn(
                     'group relative p-6 rounded-3xl bg-white border border-purple-100/70 shadow-sm card-lift cursor-default overflow-hidden',
-                    isIntersecting1 && 'animate-in fade-in slide-in-from-bottom-8 duration-700'
+                    isIntersecting1 && 'animate-scale-in'
                   )}
-                  style={{ animationDelay: `${i * 80}ms` }}
+                  style={{ animationDelay: `${i * 70}ms` }}
                 >
                   {/* Hover glow */}
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-violet-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl" />
@@ -446,8 +562,7 @@ export default function LandingPage() {
         ══════════════════════════════════════════════════════════ */}
         <section
           id="features"
-          className="py-24 scroll-mt-20"
-          style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f0ff 50%, #faf5ff 100%)' }}
+          className="py-24 scroll-mt-20 bg-white"
         >
           <div className="container mx-auto px-6">
             <div className="text-center max-w-2xl mx-auto mb-16">
@@ -464,7 +579,7 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
 
               {/* Card grande — Feature principal */}
-              <div className="md:col-span-2 group relative bg-white rounded-3xl border border-purple-100/80 shadow-sm overflow-hidden card-lift">
+              <div className="md:col-span-2 group relative bg-white rounded-3xl border border-purple-100/80 shadow-sm overflow-hidden card-lift animate-fade-up" style={{ animationDelay: '0ms' }}>
                 <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-violet-400 to-purple-300" />
                 <div className="grid md:grid-cols-2 gap-0 h-full">
                   <div className="p-8 flex flex-col justify-between">
@@ -501,7 +616,7 @@ export default function LandingPage() {
               </div>
 
               {/* Card vertical */}
-              <div className="group relative bg-white rounded-3xl border border-purple-100/80 shadow-sm overflow-hidden card-lift flex flex-col">
+              <div className="group relative bg-white rounded-3xl border border-purple-100/80 shadow-sm overflow-hidden card-lift flex flex-col animate-fade-up" style={{ animationDelay: '120ms' }}>
                 <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-violet-400 to-fuchsia-400" />
                 <div className="relative h-48 bg-gradient-to-br from-purple-50 to-violet-50 overflow-hidden">
                   {getImage('feature2') && (
@@ -527,7 +642,7 @@ export default function LandingPage() {
               </div>
 
               {/* Card oscura — destacada */}
-              <div className="group relative rounded-3xl overflow-hidden card-lift section-dark-purple p-8 flex flex-col justify-between border border-white/5">
+              <div className="group relative rounded-3xl overflow-hidden card-lift section-dark-purple p-8 flex flex-col justify-between border border-white/5 animate-fade-up" style={{ animationDelay: '200ms' }}>
                 <div>
                   <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center mb-6">
                     <Lock className="w-6 h-6 text-purple-300" />
@@ -546,7 +661,7 @@ export default function LandingPage() {
               </div>
 
               {/* Card horizontal */}
-              <div className="md:col-span-2 group relative bg-white rounded-3xl border border-purple-100/80 shadow-sm overflow-hidden card-lift">
+              <div className="md:col-span-2 group relative bg-white rounded-3xl border border-purple-100/80 shadow-sm overflow-hidden card-lift animate-fade-up" style={{ animationDelay: '300ms' }}>
                 <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-fuchsia-400 to-primary" />
                 <div className="grid md:grid-cols-2 gap-0 h-full">
                   <div className="relative h-52 md:h-auto bg-gradient-to-br from-purple-50 to-violet-50 overflow-hidden">
@@ -692,25 +807,28 @@ export default function LandingPage() {
                       desc: 'Patrones detectados, nivel de riesgo, sugerencias orientativas. Todo en menos de un minuto.',
                       color: 'from-fuchsia-500 to-pink-500',
                     },
-                  ].map((step, i) => (
-                    <div
-                      key={i}
-                      className={cn(
-                        'flex gap-5 glass-dark rounded-2xl p-5 border border-white/8',
-                        isIntersecting2 && 'animate-in fade-in slide-in-from-left-8 duration-700'
-                      )}
-                      style={{ animationDelay: `${i * 150 + 200}ms` }}
-                    >
-                      <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${step.color} flex flex-col items-center justify-center shadow-lg flex-shrink-0`}>
-                        <span className="text-[9px] font-black text-white/70 leading-none">{step.num}</span>
-                        <step.icon className="w-4 h-4 text-white" />
+                  ].map((step, i) => {
+                    const StepIcon = step.icon;
+                    return (
+                      <div
+                        key={i}
+                        className={cn(
+                          'flex gap-5 glass-dark rounded-2xl p-5 border border-white/8',
+                          isIntersecting2 && 'animate-in fade-in slide-in-from-left-8 duration-700'
+                        )}
+                        style={{ animationDelay: `${i * 150 + 200}ms` }}
+                      >
+                        <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${step.color} flex flex-col items-center justify-center shadow-lg flex-shrink-0`}>
+                          <span className="text-[9px] font-black text-white/70 leading-none">{step.num}</span>
+                          <StepIcon className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="font-black text-white text-base mb-1">{step.title}</h3>
+                          <p className="text-sm text-purple-300/80 leading-relaxed">{step.desc}</p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="font-black text-white text-base mb-1">{step.title}</h3>
-                        <p className="text-sm text-purple-300/80 leading-relaxed">{step.desc}</p>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 <div className="mt-8 p-4 rounded-2xl bg-amber-500/10 border border-amber-400/20">
@@ -777,30 +895,31 @@ export default function LandingPage() {
             <div className="relative rounded-3xl overflow-hidden border border-purple-100/70 shadow-xl">
               <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-violet-400 to-purple-300" />
 
-              <div className="grid lg:grid-cols-[280px_1fr]">
-                {/* Left sidebar */}
-                <div className="section-dark-purple p-8 flex flex-col justify-between">
+              <div className="grid lg:grid-cols-[260px_1fr]">
+                {/* Left sidebar — light, mismo tono que el resto */}
+                <div className="bg-gray-50 border-r border-gray-100 p-8 flex flex-col justify-between">
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-widest text-purple-300/60 mb-6">Confían en Alumbra</p>
-                    <div className="space-y-3">
+                    <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">Confían en Alumbra</p>
+                    <div className="space-y-2">
                       {testimonials.map((t, i) => (
                         <button
                           key={i}
+                          type="button"
                           onClick={() => setActiveTestimonial(i)}
                           className={cn(
                             'w-full flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 text-left',
                             activeTestimonial === i
-                              ? 'bg-white/12 border border-white/20'
-                              : 'hover:bg-white/6 border border-transparent'
+                              ? 'bg-white border border-purple-200 shadow-sm'
+                              : 'hover:bg-white/70 border border-transparent'
                           )}
                         >
-                          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${t.color} flex items-center justify-center text-white font-black text-sm flex-shrink-0`}>
+                          <span className={`w-10 h-10 rounded-xl bg-gradient-to-br ${t.color} inline-flex items-center justify-center text-white font-black text-sm flex-shrink-0 shadow-sm`}>
                             {t.initials}
-                          </div>
-                          <div className="min-w-0">
-                            <p className={cn('text-sm font-bold truncate transition-colors', activeTestimonial === i ? 'text-white' : 'text-white/60')}>{t.name}</p>
-                            <p className="text-xs text-purple-300/60 truncate">{t.role}</p>
-                          </div>
+                          </span>
+                          <span className="min-w-0 flex flex-col overflow-hidden">
+                            <span className={cn('text-sm font-bold truncate transition-colors', activeTestimonial === i ? 'text-gray-900' : 'text-gray-500')}>{t.name}</span>
+                            <span className="text-xs text-gray-400 truncate">{t.role}</span>
+                          </span>
                         </button>
                       ))}
                     </div>
@@ -808,9 +927,9 @@ export default function LandingPage() {
                   <div className="mt-8">
                     <div className="grid grid-cols-3 gap-2">
                       {[{ v: '500+', l: 'Usuarios' }, { v: '4.9', l: 'Rating' }, { v: '98%', l: 'Satisf.' }].map(s => (
-                        <div key={s.v} className="glass-dark rounded-xl p-3 text-center">
-                          <p className="text-lg font-black text-white">{s.v}</p>
-                          <p className="text-[10px] text-purple-300/60">{s.l}</p>
+                        <div key={s.v} className="bg-white border border-gray-100 rounded-xl p-3 text-center shadow-sm">
+                          <p className="text-base font-black text-gradient">{s.v}</p>
+                          <p className="text-[10px] text-gray-400 mt-0.5">{s.l}</p>
                         </div>
                       ))}
                     </div>
@@ -819,7 +938,7 @@ export default function LandingPage() {
 
                 {/* Testimonial content */}
                 <div className="p-10 lg:p-12 bg-white flex flex-col justify-center">
-                  <div className="text-7xl font-black text-primary/15 leading-none mb-4 select-none">&ldquo;</div>
+                  <div className="text-7xl font-black text-primary/12 leading-none mb-4 select-none">&ldquo;</div>
 
                   <blockquote
                     key={activeTestimonial}
@@ -866,8 +985,7 @@ export default function LandingPage() {
         <section
           id="pricing"
           ref={ref4}
-          className={cn('py-24 scroll-mt-20 transition-all duration-700', isIntersecting4 ? 'opacity-100' : 'opacity-0')}
-          style={{ background: 'linear-gradient(180deg, #faf5ff 0%, #f5f0ff 40%, white 100%)' }}
+          className={cn('py-24 scroll-mt-20 bg-white transition-all duration-700', isIntersecting4 ? 'opacity-100' : 'opacity-0')}
         >
           <div className="container mx-auto px-6">
             <div className={cn('text-center max-w-2xl mx-auto mb-16', isIntersecting4 && 'animate-in fade-in slide-in-from-bottom-8 duration-700')}>
@@ -892,9 +1010,9 @@ export default function LandingPage() {
                     plan.popular
                       ? 'bg-gradient-to-b from-[hsl(262,83%,50%)] to-[hsl(275,70%,55%)] text-white shadow-2xl shadow-purple-400/30 scale-[1.04] z-10'
                       : 'bg-white border border-purple-100/80 shadow-sm hover:shadow-lg hover:border-purple-200',
-                    isIntersecting4 && 'animate-in fade-in slide-in-from-bottom-10 duration-700'
+                    isIntersecting4 && 'animate-scale-in'
                   )}
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'both' }}
                 >
                   {plan.popular && (
                     <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
