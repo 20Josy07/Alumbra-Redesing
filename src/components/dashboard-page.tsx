@@ -21,8 +21,10 @@ import { useToast } from "@/hooks/use-toast";
 import { type AnalysisRecord } from "@/types";
 import type { Timestamp } from "firebase/firestore";
 import { useState, useTransition, useMemo } from "react";
-import { collection, query, orderBy } from "firebase/firestore";
-import { useCollection, useMemoFirebase } from "@/firebase";
+import { collection, query, orderBy, doc } from "firebase/firestore";
+import { useCollection, useMemoFirebase, useDoc } from "@/firebase";
+import { incrementUsage } from "@/firebase/firestore/usage";
+import { PLAN_LIMITS, PLAN_NAMES, currentMonthKey, type PlanId } from "@/lib/plans";
 import { Textarea } from "./ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Badge } from "./ui/badge";
@@ -56,6 +58,27 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
   }, [user, firestore]);
 
   const { data: analyses, loading: loadingAnalyses } = useCollection<AnalysisRecord>(analysesQuery);
+
+  // ── Plan y cuota de uso (reactivo) ──
+  const userDocRef = useMemoFirebase(
+    () => (user && firestore ? doc(firestore, 'users', user.uid) : null),
+    [user, firestore]
+  );
+  const { data: account } = useDoc<{ plan?: PlanId; planEnds?: string; usageMonth?: string; usageCount?: number }>(userDocRef);
+
+  // Plan efectivo: si la suscripción de pago venció, vuelve a 'gratis'
+  const storedPlan: PlanId = account?.plan ?? 'gratis';
+  const subActive = storedPlan === 'gratis'
+    || (!!account?.planEnds && new Date(account.planEnds).getTime() > Date.now());
+  const plan: PlanId = subActive ? storedPlan : 'gratis';
+  const planEndsLabel = plan !== 'gratis' && account?.planEnds
+    ? new Date(account.planEnds).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
+    : null;
+  const planLimit = PLAN_LIMITS[plan];
+  const usageCount = account?.usageMonth === currentMonthKey() ? account?.usageCount ?? 0 : 0;
+  const isUnlimited = planLimit === Infinity;
+  const remaining = isUnlimited ? Infinity : Math.max(0, planLimit - usageCount);
+  const limitReached = !isUnlimited && remaining <= 0;
 
   // ── Stats reales calculadas desde Firestore ──
   const toDate = (r: AnalysisRecord): Date | null => {
@@ -91,6 +114,15 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
   })();
 
   const handleAnalysis = async () => {
+    // Bloqueo por cuota agotada
+    if (limitReached) {
+      toast({
+        variant: "destructive",
+        title: "Límite mensual alcanzado",
+        description: `Tu plan ${PLAN_NAMES[plan]} permite ${planLimit} análisis al mes. Mejora tu plan para seguir analizando.`,
+      });
+      return;
+    }
     setError(null);
     setPendingAnalysis(null);
     startTransition(async () => {
@@ -102,6 +134,10 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
       } else if (data) {
         setPendingAnalysis(data);
         setText('');
+        // Cuenta el análisis hacia la cuota mensual
+        if (user && firestore && !isUnlimited) {
+          incrementUsage(firestore, user.uid).catch(() => {});
+        }
       }
     });
   };
@@ -250,24 +286,34 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
           )}
         </CardContent>
         <CardFooter className="flex-col gap-3 pt-2">
-          <Button
-            onClick={handleAnalysis}
-            disabled={isPending || text.trim().length < 20}
-            size="lg"
-            className="w-full h-12 rounded-2xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 font-bold shadow-md glow-purple-sm text-sm"
-          >
-            {isPending ? (
-              <span className="flex items-center gap-2">
-                <Loader className="h-4 w-4 animate-spin" />
-                Analizando patrones…
-              </span>
-            ) : (
-              <span className="flex items-center gap-2">
-                <Zap className="h-4 w-4" />
-                Analizar conversación
-              </span>
-            )}
-          </Button>
+          {limitReached ? (
+            <div className="w-full rounded-2xl bg-amber-50 border border-amber-200 p-4 text-center">
+              <p className="text-sm font-bold text-amber-800">Has usado tus {planLimit} análisis de este mes</p>
+              <p className="text-xs text-amber-700 mt-0.5 mb-3">Mejora tu plan para seguir analizando sin esperar.</p>
+              <Button asChild size="sm" className="rounded-xl bg-gradient-to-r from-primary to-violet-500 font-bold">
+                <Link href="/dashboard/billing">Ver planes</Link>
+              </Button>
+            </div>
+          ) : (
+            <Button
+              onClick={handleAnalysis}
+              disabled={isPending || text.trim().length < 20}
+              size="lg"
+              className="w-full h-12 rounded-2xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 font-bold shadow-md glow-purple-sm text-sm"
+            >
+              {isPending ? (
+                <span className="flex items-center gap-2">
+                  <Loader className="h-4 w-4 animate-spin" />
+                  Analizando patrones…
+                </span>
+              ) : (
+                <span className="flex items-center gap-2">
+                  <Zap className="h-4 w-4" />
+                  Analizar conversación
+                </span>
+              )}
+            </Button>
+          )}
           <div className="flex items-center gap-2 text-xs text-gray-400">
             <Lock className="w-3 h-3" />
             Procesamiento privado · el texto no se almacena
@@ -371,6 +417,62 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
 
         {/* Sidebar: Recent history */}
         <div className="space-y-5">
+
+          {/* Plan y uso */}
+          <Card className="rounded-3xl border border-purple-100/60 shadow-sm overflow-hidden animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-100">
+            <div className="h-1 bg-gradient-to-r from-primary via-violet-400 to-purple-300" />
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <p className="text-xs text-gray-400 font-medium">Tu plan</p>
+                  <p className="text-base font-black text-gray-900">{PLAN_NAMES[plan]}</p>
+                </div>
+                <Badge className="bg-purple-100 text-primary border-purple-200 font-bold text-[11px]">
+                  {isUnlimited ? 'Ilimitado' : `${planLimit}/mes`}
+                </Badge>
+              </div>
+
+              {isUnlimited ? (
+                <div className="flex items-center gap-2 text-sm text-gray-500 bg-purple-50/60 rounded-xl p-3">
+                  <Sparkles className="w-4 h-4 text-primary flex-shrink-0" />
+                  Análisis ilimitados este mes
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-baseline justify-between mb-1.5">
+                    <span className="text-sm font-bold text-gray-700">
+                      {usageCount} <span className="text-gray-400 font-medium">de {planLimit}</span>
+                    </span>
+                    <span className={cn('text-xs font-semibold', remaining <= 2 ? 'text-amber-600' : 'text-gray-400')}>
+                      {remaining} restantes
+                    </span>
+                  </div>
+                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div
+                      className={cn('h-full rounded-full transition-all duration-700', limitReached ? 'bg-red-500' : 'bg-gradient-to-r from-primary to-violet-500')}
+                      style={{ width: `${Math.min(100, (usageCount / planLimit) * 100)}%` }}
+                    />
+                  </div>
+                  <p className="text-[11px] text-gray-400 mt-2">Se reinicia cada mes.</p>
+                </>
+              )}
+
+              {/* Vencimiento de la suscripción */}
+              {planEndsLabel && (
+                <div className="flex items-center gap-1.5 mt-3 text-[11px] text-gray-400">
+                  <Clock className="w-3 h-3 flex-shrink-0" />
+                  Tu plan se renueva el <span className="font-semibold text-gray-600">{planEndsLabel}</span>
+                </div>
+              )}
+
+              {plan === 'gratis' && (
+                <Button asChild size="sm" className="w-full mt-4 rounded-xl bg-gradient-to-r from-primary to-violet-500 font-bold text-xs h-9">
+                  <Link href="/dashboard/billing">Mejorar plan</Link>
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+
           <Card className="rounded-3xl border border-purple-100/60 shadow-sm animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-150">
             <div className="h-1 bg-gradient-to-r from-violet-400 via-purple-400 to-fuchsia-300 rounded-t-3xl" />
             <CardHeader className="pb-3">

@@ -38,7 +38,8 @@ interface CategoryMeta {
   mark: string;   // clases para el resaltado <mark>
   dot: string;    // color del indicador
   text: string;   // color de texto
-  bar: string;    // color de la barra
+  bar: string;    // color de la barra (sólido)
+  chip: string;   // chip de severidad con fondo sólido
 }
 
 // Orden por gravedad (de mayor a menor).
@@ -47,31 +48,36 @@ export const CATEGORY_META: Record<CategoryKey, CategoryMeta> = {
     label: 'Amenazas', description: 'Intimidación o coerción',
     detectedKey: 'threats_detected', countKey: 'threat_count', severity: 'Crítico',
     mark: 'bg-red-100 text-red-800 border-b-2 border-red-400',
-    dot: 'bg-red-500', text: 'text-red-600', bar: 'from-red-500 to-rose-500',
+    dot: 'bg-red-500', text: 'text-red-600', bar: 'bg-red-500',
+    chip: 'bg-red-500 text-white',
   },
   severe_insults: {
     label: 'Insultos graves', description: 'Desvalorización severa',
     detectedKey: 'severe_insults_detected', countKey: 'severe_insult_count', severity: 'Crítico',
     mark: 'bg-rose-100 text-rose-800 border-b-2 border-rose-400',
-    dot: 'bg-rose-500', text: 'text-rose-600', bar: 'from-rose-500 to-pink-500',
+    dot: 'bg-rose-500', text: 'text-rose-600', bar: 'bg-rose-500',
+    chip: 'bg-rose-500 text-white',
   },
   gaslighting: {
     label: 'Gaslighting', description: 'Distorsión de la realidad',
     detectedKey: 'gaslighting_detected', countKey: 'gaslighting_count', severity: 'Alto',
     mark: 'bg-orange-100 text-orange-800 border-b-2 border-orange-400',
-    dot: 'bg-orange-500', text: 'text-orange-600', bar: 'from-orange-500 to-amber-500',
+    dot: 'bg-orange-500', text: 'text-orange-600', bar: 'bg-orange-500',
+    chip: 'bg-orange-500 text-white',
   },
   control: {
     label: 'Control', description: 'Conductas coercitivas',
     detectedKey: 'control_detected', countKey: 'control_count', severity: 'Alto',
     mark: 'bg-amber-100 text-amber-800 border-b-2 border-amber-400',
-    dot: 'bg-amber-500', text: 'text-amber-600', bar: 'from-amber-500 to-yellow-500',
+    dot: 'bg-amber-500', text: 'text-amber-600', bar: 'bg-amber-500',
+    chip: 'bg-amber-500 text-white',
   },
   insults: {
     label: 'Insultos', description: 'Descalificaciones',
     detectedKey: 'insults_detected', countKey: 'insult_count', severity: 'Moderado',
     mark: 'bg-yellow-100 text-yellow-800 border-b-2 border-yellow-400',
-    dot: 'bg-yellow-500', text: 'text-yellow-600', bar: 'from-yellow-500 to-amber-400',
+    dot: 'bg-yellow-500', text: 'text-yellow-600', bar: 'bg-yellow-400',
+    chip: 'bg-yellow-400 text-yellow-900',
   },
 };
 

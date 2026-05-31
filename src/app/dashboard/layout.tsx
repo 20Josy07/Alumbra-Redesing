@@ -9,7 +9,7 @@ import {
   SidebarMenuButton, SidebarMenuItem, SidebarSeparator,
   SidebarProvider, SidebarTrigger, SidebarInset,
 } from "@/components/ui/sidebar";
-import { Home, History, User, Settings, LifeBuoy, LogOut, Sparkles } from "lucide-react";
+import { Home, History, CreditCard, User, Settings, LifeBuoy, LogOut, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 const navMain = [
   { href: '/dashboard', icon: Home, label: 'Inicio' },
   { href: '/dashboard/history', icon: History, label: 'Historial' },
+  { href: '/dashboard/billing', icon: CreditCard, label: 'Plan y facturación' },
   { href: '/dashboard/profile', icon: User, label: 'Mi Perfil' },
   { href: '/dashboard/settings', icon: Settings, label: 'Configuración' },
 ];

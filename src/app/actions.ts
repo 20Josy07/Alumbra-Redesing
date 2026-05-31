@@ -116,25 +116,39 @@ function buildRules(normalized: string): { rules: AnalysisRules; raw: number } {
     threat_count: 0,
   };
 
-  let raw = 0;
-
+  // 1. Recolecta TODAS las coincidencias con su posición y categoría.
+  interface Match { start: number; end: number; category: Category; phrase: string }
+  const matches: Match[] = [];
   (Object.keys(LEXICON) as Category[]).forEach((category) => {
-    const matches: string[] = [];
     for (const phrase of LEXICON[category]) {
       const needle = normalize(phrase);
-      // cuenta cuántas veces aparece la frase
+      if (!needle) continue;
       let idx = normalized.indexOf(needle);
       while (idx !== -1) {
-        matches.push(phrase);
+        matches.push({ start: idx, end: idx + needle.length, category, phrase });
         idx = normalized.indexOf(needle, idx + needle.length);
       }
     }
-    const fields = RULE_FIELDS[category];
-    // dedupe para la lista mostrada, pero cuenta total para el score
-    (rules[fields.detected] as string[]) = Array.from(new Set(matches));
-    (rules[fields.count] as number) = matches.length;
-    raw += matches.length * WEIGHTS[category];
   });
+
+  // 2. Resuelve solapamientos con la MISMA lógica que el resaltado
+  //    (ordena por inicio, luego por fin; descarta lo que se solapa).
+  //    Así una frase contenida en otra (ej. "nunca pasó" dentro de
+  //    "eso nunca pasó") no se cuenta dos veces, y el conteo coincide
+  //    exactamente con los fragmentos resaltados.
+  matches.sort((a, b) => a.start - b.start || a.end - b.end);
+
+  let raw = 0;
+  let cursor = -1;
+  for (const m of matches) {
+    if (m.start < cursor) continue; // se solapa con una ya elegida → ignorar
+    cursor = m.end;
+    const fields = RULE_FIELDS[m.category];
+    (rules[fields.count] as number) += 1;
+    const detected = rules[fields.detected] as string[];
+    if (!detected.includes(m.phrase)) detected.push(m.phrase);
+    raw += WEIGHTS[m.category];
+  }
 
   return { rules, raw };
 }

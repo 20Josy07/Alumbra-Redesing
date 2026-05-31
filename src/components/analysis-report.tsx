@@ -2,7 +2,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-import { Badge } from "./ui/badge";
 import { ShieldAlert, ListChecks, Highlighter, Sparkles, AlertCircle, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { type AnalysisResult } from "@/types";
@@ -111,16 +110,16 @@ export default function AnalysisReport({ result, originalText, compact = false }
                       <span className="text-xs text-gray-400 truncate hidden sm:inline">{meta.description}</span>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
-                      <Badge variant="outline" className={cn("text-[10px] font-bold border-current/20", meta.text)}>
+                      <span className={cn("text-[10px] font-black uppercase tracking-wide px-2 py-0.5 rounded-full", meta.chip)}>
                         {meta.severity}
-                      </Badge>
-                      <span className={cn("text-sm font-black tabular-nums", meta.text)}>{count}</span>
+                      </span>
+                      <span className={cn("text-sm font-black tabular-nums w-4 text-right", meta.text)}>{count}</span>
                     </div>
                   </div>
-                  <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                     <div
-                      className={cn("h-full rounded-full bg-gradient-to-r transition-all duration-700", meta.bar)}
-                      style={{ width: `${(count / maxCount) * 100}%` }}
+                      className={cn("h-full rounded-full transition-all duration-700", meta.bar)}
+                      style={{ width: `${Math.max(8, (count / maxCount) * 100)}%` }}
                     />
                   </div>
                 </div>

@@ -18,14 +18,14 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
-type NavKey = 'how-it-works' | 'reviews' | 'pricing' | 'team' | 'contact' | 'features';
+type NavKey = 'features' | 'problema' | 'solucion' | 'pricing' | 'team' | 'contact';
 
 const navItems: { href: string; label: string; key: NavKey; icon: React.ElementType }[] = [
-  { href: '/#how-it-works', label: 'Cómo funciona', key: 'how-it-works', icon: Info   },
-  { href: '/#reviews',      label: 'Reseñas',        key: 'reviews',      icon: Star   },
-  { href: '/#pricing',      label: 'Precios',         key: 'pricing',      icon: Tag    },
-  { href: '/team',          label: 'Equipo',           key: 'team',         icon: Users  },
-  { href: '/contact',       label: 'Contacto',         key: 'contact',      icon: Phone  },
+  { href: '/#features', label: 'Funcionalidades', key: 'features', icon: Star  },
+  { href: '/#solucion', label: 'Solución',        key: 'solucion', icon: Info  },
+  { href: '/#pricing',  label: 'Planes',           key: 'pricing',  icon: Tag   },
+  { href: '/team',      label: 'Equipo',            key: 'team',     icon: Users },
+  { href: '/contact',   label: 'Contacto',          key: 'contact',  icon: Phone },
 ];
 
 type HeaderProps = { activeLink?: string | null };
