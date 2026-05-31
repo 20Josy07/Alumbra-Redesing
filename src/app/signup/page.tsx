@@ -9,7 +9,7 @@ import Image from "next/image";
 import { Eye, EyeOff, ArrowRight, Sparkles, Shield, Brain, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/firebase';
-import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, createUserWithEmailAndPassword, updateProfile, getAdditionalUserInfo, type UserCredential } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 
@@ -96,17 +96,26 @@ export default function SignupPage() {
   const router = useRouter();
   const { toast } = useToast();
 
+  // Si era nuevo -> onboarding; si ya existía -> entra directo al panel.
+  const completeGoogleSignup = (result: UserCredential): void => {
+    if (getAdditionalUserInfo(result)?.isNewUser) {
+      toast({ title: "¡Bienvenido/a a Alumbra!", description: "Tu cuenta ha sido creada." });
+      router.push('/welcome');
+    } else {
+      toast({ title: "¡Bienvenido/a de nuevo!", description: "Ya tenías una cuenta, has iniciado sesión." });
+      router.push('/dashboard');
+    }
+  };
+
   // Completa el flujo si se usó redirect (popup bloqueado)
   useEffect(() => {
     if (!auth) return;
     getRedirectResult(auth)
       .then((result) => {
-        if (result?.user) {
-          toast({ title: "¡Bienvenido/a a Alumbra!", description: "Tu cuenta ha sido creada." });
-          router.push('/welcome');
-        }
+        if (result?.user) completeGoogleSignup(result);
       })
       .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, router, toast]);
 
   const handleGoogleSignIn = async () => {
@@ -114,9 +123,8 @@ export default function SignupPage() {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
     try {
-      await signInWithPopup(auth, provider);
-      toast({ title: "¡Bienvenido/a a Alumbra!", description: "Tu cuenta ha sido creada." });
-      router.push('/welcome');
+      const result = await signInWithPopup(auth, provider);
+      completeGoogleSignup(result);
     } catch (error: unknown) {
       const code = getAuthErrorCode(error);
       if (code === 'auth/popup-blocked' || code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {

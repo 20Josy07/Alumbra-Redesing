@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/firebase";
-import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult, sendPasswordResetEmail } from "firebase/auth";
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult, sendPasswordResetEmail, getAdditionalUserInfo, deleteUser, type UserCredential } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 
@@ -76,17 +76,37 @@ export default function LoginPage() {
     }
   };
 
+  // Si el usuario entró con Google pero NO tenía cuenta, revierte y lo manda a registrarse.
+  const completeGoogleLogin = async (result: UserCredential): Promise<void> => {
+    if (!auth) return;
+    if (getAdditionalUserInfo(result)?.isNewUser) {
+      // Cuenta recién creada por Google: la eliminamos para no dejar usuarios "fantasma".
+      try {
+        await deleteUser(result.user);
+      } catch {
+        try { await auth.signOut(); } catch { /* noop */ }
+      }
+      toast({
+        variant: "destructive",
+        title: "Aún no tienes una cuenta",
+        description: "Para entrar con Google primero debes registrarte.",
+      });
+      router.push('/signup');
+      return;
+    }
+    toast({ title: "¡Bienvenido/a!", description: "Has iniciado sesión correctamente." });
+    router.push('/dashboard');
+  };
+
   // Completa el flujo si se usó redirect (cuando el popup está bloqueado)
   useEffect(() => {
     if (!auth) return;
     getRedirectResult(auth)
       .then((result) => {
-        if (result?.user) {
-          toast({ title: "¡Bienvenido/a!", description: "Has iniciado sesión correctamente." });
-          router.push('/dashboard');
-        }
+        if (result?.user) void completeGoogleLogin(result);
       })
       .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, router, toast]);
 
   const handlePasswordReset = async () => {
@@ -125,9 +145,8 @@ export default function LoginPage() {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
     try {
-      await signInWithPopup(auth, provider);
-      toast({ title: "¡Bienvenido/a!", description: "Has iniciado sesión correctamente." });
-      router.push('/dashboard');
+      const result = await signInWithPopup(auth, provider);
+      await completeGoogleLogin(result);
     } catch (error: unknown) {
       const code = getAuthErrorCode(error);
       // Si el popup fue bloqueado, intenta con redirect
