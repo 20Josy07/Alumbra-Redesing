@@ -125,7 +125,7 @@ export default function LoginPage() {
       await sendPasswordResetEmail(auth, target, buildAuthActionSettings('/login'));
       toast({
         title: "Correo enviado",
-        description: `Te enviamos un enlace a ${target} para restablecer tu contraseña. Revisa también la carpeta de spam.`,
+        description: `Si existe una cuenta con ${target}, recibirás un enlace para restablecer tu contraseña. Revisa también spam.`,
       });
     } catch (error: unknown) {
       const code = getAuthErrorCode(error);
