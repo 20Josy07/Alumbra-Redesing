@@ -1,15 +1,31 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/firebase";
-import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+
+/** Mensaje claro según el código de error de Firebase Auth */
+function googleErrorMessage(code: string): string | null {
+  switch (code) {
+    case 'auth/popup-closed-by-user':
+    case 'auth/cancelled-popup-request':
+    case 'auth/user-cancelled':
+      return null; // el usuario canceló, no mostramos error
+    case 'auth/operation-not-allowed':
+      return 'El inicio con Google no está habilitado. Actívalo en Firebase → Authentication → Sign-in method → Google.';
+    case 'auth/unauthorized-domain':
+      return 'Este dominio no está autorizado. Agrégalo en Firebase → Authentication → Settings → Dominios autorizados.';
+    default:
+      return 'Hubo un problema con Google. Inténtalo de nuevo.';
+  }
+}
 import { ArrowRight, Eye, EyeOff, Sparkles, Shield, Brain, CheckCircle2 } from "lucide-react";
 
 const GoogleIcon = () => (
@@ -60,16 +76,41 @@ export default function LoginPage() {
     }
   };
 
+  // Completa el flujo si se usó redirect (cuando el popup está bloqueado)
+  useEffect(() => {
+    if (!auth) return;
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result?.user) {
+          toast({ title: "¡Bienvenido/a!", description: "Has iniciado sesión correctamente." });
+          router.push('/dashboard');
+        }
+      })
+      .catch(() => {});
+  }, [auth, router, toast]);
+
   const handleGoogleSignIn = async () => {
     if (!auth) return;
     const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
     try {
       await signInWithPopup(auth, provider);
       toast({ title: "¡Bienvenido/a!", description: "Has iniciado sesión correctamente." });
       router.push('/dashboard');
     } catch (error: unknown) {
-      if (getAuthErrorCode(error) === 'auth/cancelled-popup-request') return;
-      toast({ variant: "destructive", title: "Error al iniciar sesión", description: "Hubo un problema con Google. Inténtalo de nuevo." });
+      const code = getAuthErrorCode(error);
+      // Si el popup fue bloqueado, intenta con redirect
+      if (code === 'auth/popup-blocked' || code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
+        try {
+          await signInWithRedirect(auth, provider);
+          return;
+        } catch {
+          toast({ variant: "destructive", title: "Error al iniciar sesión", description: "No se pudo abrir Google. Permite las ventanas emergentes e inténtalo de nuevo." });
+          return;
+        }
+      }
+      const msg = googleErrorMessage(code);
+      if (msg) toast({ variant: "destructive", title: "Error al iniciar sesión", description: msg });
     }
   };
 

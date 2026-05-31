@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,9 +9,25 @@ import Image from "next/image";
 import { Eye, EyeOff, ArrowRight, Sparkles, Shield, Brain, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/firebase';
-import { GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
+
+/** Mensaje claro según el código de error de Firebase Auth */
+function googleErrorMessage(code: string): string | null {
+  switch (code) {
+    case 'auth/popup-closed-by-user':
+    case 'auth/cancelled-popup-request':
+    case 'auth/user-cancelled':
+      return null;
+    case 'auth/operation-not-allowed':
+      return 'El registro con Google no está habilitado. Actívalo en Firebase → Authentication → Sign-in method → Google.';
+    case 'auth/unauthorized-domain':
+      return 'Este dominio no está autorizado. Agrégalo en Firebase → Authentication → Settings → Dominios autorizados.';
+    default:
+      return 'Hubo un problema con Google. Inténtalo de nuevo.';
+  }
+}
 
 const GoogleIcon = () => (
   <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
@@ -80,16 +96,40 @@ export default function SignupPage() {
   const router = useRouter();
   const { toast } = useToast();
 
+  // Completa el flujo si se usó redirect (popup bloqueado)
+  useEffect(() => {
+    if (!auth) return;
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result?.user) {
+          toast({ title: "¡Bienvenido/a a Alumbra!", description: "Tu cuenta ha sido creada." });
+          router.push('/welcome');
+        }
+      })
+      .catch(() => {});
+  }, [auth, router, toast]);
+
   const handleGoogleSignIn = async () => {
     if (!auth) return;
     const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
     try {
       await signInWithPopup(auth, provider);
       toast({ title: "¡Bienvenido/a a Alumbra!", description: "Tu cuenta ha sido creada." });
       router.push('/welcome');
     } catch (error: unknown) {
-      if (getAuthErrorCode(error) === 'auth/cancelled-popup-request') return;
-      toast({ variant: "destructive", title: "Error al registrarte", description: "Problema con Google. Inténtalo de nuevo." });
+      const code = getAuthErrorCode(error);
+      if (code === 'auth/popup-blocked' || code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
+        try {
+          await signInWithRedirect(auth, provider);
+          return;
+        } catch {
+          toast({ variant: "destructive", title: "Error al registrarte", description: "No se pudo abrir Google. Permite las ventanas emergentes e inténtalo de nuevo." });
+          return;
+        }
+      }
+      const msg = googleErrorMessage(code);
+      if (msg) toast({ variant: "destructive", title: "Error al registrarte", description: msg });
     }
   };
 
