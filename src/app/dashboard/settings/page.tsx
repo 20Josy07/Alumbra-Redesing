@@ -6,6 +6,7 @@ import { sendPasswordResetEmail, deleteUser } from 'firebase/auth';
 import { doc } from 'firebase/firestore';
 import { useUser, useAuth, useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { setTrustedContact } from '@/firebase/firestore/usage';
+import { buildAuthActionSettings } from '@/lib/auth-action';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -107,7 +108,7 @@ export default function SettingsPage() {
     if (!auth || !user?.email) return;
     setSendingReset(true);
     try {
-      await sendPasswordResetEmail(auth, user.email);
+      await sendPasswordResetEmail(auth, user.email, buildAuthActionSettings('/login'));
       toast({
         title: 'Correo enviado',
         description: `Te enviamos un enlace a ${user.email} para restablecer tu contraseña.`,

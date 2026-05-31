@@ -10,6 +10,7 @@ import { useAuth } from "@/firebase";
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult, sendPasswordResetEmail, getAdditionalUserInfo, deleteUser, type UserCredential } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { buildAuthActionSettings } from "@/lib/auth-action";
 
 /** Mensaje claro según el código de error de Firebase Auth */
 function googleErrorMessage(code: string): string | null {
@@ -121,7 +122,7 @@ export default function LoginPage() {
       return;
     }
     try {
-      await sendPasswordResetEmail(auth, target);
+      await sendPasswordResetEmail(auth, target, buildAuthActionSettings('/login'));
       toast({
         title: "Correo enviado",
         description: `Te enviamos un enlace a ${target} para restablecer tu contraseña. Revisa también la carpeta de spam.`,
