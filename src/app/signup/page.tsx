@@ -136,10 +136,14 @@ export default function SignupPage() {
 
         {/* Logo */}
         <div className="relative z-10">
-          <Link href="/" className="inline-flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-violet-400 flex items-center justify-center shadow-lg">
-              <Image src="https://i.postimg.cc/QCys4Rbt/favicon-light.png" alt="Alumbra" width={18} height={18} className="brightness-0 invert" />
-            </div>
+          <Link href="/" className="inline-flex items-center gap-2.5 group">
+            <Image
+              src="https://i.postimg.cc/QCys4Rbt/favicon-light.png"
+              alt="Alumbra"
+              width={40}
+              height={40}
+              className="w-10 h-10 object-contain brightness-0 invert transition-transform duration-300 group-hover:scale-110"
+            />
             <span className="text-xl font-black text-white">Alumbra</span>
           </Link>
         </div>
@@ -194,9 +198,13 @@ export default function SignupPage() {
         {/* Mobile header */}
         <div className="lg:hidden flex items-center justify-between p-6 border-b border-purple-100/60">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center">
-              <Image src="https://i.postimg.cc/QCys4Rbt/favicon-light.png" alt="Alumbra" width={16} height={16} className="brightness-0 invert" />
-            </div>
+            <Image
+              src="https://i.postimg.cc/QCys4Rbt/favicon-light.png"
+              alt="Alumbra"
+              width={32}
+              height={32}
+              className="w-8 h-8 object-contain"
+            />
             <span className="font-black text-lg">Alumbra</span>
           </Link>
         </div>

@@ -114,14 +114,14 @@ export default function SettingsPage() {
           <CardDescription className="text-sm">Protege el acceso a tu cuenta.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-purple-50/60 border border-purple-100/60">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between gap-3 p-4 rounded-2xl bg-purple-50/60 border border-purple-100/60">
+            <div className="flex items-center gap-3 min-w-0">
               <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm flex-shrink-0">
                 <KeyRound className="w-4 h-4 text-primary" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-sm font-bold text-gray-900">Contraseña</p>
-                <p className="text-xs text-gray-400">Te enviaremos un enlace para cambiarla por correo.</p>
+                <p className="text-xs text-gray-400">Te enviaremos un enlace por correo.</p>
               </div>
             </div>
             <Button

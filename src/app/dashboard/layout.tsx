@@ -69,9 +69,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <SidebarHeader className="border-b border-white/8">
           <div className="flex h-16 items-center justify-between px-4 group-data-[collapsible=icon]:justify-center">
             <Link href="/" className="flex items-center gap-2.5 group-data-[collapsible=icon]:hidden">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-violet-400 flex items-center justify-center shadow-md">
-                <Image src="https://i.postimg.cc/QCys4Rbt/favicon-light.png" alt="Alumbra" width={16} height={16} className="brightness-0 invert" />
-              </div>
+              <Image
+                src="https://i.postimg.cc/QCys4Rbt/favicon-light.png"
+                alt="Alumbra"
+                width={32}
+                height={32}
+                className="w-8 h-8 object-contain brightness-0 invert"
+              />
               <span className="font-black text-white text-lg">Alumbra</span>
             </Link>
             <SidebarTrigger className="text-white/60 hover:text-white hover:bg-white/10 rounded-lg" />
@@ -152,7 +156,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* ── Main content ────────────────────────────────────────── */}
       <SidebarInset className="bg-gradient-to-br from-purple-50/40 via-white to-white">
-        <main className="flex-1 p-5 sm:p-7 lg:p-9">
+        {/* Barra superior móvil — abre el sidebar */}
+        <header className="md:hidden sticky top-0 z-30 flex items-center justify-between h-14 px-4 bg-white/85 backdrop-blur-xl border-b border-purple-100/60">
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="https://i.postimg.cc/QCys4Rbt/favicon-light.png"
+              alt="Alumbra"
+              width={28}
+              height={28}
+              className="w-7 h-7 object-contain"
+            />
+            <span className="font-black text-base text-gray-900">Alumbra</span>
+          </Link>
+          <SidebarTrigger className="h-9 w-9 rounded-full text-gray-600 hover:bg-purple-50 hover:text-primary border border-gray-200/60" />
+        </header>
+
+        <main className="flex-1 p-4 sm:p-6 lg:p-9">
           {children}
         </main>
       </SidebarInset>
