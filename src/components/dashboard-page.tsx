@@ -24,6 +24,7 @@ import { useState, useTransition, useMemo } from "react";
 import { collection, query, orderBy, doc } from "firebase/firestore";
 import { useCollection, useMemoFirebase, useDoc } from "@/firebase";
 import { incrementUsage } from "@/firebase/firestore/usage";
+import { isHighRisk, sendRiskAlert } from "@/lib/alerts";
 import { PLAN_LIMITS, PLAN_NAMES, currentMonthKey, type PlanId } from "@/lib/plans";
 import { Textarea } from "./ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
@@ -64,7 +65,14 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
     () => (user && firestore ? doc(firestore, 'users', user.uid) : null),
     [user, firestore]
   );
-  const { data: account } = useDoc<{ plan?: PlanId; planEnds?: string; usageMonth?: string; usageCount?: number }>(userDocRef);
+  const { data: account } = useDoc<{
+    plan?: PlanId;
+    planEnds?: string;
+    usageMonth?: string;
+    usageCount?: number;
+    trustedContact?: { name?: string; email?: string } | null;
+    autoAlertEnabled?: boolean;
+  }>(userDocRef);
 
   // Plan efectivo: si la suscripción de pago venció, vuelve a 'gratis'
   const storedPlan: PlanId = account?.plan ?? 'gratis';
@@ -138,6 +146,41 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
         if (user && firestore && !isUnlimited) {
           incrementUsage(firestore, user.uid).catch(() => {});
         }
+        // Alerta automática al contacto de confianza si el riesgo es alto/muy alto
+        maybeSendRiskAlert(data);
+      }
+    });
+  };
+
+  const maybeSendRiskAlert = (data: AnalysisResult) => {
+    const contactEmail = account?.trustedContact?.email?.trim();
+    if (!contactEmail) return;
+    if (account?.autoAlertEnabled === false) return;
+    if (!isHighRisk(data.score.risk_level)) return;
+
+    sendRiskAlert({
+      to: contactEmail,
+      contactName: account?.trustedContact?.name?.trim() || '',
+      userName: user?.displayName?.trim() || user?.email || '',
+      result: data,
+    }).then((outcome) => {
+      if (outcome === 'sent') {
+        toast({
+          title: 'Alerta enviada',
+          description: `Avisamos a tu contacto de confianza (${contactEmail}) por el nivel de riesgo detectado.`,
+        });
+      } else if (outcome === 'not_configured') {
+        toast({
+          variant: 'destructive',
+          title: 'Alertas no disponibles',
+          description: 'El envío de correos aún no está configurado. Revisa las variables de Resend en el servidor.',
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'No se pudo enviar la alerta',
+          description: 'Detectamos riesgo alto, pero el correo al contacto falló. Inténtalo desde Configuración.',
+        });
       }
     });
   };

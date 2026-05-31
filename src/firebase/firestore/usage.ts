@@ -3,6 +3,11 @@
 import { Firestore, doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { currentMonthKey, type PlanId } from '@/lib/plans';
 
+export interface TrustedContact {
+  name: string;
+  email: string;
+}
+
 export interface UserAccount {
   /** Plan efectivo (ya considerando si la suscripción venció) */
   plan: PlanId;
@@ -84,6 +89,28 @@ export async function setUserPlan(
       planEnds: ends,
       cancelAtPeriodEnd: false,
       planStartedAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    },
+    { merge: true }
+  );
+}
+
+/**
+ * Guarda (o limpia) el contacto de confianza y la preferencia de alerta
+ * automática del usuario. Pasar `contact = null` borra el contacto.
+ */
+export async function setTrustedContact(
+  db: Firestore,
+  uid: string,
+  contact: TrustedContact | null,
+  autoAlertEnabled: boolean
+): Promise<void> {
+  const ref = doc(db, 'users', uid);
+  await setDoc(
+    ref,
+    {
+      trustedContact: contact && contact.email ? { name: contact.name || '', email: contact.email } : null,
+      autoAlertEnabled,
       updatedAt: serverTimestamp(),
     },
     { merge: true }

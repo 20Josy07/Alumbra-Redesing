@@ -3,9 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { sendPasswordResetEmail, deleteUser } from 'firebase/auth';
-import { useUser, useAuth } from '@/firebase';
+import { doc } from 'firebase/firestore';
+import { useUser, useAuth, useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import { setTrustedContact } from '@/firebase/firestore/usage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import {
@@ -13,22 +16,50 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Settings, KeyRound, Bell, Save, Trash2, Loader, ShieldCheck, LogOut } from 'lucide-react';
+import { Settings, KeyRound, Bell, Save, Trash2, Loader, ShieldCheck, LogOut, HeartHandshake, Check } from 'lucide-react';
 
 const PREFS_KEY = 'alumbra:prefs';
 
 type Prefs = { autoSave: boolean; emailNotifications: boolean };
 const defaultPrefs: Prefs = { autoSave: false, emailNotifications: true };
 
+interface AccountDoc {
+  trustedContact?: { name?: string; email?: string } | null;
+  autoAlertEnabled?: boolean;
+}
+
 export default function SettingsPage() {
   const { user } = useUser();
   const auth = useAuth();
+  const firestore = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
 
   const [prefs, setPrefs] = useState<Prefs>(defaultPrefs);
   const [sendingReset, setSendingReset] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  // Contacto de confianza (alertas de riesgo alto)
+  const userDocRef = useMemoFirebase(
+    () => (user && firestore ? doc(firestore, 'users', user.uid) : null),
+    [user, firestore]
+  );
+  const { data: account } = useDoc<AccountDoc>(userDocRef);
+
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [autoAlert, setAutoAlert] = useState(true);
+  const [savingContact, setSavingContact] = useState(false);
+  const [contactLoaded, setContactLoaded] = useState(false);
+
+  // Carga inicial del contacto desde Firestore (solo la primera vez)
+  useEffect(() => {
+    if (!account || contactLoaded) return;
+    setContactName(account.trustedContact?.name ?? '');
+    setContactEmail(account.trustedContact?.email ?? '');
+    setAutoAlert(account.autoAlertEnabled ?? true);
+    setContactLoaded(true);
+  }, [account, contactLoaded]);
 
   // Cargar preferencias desde localStorage
   useEffect(() => {
@@ -37,6 +68,33 @@ export default function SettingsPage() {
       if (saved) setPrefs({ ...defaultPrefs, ...JSON.parse(saved) });
     } catch { /* noop */ }
   }, []);
+
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail.trim());
+
+  const handleSaveContact = async () => {
+    if (!user || !firestore) return;
+    if (contactEmail.trim() && !emailValid) {
+      toast({ variant: 'destructive', title: 'Correo no válido', description: 'Revisa el correo del contacto de confianza.' });
+      return;
+    }
+    setSavingContact(true);
+    try {
+      const contact = contactEmail.trim()
+        ? { name: contactName.trim(), email: contactEmail.trim() }
+        : null;
+      await setTrustedContact(firestore, user.uid, contact, autoAlert);
+      toast({
+        title: contact ? 'Contacto guardado' : 'Contacto eliminado',
+        description: contact
+          ? 'Avisaremos a esta persona si detectamos un riesgo alto.'
+          : 'Ya no enviaremos alertas automáticas.',
+      });
+    } catch {
+      toast({ variant: 'destructive', title: 'Error', description: 'No se pudo guardar el contacto. Inténtalo de nuevo.' });
+    } finally {
+      setSavingContact(false);
+    }
+  };
 
   const updatePref = (key: keyof Prefs, value: boolean) => {
     const next = { ...prefs, [key]: value };
@@ -131,6 +189,72 @@ export default function SettingsPage() {
               className="rounded-xl border-purple-200 text-primary hover:bg-purple-50 font-semibold flex-shrink-0"
             >
               {sendingReset ? <Loader className="w-4 h-4 animate-spin" /> : 'Cambiar'}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Contacto de confianza */}
+      <Card className="rounded-3xl border border-purple-100/60 shadow-sm overflow-hidden animate-blur-reveal" style={{ animationDelay: '110ms' }}>
+        <div className="h-1 bg-gradient-to-r from-rose-400 via-pink-400 to-fuchsia-400" />
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base font-black">
+            <HeartHandshake className="w-4 h-4 text-primary" /> Contacto de confianza
+          </CardTitle>
+          <CardDescription className="text-sm">
+            Si un análisis detecta un nivel de riesgo <span className="font-semibold text-rose-600">alto</span> o{' '}
+            <span className="font-semibold text-red-600">muy alto</span>, avisaremos por correo a esta persona.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="contactName" className="text-sm font-semibold text-gray-700">Nombre (opcional)</Label>
+              <Input
+                id="contactName"
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                placeholder="Ej. María, mi hermana"
+                className="h-11 rounded-xl border-gray-200 focus:border-primary"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="contactEmail" className="text-sm font-semibold text-gray-700">Correo del contacto</Label>
+              <Input
+                id="contactEmail"
+                type="email"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                placeholder="contacto@email.com"
+                className="h-11 rounded-xl border-gray-200 focus:border-primary"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-purple-50/60 border border-purple-100/60">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm flex-shrink-0">
+                <ShieldCheck className="w-4 h-4 text-primary" />
+              </div>
+              <div className="min-w-0">
+                <Label className="text-sm font-bold text-gray-900 cursor-pointer">Enviar alerta automáticamente</Label>
+                <p className="text-xs text-gray-400">Cuando se detecte riesgo alto o muy alto, sin que tengas que confirmar.</p>
+              </div>
+            </div>
+            <Switch checked={autoAlert} onCheckedChange={setAutoAlert} />
+          </div>
+
+          <p className="text-xs text-gray-400 leading-relaxed">
+            Solo se enviará un correo de aviso (sin el contenido de la conversación). Deja el correo en blanco y guarda para desactivar las alertas.
+          </p>
+
+          <div className="flex justify-end">
+            <Button
+              onClick={handleSaveContact}
+              disabled={savingContact}
+              className="h-11 px-6 rounded-xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 font-bold shadow-md"
+            >
+              {savingContact ? <><Loader className="w-4 h-4 mr-2 animate-spin" /> Guardando…</> : <><Check className="w-4 h-4 mr-2" /> Guardar contacto</>}
             </Button>
           </div>
         </CardContent>

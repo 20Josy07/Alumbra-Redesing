@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/firebase";
-import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult } from "firebase/auth";
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult, sendPasswordResetEmail } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 
@@ -88,6 +88,37 @@ export default function LoginPage() {
       })
       .catch(() => {});
   }, [auth, router, toast]);
+
+  const handlePasswordReset = async () => {
+    if (!auth) return;
+    const target = email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(target)) {
+      toast({
+        variant: "destructive",
+        title: "Escribe tu correo",
+        description: "Introduce tu correo en el campo de arriba y vuelve a pulsar el enlace.",
+      });
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, target);
+      toast({
+        title: "Correo enviado",
+        description: `Te enviamos un enlace a ${target} para restablecer tu contraseña. Revisa también la carpeta de spam.`,
+      });
+    } catch (error: unknown) {
+      const code = getAuthErrorCode(error);
+      // Por seguridad no revelamos si el correo existe o no
+      if (code === 'auth/invalid-email') {
+        toast({ variant: "destructive", title: "Correo no válido", description: "Revisa el correo introducido." });
+      } else {
+        toast({
+          title: "Correo enviado",
+          description: `Si existe una cuenta con ${target}, recibirás un enlace para restablecer tu contraseña.`,
+        });
+      }
+    }
+  };
 
   const handleGoogleSignIn = async () => {
     if (!auth) return;
@@ -238,7 +269,13 @@ export default function LoginPage() {
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password" className="text-sm font-semibold text-gray-700">Contraseña</Label>
-                  <Link href="#" className="text-xs text-primary hover:underline font-medium">¿Olvidaste tu contraseña?</Link>
+                  <button
+                    type="button"
+                    onClick={handlePasswordReset}
+                    className="text-xs text-primary hover:underline font-medium"
+                  >
+                    ¿Olvidaste tu contraseña?
+                  </button>
                 </div>
                 <div className="relative">
                   <Input
