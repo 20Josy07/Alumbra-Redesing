@@ -1,90 +1,67 @@
+<div align="center">
+
+<img src="public/alumbra-logo.png" alt="Alumbra" width="120" />
+
 # Alumbra
 
-Aplicacion web con Next.js y Firebase para analizar conversaciones e identificar patrones de abuso emocional.
+### Luz para conversaciones que duelen
 
-## Requisitos
+*A veces lo que más confunde no es lo que pasó, sino no saber ponerle nombre.*
+**Alumbra te ayuda a verlo con claridad.**
 
-- Node.js 20+
-- npm 10+
+</div>
 
-## Configuracion local
+---
 
-1. Instala dependencias:
+## ¿Qué es Alumbra?
 
-```bash
-npm install
-```
+Alumbra es un espacio seguro donde puedes pegar una conversación y entender, sin juicios,
+si hay señales de **abuso emocional, manipulación o maltrato**.
 
-2. Crea tu archivo `.env.local` con base en `.env.example`.
+No te dice qué sentir. Te acompaña a poner en palabras eso que llevas tiempo intuyendo,
+y te muestra con calma qué está pasando y qué puedes hacer.
 
-3. Levanta el proyecto:
+> Pensado para quien tiene una duda en el pecho y nadie a quien preguntar de madrugada.
 
-```bash
-npm run dev
-```
+---
 
-La app inicia por defecto en `http://localhost:9002`.
+## ¿Cómo te ayuda?
 
-## Variables de entorno
+🔍 **Te muestra lo que cuesta ver**
+Detecta patrones de manipulación, control, culpa y otras señales difíciles de reconocer cuando estás dentro de la situación.
 
-- `ANALYSIS_API_URL`: endpoint del servicio de analisis IA.
-- `RESEND_API_KEY`: API key de Resend para enviar las alertas por correo.
-- `ALERT_EMAIL_FROM`: remitente de las alertas, p. ej. `"Alumbra <alertas@tudominio.com>"`. El dominio debe estar verificado en Resend.
-- `ALERT_REPLY_TO`: (opcional) correo de respuesta.
+🌡️ **Te da un nivel de claridad, no una sentencia**
+Traduce la conversación en un nivel de riesgo fácil de entender, para que sepas en qué punto estás.
 
-## Alertas por correo en riesgo alto
+🤝 **Te sugiere pasos concretos**
+Ideas prácticas y cuidadosas sobre qué hacer a continuación, a tu ritmo.
 
-Cuando un análisis arroja un nivel de riesgo **alto** o **muy alto**, Alumbra puede
-enviar un correo de aviso a un **contacto de confianza** (sin incluir el texto de la
-conversación, solo el nivel de riesgo y las señales detectadas).
+🔔 **Avisa a quien tú elijas**
+Si la situación es delicada, puede notificar a un **contacto de confianza** que tú definas, sin compartir nunca el contenido de tu conversación.
 
-1. El usuario registra el contacto en **Dashboard → Configuración → Contacto de confianza**
-   y activa "Enviar alerta automáticamente".
-2. El servidor manda el correo con [Resend](https://resend.com) (capa gratuita: 3.000/mes).
-3. Define `RESEND_API_KEY` y `ALERT_EMAIL_FROM` en `.env.local`. Sin estas variables la
-   función queda inactiva y la UI lo indica.
+🔒 **Tu privacidad, primero**
+Lo que escribes es tuyo. Alumbra está diseñada para protegerte, no para exponerte.
 
-## Entregabilidad: que los correos no caigan en spam
+---
 
-La causa #1 de que un correo acabe en spam es un dominio sin autenticar. Para evitarlo:
+## ¿Para quién es?
 
-### A) Correos de alerta (Resend)
+- Para quien siente que algo no está bien, pero no sabe cómo nombrarlo.
+- Para quien quiere una segunda mirada, tranquila y sin prejuicios.
+- Para quien acompaña a otra persona y busca entender mejor cómo ayudar.
 
-1. En Resend → **Domains**, añade tu dominio (ej. `tudominio.com`).
-2. Copia los registros DNS que te da Resend y créalos en tu proveedor de dominio:
-   - **SPF** (TXT): autoriza a Resend a enviar en tu nombre.
-   - **DKIM** (CNAME/TXT): firma criptográfica de cada correo.
-   - **DMARC** (TXT en `_dmarc.tudominio.com`), por ejemplo:
-     `v=DMARC1; p=quarantine; rua=mailto:dmarc@tudominio.com`
-3. Espera a que Resend marque el dominio como **Verified** y usa ese dominio en
-   `ALERT_EMAIL_FROM`. Usa siempre un remitente con nombre y un `reply-to` real.
+---
 
-### B) Correos de Firebase Auth (restablecer contraseña, verificación)
+## Tu seguridad
 
-Por defecto se envían desde el dominio de Firebase y suelen ir a spam. Para mejorarlo:
+Si tú o alguien que conoces está en peligro inmediato, **busca ayuda de emergencia local
+de inmediato**. Alumbra es una herramienta de orientación y acompañamiento; **no sustituye**
+a profesionales de salud mental, servicios sociales ni a las autoridades.
 
-1. **Firebase Console → Authentication → Templates → Plantillas de correo**.
-2. Edita la plantilla y, en "Personalizar dominio", configura un **dominio remitente
-   propio** (ej. `noreply@tudominio.com`).
-3. Firebase te dará registros **TXT/CNAME (SPF y DKIM)** para añadir en tu DNS.
-4. Una vez verificado, los correos de restablecimiento saldrán desde tu dominio
-   autenticado y dejarán de marcarse como spam.
-5. Recomendado: personaliza el asunto y el remitente para que el usuario reconozca a Alumbra.
+---
 
-## Scripts disponibles
+<div align="center">
 
-- `npm run dev`: servidor de desarrollo.
-- `npm run build`: build de produccion.
-- `npm run start`: servir build de produccion.
-- `npm run lint`: ejecutar ESLint con Next.js.
-- `npm run typecheck`: validacion de tipos TypeScript.
+**Alumbra** — porque entender lo que vives es el primer paso para cuidarte. 💜
 
-## Recomendaciones de calidad antes de publicar
-
-Ejecuta siempre:
-
-```bash
-npm run typecheck
-npm run lint
-npm run build
-```
+</div>
