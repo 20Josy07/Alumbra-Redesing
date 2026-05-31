@@ -51,6 +51,8 @@ export async function POST(req: Request) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.ALERT_EMAIL_FROM;
   const replyTo = process.env.ALERT_REPLY_TO;
+  // Logo que se muestra en la cabecera del correo. Debe ser una URL pública.
+  const logoUrl = process.env.ALERT_LOGO_URL || 'https://i.postimg.cc/QCys4Rbt/favicon-light.png';
 
   if (!apiKey || !from) {
     // Aún no configurado: la UI lo interpreta como "no disponible".
@@ -94,8 +96,16 @@ export async function POST(req: Request) {
   <div style="max-width:560px;margin:0 auto;padding:24px;">
     <div style="background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(76,29,149,0.08);">
       <div style="background:linear-gradient(135deg,#6d28d9,#8b5cf6);padding:24px 28px;">
-        <p style="margin:0;color:#ffffff;font-size:18px;font-weight:800;">Alumbra</p>
-        <p style="margin:4px 0 0;color:#ede9fe;font-size:13px;">Aviso de seguridad</p>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td style="vertical-align:middle;padding-right:10px;">
+            <img src="${logoUrl}" width="32" height="32" alt="Alumbra"
+                 style="display:block;width:32px;height:32px;border:0;outline:none;" />
+          </td>
+          <td style="vertical-align:middle;">
+            <p style="margin:0;color:#ffffff;font-size:18px;font-weight:800;line-height:1.1;">Alumbra</p>
+            <p style="margin:2px 0 0;color:#ede9fe;font-size:13px;line-height:1.1;">Aviso de seguridad</p>
+          </td>
+        </tr></table>
       </div>
       <div style="padding:28px;">
         <p style="margin:0 0 16px;font-size:15px;">${escapeHtml(contactName)},</p>
