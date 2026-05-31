@@ -38,11 +38,16 @@ const LEXICON: Record<Category, string[]> = {
     'puta', 'puto', 'zorra', 'perra', 'maldita', 'maldito', 'imbecil',
     'estupida', 'estupido', 'idiota', 'inutil', 'basura', 'escoria',
     'mereces', 'no sirves', 'das asco', 'desgraciada', 'desgraciado',
+    'no vales nada', 'no vales para nada', 'eres una mierda', 'eres un cero',
+    'me das verguenza', 'eres patetica', 'eres patetico', 'estorbo',
+    'eres un fracaso', 'ojala te', 'pedazo de',
   ],
   insults: [
     'tonta', 'tonto', 'boba', 'bobo', 'pesada', 'pesado', 'fea', 'feo',
     'gorda', 'gordo', 'loca', 'loco', 'ridicula', 'ridiculo', 'fracasada',
     'fracasado', 'amargada', 'amargado', 'inmadura', 'inmaduro',
+    'no piensas', 'no sabes nada', 'que tonteria', 'eres lenta', 'eres lento',
+    'cállate', 'callate', 'das pena', 'eres una carga', 'no sirves para esto',
   ],
   control: [
     'no puedes', 'no vas a', 'te prohibo', 'prohibido', 'con quien estabas',
@@ -52,6 +57,10 @@ const LEXICON: Record<Category, string[]> = {
     'no te dejo', 'no vas a salir', 'enseñame tu telefono', 'ensename tu telefono',
     'borra ese', 'a que hora', 'reportame', 'reportate', 'no confio en ti',
     'siempre tienes que', 'me perteneces', 'eres mia', 'eres mio',
+    'no te vistas asi', 'que ropa', 'no veas a tus amigas', 'no veas a tus amigos',
+    'aleja de tu familia', 'no hables con', 'pasame tu ubicacion', 'mandame ubicacion',
+    'donde estas ahora', 'con quien estas', 'no me cuelgues', 'contesta ya',
+    'tienes que avisarme', 'no salgas sin', 'yo decido', 'haras lo que yo diga',
   ],
   gaslighting: [
     'estas loca', 'estas loco', 'eso nunca paso', 'nunca paso',
@@ -61,6 +70,10 @@ const LEXICON: Record<Category, string[]> = {
     'yo nunca dije eso', 'nunca dije eso', 'te lo estas inventando',
     'eres muy sensible', 'todo te afecta', 'siempre te victimizas',
     'estas confundida', 'estas confundido', 'no fue para tanto',
+    'estas paranoica', 'estas paranoico', 'te lo tomas todo mal',
+    'siempre malinterpretas', 'es tu culpa', 'tu me obligaste', 'me hiciste enojar',
+    'por tu culpa', 'todo lo malo es por ti', 'estas inventando cosas',
+    'estas imaginando cosas', 'tienes problemas mentales',
   ],
   threats: [
     'te vas a arrepentir', 'te arrepentiras', 'si me dejas', 'si me dejas te',
@@ -68,6 +81,9 @@ const LEXICON: Record<Category, string[]> = {
     'ya veras', 'te voy a hacer', 'te puede pasar algo', 'cuidate',
     'no sabes de lo que soy capaz', 'lo vas a lamentar', 'te quedaras sin nada',
     'nadie te va a querer', 'no vas a poder sin mi', 'me las pagaras',
+    'si te vas', 'te quitare', 'no volveras a ver', 'voy a contar tus',
+    'voy a publicar', 'voy a decir a todos', 'si hablas', 'si me denuncias',
+    'te voy a buscar', 'se donde vives', 'no tienes a donde ir', 'te destruire',
   ],
 };
 

@@ -105,7 +105,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Seguridad */}
-      <Card className="rounded-3xl border border-purple-100/60 shadow-sm overflow-hidden animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-100">
+      <Card className="rounded-3xl border border-purple-100/60 shadow-sm overflow-hidden animate-blur-reveal" style={{ animationDelay: '60ms' }}>
         <div className="h-1 bg-gradient-to-r from-primary via-violet-400 to-purple-300" />
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base font-black">
@@ -137,7 +137,7 @@ export default function SettingsPage() {
       </Card>
 
       {/* Preferencias */}
-      <Card className="rounded-3xl border border-purple-100/60 shadow-sm overflow-hidden animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-150">
+      <Card className="rounded-3xl border border-purple-100/60 shadow-sm overflow-hidden animate-blur-reveal" style={{ animationDelay: '140ms' }}>
         <div className="h-1 bg-gradient-to-r from-violet-400 to-fuchsia-400" />
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base font-black">
@@ -167,7 +167,7 @@ export default function SettingsPage() {
       </Card>
 
       {/* Zona de peligro */}
-      <Card className="rounded-3xl border border-red-200/70 shadow-sm overflow-hidden animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-200">
+      <Card className="rounded-3xl border border-red-200/70 shadow-sm overflow-hidden animate-blur-reveal" style={{ animationDelay: '220ms' }}>
         <div className="h-1 bg-gradient-to-r from-red-400 to-orange-400" />
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base font-black text-red-600">

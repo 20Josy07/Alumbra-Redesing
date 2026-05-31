@@ -61,9 +61,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* ── Sidebar ─────────────────────────────────────────────── */}
       <Sidebar
         side="left"
+        variant="floating"
         collapsible="icon"
         className="border-r-0"
-        style={{ background: 'linear-gradient(175deg, hsl(262 40% 7%) 0%, hsl(275 35% 11%) 100%)' }}
+        style={{ background: 'linear-gradient(175deg, hsl(262 42% 8% / 0.92) 0%, hsl(275 38% 13% / 0.92) 100%)' }}
       >
         {/* Header */}
         <SidebarHeader className="border-b border-white/8">

@@ -111,6 +111,7 @@ const Sidebar = React.forwardRef<
       variant = "sidebar",
       collapsible = "offcanvas",
       className,
+      style,
       children,
       ...props
     },
@@ -143,7 +144,7 @@ const Sidebar = React.forwardRef<
             style={
               {
                 "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
-                ...(props.style as React.CSSProperties),
+                ...(style as React.CSSProperties),
               } as React.CSSProperties
             }
             side={side}
@@ -188,7 +189,8 @@ const Sidebar = React.forwardRef<
         >
           <div
             data-sidebar="sidebar"
-            className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-border group-data-[variant=floating]:shadow"
+            style={style}
+            className="flex h-full w-full flex-col bg-sidebar backdrop-blur-xl group-data-[variant=floating]:rounded-[28px] group-data-[variant=floating]:border group-data-[variant=floating]:border-white/10 group-data-[variant=floating]:shadow-2xl group-data-[variant=floating]:overflow-hidden"
           >
             {children}
           </div>

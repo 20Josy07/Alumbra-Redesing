@@ -4,15 +4,17 @@ import { useUser, useFirestore } from "@/firebase";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import {
   FileText, Clock, Sparkles, AlertCircle, BrainCircuit,
-  Loader, Lock, ShieldAlert, BarChart, MessageSquareQuote,
+  Loader, Lock, ShieldAlert,
   TrendingUp, ShieldCheck, Zap, ChevronRight, History as HistoryIcon,
-  Wand2, ArrowRight
+  Wand2, ArrowRight, Copy, Check
 } from "lucide-react";
 import Link from "next/link";
 import Resources from "./resources";
 import { type AnalysisResult, performAnalysis } from "@/app/actions";
 import { cn } from "@/lib/utils";
-import { buildAnalysisDetails, formatAnalysisDate, getRiskColorClass } from "@/lib/analysis";
+import { formatAnalysisDate } from "@/lib/analysis";
+import AnalysisReport, { buildReportSummary } from "./analysis-report";
+import { Reveal } from "./reveal";
 import { Button } from "./ui/button";
 import { saveAnalysis } from "@/firebase/firestore/analyses";
 import { useToast } from "@/hooks/use-toast";
@@ -23,8 +25,15 @@ import { collection, query, orderBy } from "firebase/firestore";
 import { useCollection, useMemoFirebase } from "@/firebase";
 import { Textarea } from "./ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-import { Progress } from "./ui/progress";
 import { Badge } from "./ui/badge";
+
+const DETECTION_CATEGORIES = [
+  { label: 'Amenazas', dot: 'bg-red-500' },
+  { label: 'Insultos graves', dot: 'bg-rose-500' },
+  { label: 'Gaslighting', dot: 'bg-orange-500' },
+  { label: 'Control', dot: 'bg-amber-500' },
+  { label: 'Insultos', dot: 'bg-yellow-500' },
+];
 
 interface DashboardPageProps {
   pendingAnalysis: AnalysisResult | null;
@@ -39,6 +48,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [lastAnalyzedText, setLastAnalyzedText] = useState('');
+  const [copied, setCopied] = useState(false);
 
   const analysesQuery = useMemoFirebase(() => {
     if (!user || !firestore) return null;
@@ -118,119 +128,54 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
     toast({ title: "Análisis descartado", description: "El análisis no ha sido guardado." });
   };
 
+  const handleCopySummary = (text: string) => {
+    navigator.clipboard?.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      toast({ title: 'Resumen copiado', description: 'El informe se copió al portapapeles.' });
+    });
+  };
+
   const renderPendingAnalysis = () => {
     if (!pendingAnalysis) return null;
-    const { rules, score, help, ai_suggestion } = pendingAnalysis;
-    const analysisDetails = buildAnalysisDetails(rules);
-    const riskColor = getRiskColorClass(score.risk_level);
-
-    const riskBgMap: Record<string, string> = {
-      bajo: 'bg-green-50 border-green-200',
-      medio: 'bg-amber-50 border-amber-200',
-      alto: 'bg-red-50 border-red-200',
-    };
-    const riskBg = riskBgMap[score.risk_level?.toLowerCase()] || 'bg-purple-50 border-purple-200';
 
     return (
-      <div className="space-y-5 animate-in fade-in-0 duration-500">
+      <div className="space-y-5 animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center shadow-md">
-            <BrainCircuit className="w-5 h-5 text-white" />
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center shadow-md">
+              <BrainCircuit className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl font-black text-gray-900">Informe de Análisis</h2>
+              <p className="text-xs text-gray-400">Resultados completos de la conversación</p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-xl font-black text-gray-900">Resultados del Análisis</h2>
-            <p className="text-xs text-gray-400">Aquí está el análisis completo del texto proporcionado</p>
-          </div>
+          <button
+            onClick={() => handleCopySummary(buildReportSummary(pendingAnalysis))}
+            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-primary border border-gray-200 hover:border-purple-200 rounded-full px-3 py-1.5 transition-colors"
+          >
+            {copied ? <><Check className="w-3.5 h-3.5 text-green-500" /> Copiado</> : <><Copy className="w-3.5 h-3.5" /> Copiar</>}
+          </button>
         </div>
 
-        {/* Risk Score */}
-        <Card className={cn("border-2 rounded-3xl overflow-hidden shadow-sm", riskBg)}>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <ShieldAlert className={cn("w-6 h-6", riskColor)} />
-                <div>
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Nivel de Riesgo</p>
-                  <p className={cn("text-2xl font-black capitalize", riskColor)}>{score.risk_level}</p>
-                </div>
-              </div>
-              <div className={cn("text-4xl font-black", riskColor)}>{score.score_percent}%</div>
-            </div>
-            <Progress value={score.score_percent} className="h-2.5 rounded-full mb-3" />
-            <p className="text-sm text-gray-600">{score.message}</p>
-          </CardContent>
-        </Card>
-
-        {/* Detected Patterns */}
-        {analysisDetails.length > 0 && (
-          <Card className="rounded-3xl border border-purple-100 shadow-sm">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-base font-bold">
-                <BarChart className="w-5 h-5 text-primary" />
-                Patrones Detectados
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {analysisDetails.map(detail => (
-                  <li key={detail.label} className="p-3.5 bg-purple-50/80 rounded-2xl border border-purple-100/60">
-                    <p className="text-xs font-semibold text-gray-500 mb-1">{detail.label}</p>
-                    <p className="text-2xl font-black text-gradient">{detail.count}</p>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* AI Suggestion */}
-        <Card className="rounded-3xl border border-purple-100 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-base font-bold">
-              <Sparkles className="w-5 h-5 text-primary" />
-              Sugerencia de la IA
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-gray-600 leading-relaxed">{ai_suggestion}</p>
-          </CardContent>
-        </Card>
-
-        {/* Help Alert */}
-        <Alert className="bg-red-50 border-red-200 rounded-2xl">
-          <AlertCircle className="h-4 w-4 text-red-500" />
-          <AlertTitle className="text-red-800 font-bold text-sm">{help.title}</AlertTitle>
-          <AlertDescription className="text-red-600 text-xs leading-relaxed">{help.message}</AlertDescription>
-        </Alert>
-
-        {/* Original Text */}
-        <Card className="rounded-3xl border border-gray-100 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-base font-bold">
-              <MessageSquareQuote className="w-5 h-5 text-gray-400" />
-              Texto Original Analizado
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <blockquote className="border-l-4 border-primary/20 pl-4 py-2 bg-purple-50/60 rounded-r-xl max-h-36 overflow-y-auto">
-              <p className="text-sm text-gray-500 italic leading-relaxed">{lastAnalyzedText}</p>
-            </blockquote>
-          </CardContent>
-        </Card>
+        {/* Informe (componente compartido) */}
+        <AnalysisReport result={pendingAnalysis} originalText={lastAnalyzedText} />
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3 pt-1">
           <Button
             onClick={handleSaveAnalysis}
-            className="flex-1 h-11 rounded-2xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 font-bold shadow-md"
+            className="flex-1 h-12 rounded-2xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 font-bold shadow-md"
           >
+            <Check className="w-4 h-4 mr-2" />
             Guardar en Historial
           </Button>
           <Button
             onClick={handleDiscardAnalysis}
             variant="outline"
-            className="flex-1 h-11 rounded-2xl border-gray-200 hover:border-red-200 hover:text-red-500 hover:bg-red-50 font-semibold"
+            className="flex-1 h-12 rounded-2xl border-gray-200 hover:border-red-200 hover:text-red-500 hover:bg-red-50 font-semibold"
           >
             Descartar
           </Button>
@@ -314,28 +259,36 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
             {isPending ? (
               <span className="flex items-center gap-2">
                 <Loader className="h-4 w-4 animate-spin" />
-                Analizando con IA...
+                Analizando patrones…
               </span>
             ) : (
               <span className="flex items-center gap-2">
                 <Zap className="h-4 w-4" />
-                Analizar Texto
+                Analizar conversación
               </span>
             )}
           </Button>
           <div className="flex items-center gap-2 text-xs text-gray-400">
             <Lock className="w-3 h-3" />
-            Análisis 100% anónimo y seguro
+            Procesamiento privado · el texto no se almacena
           </div>
         </CardFooter>
       </Card>
 
-      {/* Quick tips card */}
+      {/* Qué detecta el analizador */}
       <Card className="rounded-3xl border border-purple-100/60 bg-gradient-to-br from-purple-50/60 to-white shadow-sm">
         <CardContent className="p-5">
-          <p className="text-xs font-bold text-primary uppercase tracking-wider mb-3">Consejo profesional</p>
-          <p className="text-sm text-gray-600 leading-relaxed">
-            Para mejores resultados, incluye conversaciones completas con contexto. La IA detecta mejor los patrones con al menos 3-4 intercambios entre los participantes.
+          <p className="text-xs font-bold text-primary uppercase tracking-wider mb-3">Qué detecta el motor</p>
+          <div className="flex flex-wrap gap-2">
+            {DETECTION_CATEGORIES.map(({ label, dot }) => (
+              <span key={label} className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-100 rounded-full px-3 py-1.5 shadow-sm">
+                <span className={cn("w-2 h-2 rounded-full", dot)} />
+                {label}
+              </span>
+            ))}
+          </div>
+          <p className="text-xs text-gray-400 leading-relaxed mt-4">
+            Incluye conversaciones completas con contexto para una detección más precisa. Los resultados son orientativos y complementan el criterio profesional.
           </p>
         </CardContent>
       </Card>
@@ -500,9 +453,9 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
       </div>
 
       {/* ── Resources ───────────────────────────────────────────── */}
-      <div className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-300">
+      <Reveal delay={80}>
         <Resources />
-      </div>
+      </Reveal>
     </div>
   );
 }
