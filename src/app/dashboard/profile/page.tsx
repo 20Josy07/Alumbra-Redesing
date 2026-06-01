@@ -1,8 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { updateProfile } from 'firebase/auth';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { firebaseApp } from '@/firebase/config';
 import { collection, query, orderBy, doc, type Timestamp } from 'firebase/firestore';
 import { useUser, useFirestore, useCollection, useDoc, useMemoFirebase } from '@/firebase';
 import { type AnalysisRecord } from '@/types';
@@ -17,7 +19,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Reveal } from '@/components/reveal';
 import {
   FileText, Calendar, Loader, Check, Mail, ShieldAlert,
-  TrendingUp, BadgeCheck, Pencil, Crown, Lock, CheckCircle2, ArrowRight,
+  TrendingUp, BadgeCheck, Pencil, Crown, Lock, CheckCircle2, ArrowRight, Upload,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -29,6 +31,8 @@ export default function ProfilePage() {
   const [displayName, setDisplayName] = useState('');
   const [photoURL, setPhotoURL] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (user) {
@@ -88,6 +92,37 @@ export default function ProfilePage() {
   const hasChanges =
     user && (displayName !== (user.displayName || '') || photoURL !== (user.photoURL || ''));
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // permite re-subir el mismo archivo
+    if (!file || !user) return;
+
+    if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) {
+      toast({ variant: 'destructive', title: 'Formato no válido', description: 'Usa una imagen JPG, PNG o WebP.' });
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      toast({ variant: 'destructive', title: 'Imagen muy pesada', description: 'El máximo es 2 MB.' });
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const storage = getStorage(firebaseApp);
+      const ext = file.type.split('/')[1];
+      const ref = storageRef(storage, `avatars/${user.uid}/avatar.${ext}`);
+      await uploadBytes(ref, file, { contentType: file.type });
+      const url = await getDownloadURL(ref);
+      setPhotoURL(url);
+      await updateProfile(user, { photoURL: url });
+      toast({ title: 'Foto actualizada', description: 'Tu nueva foto de perfil se guardó correctamente.' });
+    } catch {
+      toast({ variant: 'destructive', title: 'Error al subir', description: 'No se pudo subir la imagen. Revisa tu conexión e inténtalo de nuevo.' });
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSave = async () => {
     if (!user) return;
     setIsSaving(true);
@@ -132,32 +167,34 @@ export default function ProfilePage() {
 
           {/* Avatar + info */}
           <CardContent className="px-6 pb-6 pt-0">
-            <div className="flex flex-col sm:flex-row sm:items-end gap-4 -mt-12">
-              <Avatar className="h-24 w-24 ring-4 ring-white shadow-lg flex-shrink-0">
+            {/* Avatar superpuesto sobre el cover */}
+            <div className="-mt-12 mb-4">
+              <Avatar className="h-24 w-24 ring-4 ring-white shadow-lg">
                 <AvatarImage src={photoURL || ''} alt={displayName || 'Avatar'} />
                 <AvatarFallback className="bg-gradient-to-br from-primary to-violet-500 text-white text-3xl font-black">
                   {initial}
                 </AvatarFallback>
               </Avatar>
-
-              <div className="flex-1 min-w-0 sm:pb-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="text-xl font-black text-gray-900 truncate">{displayName || 'Sin nombre'}</h1>
-                  <Badge className="bg-primary/10 text-primary border-0 text-[11px] font-bold gap-1">
-                    <BadgeCheck className="w-3 h-3" />
-                    Plan {PLAN_NAMES[plan]}
-                  </Badge>
-                </div>
-                <p className="text-sm text-gray-400 flex items-center gap-1.5 mt-1">
-                  <Mail className="w-3.5 h-3.5" />
-                  {user?.email}
-                </p>
-                <p className="text-xs text-gray-400 flex items-center gap-1.5 mt-0.5">
-                  <Calendar className="w-3.5 h-3.5" />
-                  Miembro desde {memberSince}
-                </p>
-              </div>
             </div>
+
+            {/* Info (sobre fondo blanco) */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-2xl font-black text-gray-900">
+                {displayName || 'Completa tu nombre'}
+              </h1>
+              <Badge className="bg-primary/10 text-primary border-0 text-[11px] font-bold gap-1">
+                <BadgeCheck className="w-3 h-3" />
+                Plan {PLAN_NAMES[plan]}
+              </Badge>
+            </div>
+            <p className="text-sm text-gray-500 flex items-center gap-1.5 mt-1.5">
+              <Mail className="w-3.5 h-3.5 text-gray-400" />
+              {user?.email}
+            </p>
+            <p className="text-xs text-gray-400 flex items-center gap-1.5 mt-1">
+              <Calendar className="w-3.5 h-3.5" />
+              Miembro desde {memberSince}
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -244,17 +281,47 @@ export default function ProfilePage() {
               />
             </div>
 
-            {/* Photo URL */}
+            {/* Foto de perfil — subir archivo */}
             <div className="space-y-1.5">
-              <Label htmlFor="photo" className="text-sm font-semibold text-gray-700">URL de foto de perfil</Label>
-              <Input
-                id="photo"
-                value={photoURL}
-                onChange={(e) => setPhotoURL(e.target.value)}
-                placeholder="https://…"
-                className="h-11 rounded-xl border-gray-200 focus:border-primary"
-              />
-              <p className="text-xs text-gray-400">Pega el enlace de una imagen para usarla como avatar.</p>
+              <Label className="text-sm font-semibold text-gray-700">Foto de perfil</Label>
+              <div className="flex items-center gap-4">
+                <Avatar className="h-16 w-16 ring-2 ring-purple-100 flex-shrink-0">
+                  <AvatarImage src={photoURL || ''} alt="Foto" />
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-violet-500 text-white text-lg font-black">
+                    {initial}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-wrap gap-2">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp"
+                    className="hidden"
+                    onChange={handleFileUpload}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                    className="rounded-xl border-purple-200 text-primary hover:bg-purple-50 font-semibold"
+                  >
+                    {uploading ? <><Loader className="w-4 h-4 mr-2 animate-spin" /> Subiendo…</> : <><Upload className="w-4 h-4 mr-2" /> Subir foto</>}
+                  </Button>
+                  {photoURL && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setPhotoURL('')}
+                      disabled={uploading}
+                      className="rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 font-medium"
+                    >
+                      Quitar
+                    </Button>
+                  )}
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">JPG, PNG o WebP · máximo 2 MB.</p>
             </div>
 
             {/* Email read-only */}

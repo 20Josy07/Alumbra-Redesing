@@ -196,8 +196,8 @@ export default function BillingPage() {
                   <span className="text-2xl font-black text-gray-900">{PLAN_NAMES[currentPlan]}</span>
                   {isPaid && (
                     cancelScheduled
-                      ? <Badge className="bg-amber-100 text-amber-700 border-amber-200 font-bold text-[11px]">Cancelada</Badge>
-                      : <Badge className="bg-green-100 text-green-700 border-green-200 font-bold text-[11px]">Activa</Badge>
+                      ? <Badge className="bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-100 font-bold text-[11px]">Cancelada</Badge>
+                      : <Badge className="bg-green-100 text-green-700 border-green-200 hover:bg-green-100 font-bold text-[11px]">Activa</Badge>
                   )}
                 </div>
                 <p className="text-2xl font-black text-gradient mt-1">{meta.price}{isPaid && <span className="text-sm text-gray-400 font-medium"> /mes</span>}</p>
@@ -346,7 +346,7 @@ export default function BillingPage() {
                   <p className="text-sm font-bold text-gray-900">{account.paymentMethod.label}</p>
                   <p className="text-xs text-gray-400">Usado en tu último pago con Wompi</p>
                 </div>
-                <Badge className="bg-green-100 text-green-700 border-green-200 font-bold text-[11px]">
+                <Badge className="bg-green-100 text-green-700 border-green-200 hover:bg-green-100 font-bold text-[11px]">
                   <CheckCircle2 className="w-3 h-3 mr-1" /> Activo
                 </Badge>
               </div>
