@@ -3,10 +3,9 @@
 import Link from 'next/link';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { updateProfile } from 'firebase/auth';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { firebaseApp } from '@/firebase/config';
 import { collection, query, orderBy, doc, type Timestamp } from 'firebase/firestore';
 import { useUser, useFirestore, useCollection, useDoc, useMemoFirebase } from '@/firebase';
+import { setAvatar } from '@/firebase/firestore/usage';
 import { type AnalysisRecord } from '@/types';
 import { PLAN_NAMES, PLAN_LIMITS, planCaps, type PlanId } from '@/lib/plans';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,22 +22,44 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+/** Comprime y recorta (cuadrado) una imagen a 256px y la devuelve como data URL JPEG. */
+function compressImage(file: File, size = 256, quality = 0.82): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('read_error'));
+    reader.onload = () => {
+      const img = new window.Image();
+      img.onerror = () => reject(new Error('image_error'));
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return reject(new Error('canvas_error'));
+        const min = Math.min(img.width, img.height);
+        const sx = (img.width - min) / 2;
+        const sy = (img.height - min) / 2;
+        ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function ProfilePage() {
   const { user } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
 
   const [displayName, setDisplayName] = useState('');
-  const [photoURL, setPhotoURL] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (user) {
-      setDisplayName(user.displayName || '');
-      setPhotoURL(user.photoURL || '');
-    }
+    if (user) setDisplayName(user.displayName || '');
   }, [user]);
 
   const analysesQuery = useMemoFirebase(() => {
@@ -53,12 +74,15 @@ export default function ProfilePage() {
     () => (user && firestore ? doc(firestore, 'users', user.uid) : null),
     [user, firestore]
   );
-  const { data: account } = useDoc<{ plan?: PlanId; planEnds?: string }>(userDocRef);
+  const { data: account } = useDoc<{ plan?: PlanId; planEnds?: string; avatarDataUrl?: string | null }>(userDocRef);
   const storedPlan: PlanId = account?.plan ?? 'gratis';
   const subActive = storedPlan === 'gratis' || (!!account?.planEnds && new Date(account.planEnds).getTime() > Date.now());
   const plan: PlanId = subActive ? storedPlan : 'gratis';
   const caps = planCaps(plan);
   const planLimit = PLAN_LIMITS[plan];
+
+  // Foto efectiva: la subida a Firestore (base64) tiene prioridad sobre la de Auth
+  const avatarSrc = account?.avatarDataUrl || user?.photoURL || '';
 
   const benefits = [
     { label: planLimit === Infinity ? 'Análisis ilimitados' : `${planLimit} análisis al mes`, on: true },
@@ -89,35 +113,30 @@ export default function ProfilePage() {
     ? new Date(user.metadata.creationTime).toLocaleDateString('es-ES', { year: 'numeric', month: 'long' })
     : '—';
 
-  const hasChanges =
-    user && (displayName !== (user.displayName || '') || photoURL !== (user.photoURL || ''));
+  const hasChanges = user && displayName !== (user.displayName || '');
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = ''; // permite re-subir el mismo archivo
-    if (!file || !user) return;
+    if (!file || !user || !firestore) return;
 
     if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) {
       toast({ variant: 'destructive', title: 'Formato no válido', description: 'Usa una imagen JPG, PNG o WebP.' });
       return;
     }
-    if (file.size > 2 * 1024 * 1024) {
-      toast({ variant: 'destructive', title: 'Imagen muy pesada', description: 'El máximo es 2 MB.' });
+    if (file.size > 5 * 1024 * 1024) {
+      toast({ variant: 'destructive', title: 'Imagen muy pesada', description: 'El máximo es 5 MB.' });
       return;
     }
 
     setUploading(true);
     try {
-      const storage = getStorage(firebaseApp);
-      const ext = file.type.split('/')[1];
-      const ref = storageRef(storage, `avatars/${user.uid}/avatar.${ext}`);
-      await uploadBytes(ref, file, { contentType: file.type });
-      const url = await getDownloadURL(ref);
-      setPhotoURL(url);
-      await updateProfile(user, { photoURL: url });
+      // Comprime a 256px y guarda como base64 en Firestore (sin Storage)
+      const dataUrl = await compressImage(file);
+      await setAvatar(firestore, user.uid, dataUrl);
       toast({ title: 'Foto actualizada', description: 'Tu nueva foto de perfil se guardó correctamente.' });
     } catch {
-      toast({ variant: 'destructive', title: 'Error al subir', description: 'No se pudo subir la imagen. Revisa tu conexión e inténtalo de nuevo.' });
+      toast({ variant: 'destructive', title: 'Error al subir', description: 'No se pudo procesar la imagen. Inténtalo con otra.' });
     } finally {
       setUploading(false);
     }

@@ -148,6 +148,12 @@ export interface PaymentMethod {
   label: string;       // texto legible: "Visa terminada en 4242"
 }
 
+/** Guarda (o borra) la foto de perfil como data URL base64 en Firestore. */
+export async function setAvatar(db: Firestore, uid: string, dataUrl: string | null): Promise<void> {
+  const ref = doc(db, 'users', uid);
+  await setDoc(ref, { avatarDataUrl: dataUrl || null, updatedAt: serverTimestamp() }, { merge: true });
+}
+
 /** Guarda el método de pago con que el usuario realizó el último pago. */
 export async function setPaymentMethod(db: Firestore, uid: string, method: PaymentMethod): Promise<void> {
   const ref = doc(db, 'users', uid);
