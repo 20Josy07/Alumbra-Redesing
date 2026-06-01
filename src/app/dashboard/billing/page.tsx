@@ -4,8 +4,9 @@ import { useState, useMemo } from 'react';
 import { doc, collection, query, orderBy, type Timestamp } from 'firebase/firestore';
 import { useUser, useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
 import { setUserPlan, setSubscriptionCancel, computePlanEnd } from '@/firebase/firestore/usage';
-import { PLAN_LIMITS, PLAN_NAMES, getPlan, currentMonthKey, type PlanId } from '@/lib/plans';
+import { PLANS, PLAN_LIMITS, PLAN_NAMES, getPlan, currentMonthKey, type PlanId } from '@/lib/plans';
 import { lookupPromo } from '@/lib/promo-codes';
+import { redirectToCheckout } from '@/lib/checkout-redirect';
 import { type AnalysisRecord } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -31,6 +32,7 @@ export default function BillingPage() {
   const [promoCode, setPromoCode] = useState('');
   const [redeeming, setRedeeming] = useState(false);
   const [working, setWorking] = useState(false);
+  const [upgrading, setUpgrading] = useState<PlanId | null>(null);
 
   const userDocRef = useMemoFirebase(
     () => (user && firestore ? doc(firestore, 'users', user.uid) : null),
@@ -67,6 +69,11 @@ export default function BillingPage() {
   const isPaid = currentPlan !== 'gratis';
   const cancelScheduled = !!account?.cancelAtPeriodEnd && isPaid;
 
+  // Planes superiores al actual (para mejorar). Premium no tiene mejora.
+  const PLAN_ORDER: PlanId[] = ['gratis', 'basico', 'pro', 'premium'];
+  const currentRank = PLAN_ORDER.indexOf(currentPlan);
+  const upgradePlans = PLANS.filter((p) => PLAN_ORDER.indexOf(p.id) > currentRank);
+
   const planEndsDate = account?.planEnds ? new Date(account.planEnds) : null;
   const planEndsLabel = planEndsDate
     ? planEndsDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -85,6 +92,30 @@ export default function BillingPage() {
       return d && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
     }).length;
   }, [analyses]);
+
+  const handleUpgrade = async (planId: PlanId) => {
+    if (!user) return;
+    setUpgrading(planId);
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: planId, uid: user.uid, email: user.email }),
+      });
+      if (res.status === 503) {
+        toast({ title: 'Pagos próximamente', description: 'La pasarela aún no está activa. Usa un código promocional mientras tanto.' });
+        return;
+      }
+      const data = await res.json();
+      if (!redirectToCheckout(data)) {
+        toast({ variant: 'destructive', title: 'No se pudo iniciar el pago', description: 'Inténtalo de nuevo.' });
+      }
+    } catch {
+      toast({ variant: 'destructive', title: 'Error de conexión', description: 'Inténtalo de nuevo.' });
+    } finally {
+      setUpgrading(null);
+    }
+  };
 
   const handleRedeem = async () => {
     const promo = lookupPromo(promoCode);
@@ -199,6 +230,44 @@ export default function BillingPage() {
           </CardContent>
         </Card>
       </Reveal>
+
+      {/* Mejorar plan (oculto si ya es Premium) */}
+      {upgradePlans.length > 0 && (
+        <Reveal as="div" delay={40}>
+          <Card className="rounded-3xl border border-purple-100/60 shadow-sm overflow-hidden">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Crown className="w-4 h-4 text-primary" />
+                <p className="text-sm font-black text-gray-900">Mejora tu plan</p>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {upgradePlans.map((p) => (
+                  <div key={p.id} className="flex items-center justify-between gap-3 rounded-2xl border border-purple-100/70 bg-purple-50/30 p-4">
+                    <div className="min-w-0">
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="text-sm font-black text-gray-900">{p.name}</span>
+                        <span className="text-xs text-gray-400">{p.price}/mes</span>
+                      </div>
+                      <p className="text-xs text-gray-400 truncate">
+                        {p.limit === Infinity ? 'Análisis ilimitados' : `${p.limit} análisis/mes`}
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() => handleUpgrade(p.id)}
+                      disabled={upgrading === p.id}
+                      size="sm"
+                      className="rounded-xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 font-bold text-xs flex-shrink-0"
+                    >
+                      {upgrading === p.id ? <Loader className="w-4 h-4 animate-spin" /> : 'Mejorar'}
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[11px] text-gray-400 mt-3">Pago seguro con Wompi · cancela cuando quieras.</p>
+            </CardContent>
+          </Card>
+        </Reveal>
+      )}
 
       {/* Estadísticas de uso */}
       <Reveal as="div" delay={60} className="grid grid-cols-3 gap-3 sm:gap-4">
