@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from './ui/button';
 import { useUser } from '@/firebase';
+import { useUserAvatar } from '@/hooks/use-user-avatar';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
@@ -32,6 +33,7 @@ type HeaderProps = { activeLink?: string | null };
 
 export default function Header({ activeLink }: HeaderProps) {
   const { user, auth } = useUser();
+  const avatarSrc = useUserAvatar();
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
@@ -101,7 +103,7 @@ export default function Header({ activeLink }: HeaderProps) {
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-2 pl-2 pr-3 h-9 rounded-full hover:bg-gray-100 transition-colors border border-gray-200/60">
                   <Avatar className="h-6 w-6">
-                    <AvatarImage src={user.photoURL || ''} alt={user.displayName || ''} />
+                    <AvatarImage src={avatarSrc} alt={user.displayName || ''} />
                     <AvatarFallback className="bg-gradient-to-br from-primary to-violet-500 text-white text-[10px] font-bold">
                       {user.displayName?.charAt(0).toUpperCase() || 'U'}
                     </AvatarFallback>
@@ -189,7 +191,7 @@ export default function Header({ activeLink }: HeaderProps) {
               className="flex items-center gap-2 pl-2 pr-3 h-9 rounded-full hover:bg-gray-100 border border-gray-200/60"
             >
               <Avatar className="h-6 w-6">
-                <AvatarImage src={user.photoURL || ''} alt="" />
+                <AvatarImage src={avatarSrc} alt="" />
                 <AvatarFallback className="bg-gradient-to-br from-primary to-violet-500 text-white text-[10px] font-bold">
                   {user.displayName?.charAt(0).toUpperCase() || 'U'}
                 </AvatarFallback>
@@ -342,7 +344,7 @@ function MobileDrawer({
             {/* User card */}
             <div className="flex items-center gap-3 p-3 rounded-2xl bg-gray-50 border border-gray-100">
               <Avatar className="h-9 w-9 ring-2 ring-white shadow-sm">
-                <AvatarImage src={user.photoURL || ''} alt={user.displayName || ''} />
+                <AvatarImage src={avatarSrc} alt={user.displayName || ''} />
                 <AvatarFallback className="bg-gradient-to-br from-primary to-violet-500 text-white text-xs font-bold">
                   {user.displayName?.charAt(0).toUpperCase() || 'U'}
                 </AvatarFallback>

@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useUser } from "@/firebase";
+import { useUserAvatar } from "@/hooks/use-user-avatar";
 import { useRouter, usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -29,6 +30,7 @@ const navSecondary = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, loading, auth } = useUser();
+  const avatarSrc = useUserAvatar();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -131,7 +133,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* User info */}
           <div className="flex items-center gap-3 px-2 py-2 mb-1 group-data-[collapsible=icon]:justify-center">
             <Avatar className="h-9 w-9 ring-2 ring-white/20 flex-shrink-0">
-              <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'Avatar'} />
+              <AvatarImage src={avatarSrc} alt={user.displayName || 'Avatar'} />
               <AvatarFallback className="bg-gradient-to-br from-primary to-violet-500 text-white text-xs font-black">
                 {user.displayName?.charAt(0).toUpperCase() || 'U'}
               </AvatarFallback>

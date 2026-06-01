@@ -3,11 +3,17 @@
 import Link from 'next/link';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { updateProfile } from 'firebase/auth';
-import { collection, query, orderBy, doc, type Timestamp } from 'firebase/firestore';
-import { useUser, useFirestore, useCollection, useDoc, useMemoFirebase } from '@/firebase';
+import { collection, query, orderBy, type Timestamp } from 'firebase/firestore';
+import { useUser, useFirestore, useCollection } from '@/firebase';
 import { setAvatar } from '@/firebase/firestore/usage';
+import { useUserAvatar } from '@/hooks/use-user-avatar';
 import { type AnalysisRecord } from '@/types';
 import { PLAN_NAMES, PLAN_LIMITS, planCaps, type PlanId } from '@/lib/plans';
+import {
+  compressImageToDataUrl,
+  isAllowedAvatarType,
+  MAX_AVATAR_FILE_BYTES,
+} from '@/lib/profile-image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,41 +27,19 @@ import {
   TrendingUp, BadgeCheck, Pencil, Crown, Lock, CheckCircle2, ArrowRight, Upload,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-/** Comprime y recorta (cuadrado) una imagen a 256px y la devuelve como data URL JPEG. */
-function compressImage(file: File, size = 256, quality = 0.82): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error('read_error'));
-    reader.onload = () => {
-      const img = new window.Image();
-      img.onerror = () => reject(new Error('image_error'));
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = size;
-        canvas.height = size;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return reject(new Error('canvas_error'));
-        const min = Math.min(img.width, img.height);
-        const sx = (img.width - min) / 2;
-        const sy = (img.height - min) / 2;
-        ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
-        resolve(canvas.toDataURL('image/jpeg', quality));
-      };
-      img.src = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-  });
-}
+import { doc } from 'firebase/firestore';
+import { useDoc, useMemoFirebase } from '@/firebase';
 
 export default function ProfilePage() {
   const { user } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
+  const avatarSrc = useUserAvatar();
 
   const [displayName, setDisplayName] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -69,20 +53,20 @@ export default function ProfilePage() {
 
   const { data: analyses } = useCollection<AnalysisRecord>(analysesQuery);
 
-  // Plan actual (con expiración)
   const userDocRef = useMemoFirebase(
     () => (user && firestore ? doc(firestore, 'users', user.uid) : null),
     [user, firestore]
   );
   const { data: account } = useDoc<{ plan?: PlanId; planEnds?: string; avatarDataUrl?: string | null }>(userDocRef);
+
   const storedPlan: PlanId = account?.plan ?? 'gratis';
   const subActive = storedPlan === 'gratis' || (!!account?.planEnds && new Date(account.planEnds).getTime() > Date.now());
   const plan: PlanId = subActive ? storedPlan : 'gratis';
   const caps = planCaps(plan);
   const planLimit = PLAN_LIMITS[plan];
 
-  // Foto efectiva: la subida a Firestore (base64) tiene prioridad sobre la de Auth
-  const avatarSrc = account?.avatarDataUrl || user?.photoURL || '';
+  const shownAvatar = previewSrc || avatarSrc;
+  const hasCustomAvatar = !!(previewSrc || account?.avatarDataUrl);
 
   const benefits = [
     { label: planLimit === Infinity ? 'Análisis ilimitados' : `${planLimit} análisis al mes`, on: true },
@@ -117,26 +101,45 @@ export default function ProfilePage() {
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    e.target.value = ''; // permite re-subir el mismo archivo
+    e.target.value = '';
     if (!file || !user || !firestore) return;
 
-    if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) {
+    if (!isAllowedAvatarType(file.type)) {
       toast({ variant: 'destructive', title: 'Formato no válido', description: 'Usa una imagen JPG, PNG o WebP.' });
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
-      toast({ variant: 'destructive', title: 'Imagen muy pesada', description: 'El máximo es 5 MB.' });
+    if (file.size > MAX_AVATAR_FILE_BYTES) {
+      toast({ variant: 'destructive', title: 'Imagen muy pesada', description: 'El máximo es 2 MB.' });
       return;
     }
 
     setUploading(true);
     try {
-      // Comprime a 256px y guarda como base64 en Firestore (sin Storage)
-      const dataUrl = await compressImage(file);
+      const dataUrl = await compressImageToDataUrl(file);
+      setPreviewSrc(dataUrl);
       await setAvatar(firestore, user.uid, dataUrl);
+      setPreviewSrc(null);
       toast({ title: 'Foto actualizada', description: 'Tu nueva foto de perfil se guardó correctamente.' });
+    } catch (err) {
+      setPreviewSrc(null);
+      const msg = err instanceof Error && err.message === 'too_large'
+        ? 'La imagen sigue siendo muy grande tras comprimirla. Prueba con otra más simple.'
+        : 'No se pudo procesar la imagen. Inténtalo con otra.';
+      toast({ variant: 'destructive', title: 'Error al subir', description: msg });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveAvatar = async () => {
+    if (!user || !firestore) return;
+    setUploading(true);
+    try {
+      await setAvatar(firestore, user.uid, null);
+      setPreviewSrc(null);
+      toast({ title: 'Foto eliminada', description: 'Se quitó tu foto de perfil personalizada.' });
     } catch {
-      toast({ variant: 'destructive', title: 'Error al subir', description: 'No se pudo procesar la imagen. Inténtalo con otra.' });
+      toast({ variant: 'destructive', title: 'Error', description: 'No se pudo quitar la foto.' });
     } finally {
       setUploading(false);
     }
@@ -146,7 +149,7 @@ export default function ProfilePage() {
     if (!user) return;
     setIsSaving(true);
     try {
-      await updateProfile(user, { displayName: displayName.trim(), photoURL: photoURL.trim() });
+      await updateProfile(user, { displayName: displayName.trim() });
       toast({ title: 'Perfil actualizado', description: 'Tus cambios se han guardado correctamente.' });
     } catch {
       toast({ variant: 'destructive', title: 'Error', description: 'No se pudo actualizar el perfil.' });
@@ -166,10 +169,8 @@ export default function ProfilePage() {
   return (
     <div className="space-y-6 max-w-3xl">
 
-      {/* ── Tarjeta de portada con avatar ── */}
       <div className="animate-in fade-in-0 slide-in-from-top-4 duration-500">
         <Card className="rounded-3xl border border-purple-100/60 shadow-sm overflow-hidden">
-          {/* Cover */}
           <div className="relative h-28 overflow-hidden"
             style={{ background: 'linear-gradient(120deg, hsl(262 55% 24%) 0%, hsl(275 50% 30%) 55%, hsl(262 60% 22%) 100%)' }}
           >
@@ -184,19 +185,16 @@ export default function ProfilePage() {
             />
           </div>
 
-          {/* Avatar + info */}
           <CardContent className="px-6 pb-6 pt-0">
-            {/* Avatar superpuesto sobre el cover */}
             <div className="-mt-12 mb-4">
               <Avatar className="h-24 w-24 ring-4 ring-white shadow-lg">
-                <AvatarImage src={photoURL || ''} alt={displayName || 'Avatar'} />
+                <AvatarImage src={shownAvatar} alt={displayName || 'Avatar'} />
                 <AvatarFallback className="bg-gradient-to-br from-primary to-violet-500 text-white text-3xl font-black">
                   {initial}
                 </AvatarFallback>
               </Avatar>
             </div>
 
-            {/* Info (sobre fondo blanco) */}
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-2xl font-black text-gray-900">
                 {displayName || 'Completa tu nombre'}
@@ -218,7 +216,6 @@ export default function ProfilePage() {
         </Card>
       </div>
 
-      {/* ── Stats ── */}
       <Reveal as="div" className="grid grid-cols-3 gap-3 sm:gap-4">
         {statCards.map(({ label, value, icon: Icon, color }) => (
           <Card key={label} className="rounded-2xl border border-purple-100/60 shadow-sm card-lift">
@@ -233,7 +230,6 @@ export default function ProfilePage() {
         ))}
       </Reveal>
 
-      {/* ── Tu plan y beneficios ── */}
       <Reveal as="div" delay={60}>
         <Card className="rounded-3xl border border-purple-100/60 shadow-sm overflow-hidden">
           <div className="h-1 bg-gradient-to-r from-primary via-violet-400 to-purple-300" />
@@ -276,7 +272,6 @@ export default function ProfilePage() {
         </Card>
       </Reveal>
 
-      {/* ── Editar información ── */}
       <Reveal as="div" delay={120} className="rounded-3xl overflow-hidden">
         <Card className="rounded-3xl border border-purple-100/60 shadow-sm overflow-hidden">
           <div className="h-1 bg-gradient-to-r from-primary via-violet-400 to-purple-300" />
@@ -288,7 +283,6 @@ export default function ProfilePage() {
             <CardDescription className="text-sm">Actualiza cómo te ve el resto de la plataforma.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
-            {/* Name */}
             <div className="space-y-1.5">
               <Label htmlFor="name" className="text-sm font-semibold text-gray-700">Nombre completo</Label>
               <Input
@@ -300,12 +294,11 @@ export default function ProfilePage() {
               />
             </div>
 
-            {/* Foto de perfil — subir archivo */}
             <div className="space-y-1.5">
               <Label className="text-sm font-semibold text-gray-700">Foto de perfil</Label>
               <div className="flex items-center gap-4">
                 <Avatar className="h-16 w-16 ring-2 ring-purple-100 flex-shrink-0">
-                  <AvatarImage src={photoURL || ''} alt="Foto" />
+                  <AvatarImage src={shownAvatar} alt="Foto" />
                   <AvatarFallback className="bg-gradient-to-br from-primary to-violet-500 text-white text-lg font-black">
                     {initial}
                   </AvatarFallback>
@@ -325,13 +318,17 @@ export default function ProfilePage() {
                     disabled={uploading}
                     className="rounded-xl border-purple-200 text-primary hover:bg-purple-50 font-semibold"
                   >
-                    {uploading ? <><Loader className="w-4 h-4 mr-2 animate-spin" /> Subiendo…</> : <><Upload className="w-4 h-4 mr-2" /> Subir foto</>}
+                    {uploading ? (
+                      <><Loader className="w-4 h-4 mr-2 animate-spin" /> Subiendo…</>
+                    ) : (
+                      <><Upload className="w-4 h-4 mr-2" /> Subir foto</>
+                    )}
                   </Button>
-                  {photoURL && (
+                  {hasCustomAvatar && (
                     <Button
                       type="button"
                       variant="ghost"
-                      onClick={() => setPhotoURL('')}
+                      onClick={handleRemoveAvatar}
                       disabled={uploading}
                       className="rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 font-medium"
                     >
@@ -340,10 +337,11 @@ export default function ProfilePage() {
                   )}
                 </div>
               </div>
-              <p className="text-xs text-gray-400">JPG, PNG o WebP · máximo 2 MB.</p>
+              <p className="text-xs text-gray-400">
+                JPG, PNG o WebP · máximo 2 MB. Se guarda comprimida en tu cuenta (sin Firebase Storage).
+              </p>
             </div>
 
-            {/* Email read-only */}
             <div className="space-y-1.5">
               <Label className="text-sm font-semibold text-gray-700">Correo electrónico</Label>
               <div className="h-11 rounded-xl border border-gray-200 bg-gray-50 px-3 flex items-center gap-2 text-sm text-gray-500">
