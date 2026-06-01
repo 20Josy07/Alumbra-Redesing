@@ -1,6 +1,6 @@
 'use client';
 
-import { Firestore, doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { Firestore, doc, getDoc, setDoc, serverTimestamp, arrayUnion } from 'firebase/firestore';
 import { currentMonthKey, type PlanId } from '@/lib/plans';
 
 export interface TrustedContact {
@@ -128,6 +128,23 @@ export interface PaymentMethod {
 export async function setPaymentMethod(db: Firestore, uid: string, method: PaymentMethod): Promise<void> {
   const ref = doc(db, 'users', uid);
   await setDoc(ref, { paymentMethod: method, updatedAt: serverTimestamp() }, { merge: true });
+}
+
+export interface PaymentRecord {
+  plan: PlanId;
+  planName: string;
+  amount: number;
+  currency: string;
+  method: string;     // etiqueta legible: "Visa terminada en 4242"
+  status: string;     // 'APPROVED'
+  reference: string;  // referencia/ID de la transacción
+  date: string;       // ISO
+}
+
+/** Añade un pago al historial del usuario (arreglo en su documento). */
+export async function recordPayment(db: Firestore, uid: string, payment: PaymentRecord): Promise<void> {
+  const ref = doc(db, 'users', uid);
+  await setDoc(ref, { payments: arrayUnion(payment), updatedAt: serverTimestamp() }, { merge: true });
 }
 
 /**

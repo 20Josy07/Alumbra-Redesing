@@ -5,8 +5,8 @@ import DashboardPage from "@/components/dashboard-page";
 import type { AnalysisResult } from "@/app/actions";
 import { useUser, useFirestore } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
-import { setUserPlan, setPaymentMethod } from "@/firebase/firestore/usage";
-import { PLAN_NAMES, type PlanId } from "@/lib/plans";
+import { setUserPlan, setPaymentMethod, recordPayment } from "@/firebase/firestore/usage";
+import { PLAN_NAMES, getPlan, type PlanId } from "@/lib/plans";
 
 export default function Dashboard() {
     const [pendingAnalysis, setPendingAnalysis] = useState<AnalysisResult | null>(null);
@@ -58,6 +58,17 @@ export default function Dashboard() {
                         if (data.paymentMethod?.label) {
                             await setPaymentMethod(firestore, user.uid, data.paymentMethod).catch(() => {});
                         }
+                        // Registra el pago en el historial
+                        await recordPayment(firestore, user.uid, {
+                            plan,
+                            planName: PLAN_NAMES[plan],
+                            amount: getPlan(plan).priceAmount,
+                            currency: 'COP',
+                            method: data.paymentMethod?.label || 'Wompi',
+                            status: data.status || 'APPROVED',
+                            reference: data.reference || txId,
+                            date: new Date().toISOString(),
+                        }).catch(() => {});
                     }
                 }
                 await setUserPlan(firestore, user.uid, plan);

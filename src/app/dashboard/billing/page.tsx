@@ -20,7 +20,7 @@ import { Reveal } from '@/components/reveal';
 import { cn } from '@/lib/utils';
 import {
   CreditCard, Tag, Clock, Loader, FileText, TrendingUp, Crown,
-  CheckCircle2, AlertCircle, RotateCcw, Wallet, Shield,
+  CheckCircle2, AlertCircle, RotateCcw, Wallet, Shield, Receipt,
 } from 'lucide-react';
 
 export default function BillingPage() {
@@ -36,7 +36,21 @@ export default function BillingPage() {
     () => (user && firestore ? doc(firestore, 'users', user.uid) : null),
     [user, firestore]
   );
-  const { data: account } = useDoc<{ plan?: PlanId; planEnds?: string; cancelAtPeriodEnd?: boolean; usageMonth?: string; usageCount?: number; paymentMethod?: { type?: string; brand?: string; lastFour?: string; label?: string } }>(userDocRef);
+  const { data: account } = useDoc<{
+    plan?: PlanId;
+    planEnds?: string;
+    cancelAtPeriodEnd?: boolean;
+    usageMonth?: string;
+    usageCount?: number;
+    paymentMethod?: { type?: string; brand?: string; lastFour?: string; label?: string };
+    payments?: { planName?: string; amount?: number; currency?: string; method?: string; status?: string; reference?: string; date?: string }[];
+  }>(userDocRef);
+
+  const payments = [...(account?.payments ?? [])].sort(
+    (a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()
+  );
+  const formatCOP = (n?: number) =>
+    typeof n === 'number' ? new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(n) : '—';
 
   const analysesQuery = useMemoFirebase(
     () => (user && firestore ? query(collection(firestore, 'users', user.uid, 'analyses'), orderBy('createdAt', 'desc')) : null),
@@ -282,6 +296,57 @@ export default function BillingPage() {
               <Shield className="w-3 h-3" />
               Procesado de forma segura por Wompi. Alumbra no almacena los datos de tu tarjeta.
             </p>
+          </CardContent>
+        </Card>
+      </Reveal>
+
+      {/* Historial de pagos */}
+      <Reveal as="div" delay={220}>
+        <Card className="rounded-3xl border border-purple-100/60 shadow-sm overflow-hidden">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Receipt className="w-4 h-4 text-primary" />
+              <p className="text-sm font-black text-gray-900">Historial de pagos</p>
+            </div>
+
+            {payments.length === 0 ? (
+              <div className="text-center py-8">
+                <div className="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center mx-auto mb-3">
+                  <Receipt className="w-6 h-6 text-purple-200" />
+                </div>
+                <p className="text-sm font-semibold text-gray-400">Aún no tienes pagos</p>
+                <p className="text-xs text-gray-300 mt-1">Tus comprobantes aparecerán aquí.</p>
+              </div>
+            ) : (
+              <ul className="divide-y divide-gray-100">
+                {payments.map((p, i) => {
+                  const approved = (p.status || '').toUpperCase() === 'APPROVED';
+                  return (
+                    <li key={i} className="flex items-center gap-3 py-3.5">
+                      <div className={cn('w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0', approved ? 'bg-green-50' : 'bg-amber-50')}>
+                        <Receipt className={cn('w-4 h-4', approved ? 'text-green-600' : 'text-amber-500')} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-bold text-gray-900 truncate">Plan {p.planName}</p>
+                        <p className="text-xs text-gray-400">
+                          {p.date ? new Date(p.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : '—'}
+                          {p.method ? ` · ${p.method}` : ''}
+                        </p>
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <p className="text-sm font-black text-gray-900">{formatCOP(p.amount)}</p>
+                        <span className={cn(
+                          'text-[10px] font-bold px-2 py-0.5 rounded-full',
+                          approved ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                        )}>
+                          {approved ? 'Pagado' : 'Pendiente'}
+                        </span>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </CardContent>
         </Card>
       </Reveal>
