@@ -39,5 +39,10 @@ service cloud.firestore {
         allow update: if isOwner(userId) && isAnalysisRecord(request.resource.data);
       }
     }
+
+    // Checkouts Wompi: solo el servidor (Admin SDK) escribe aquí.
+    match /wompi_checkouts/{reference} {
+      allow read, write: if false;
+    }
   }
 }

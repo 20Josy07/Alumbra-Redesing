@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createHash } from 'node:crypto';
 import { PLANS } from '@/lib/plans';
+import { createPendingCheckout } from '@/lib/wompi-fulfillment';
 
 /**
  * Genera la URL de Wompi Web Checkout (Colombia).
@@ -39,7 +40,18 @@ export async function POST(req: Request) {
   const origin = req.headers.get('origin') || new URL(req.url).origin;
   const currency = 'COP';
   const amountInCents = Math.round(meta.priceAmount * 100); // COP → centavos
-  const reference = `alumbra-${meta.id}-${(body.uid || 'anon').slice(0, 10)}-${Date.now()}`;
+  const reference = `alumbra-${meta.id}-${body.uid || 'anon'}-${Date.now()}`;
+
+  // Registro en Firestore para que el webhook sepa a quién activar el plan.
+  if (body.uid) {
+    await createPendingCheckout({
+      reference,
+      uid: body.uid,
+      plan: meta.id,
+      amountInCents,
+      email: body.email,
+    });
+  }
 
   // Firma de integridad: SHA256("<reference><amountInCents><currency><secret>")
   const signature = createHash('sha256')

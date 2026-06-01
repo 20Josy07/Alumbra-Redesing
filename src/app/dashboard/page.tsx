@@ -3,15 +3,12 @@
 import { useEffect, useState } from "react";
 import DashboardPage from "@/components/dashboard-page";
 import type { AnalysisResult } from "@/app/actions";
-import { useUser, useFirestore } from "@/firebase";
+import { useUser } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
-import { setUserPlan, setPaymentMethod, recordPayment } from "@/firebase/firestore/usage";
-import { PLAN_NAMES, getPlan, type PlanId } from "@/lib/plans";
 
 export default function Dashboard() {
     const [pendingAnalysis, setPendingAnalysis] = useState<AnalysisResult | null>(null);
     const { user } = useUser();
-    const firestore = useFirestore();
     const { toast } = useToast();
 
     useEffect(() => {
@@ -26,61 +23,64 @@ export default function Dashboard() {
         }
     }, []);
 
-    // Activación de plan tras volver del pago (?checkout=success&plan=...&id=...)
+    // Tras volver de Wompi: confirma el pago en servidor (idempotente con el webhook).
     useEffect(() => {
-        if (!user || !firestore) return;
+        if (!user) return;
         const params = new URLSearchParams(window.location.search);
         if (params.get('checkout') !== 'success') return;
-        const plan = params.get('plan') as PlanId | null;
-        const txId = params.get('id'); // Wompi añade el id de la transacción
-        if (!plan || !['basico', 'pro', 'premium'].includes(plan)) {
-            window.history.replaceState({}, '', '/dashboard');
+
+        const plan = params.get('plan');
+        const txId = params.get('id');
+        window.history.replaceState({}, '', '/dashboard');
+
+        if (!txId) {
+            toast({
+                title: 'Pago recibido',
+                description: 'Si tu pago fue aprobado, el plan se activará en unos segundos. Revisa Plan y facturación.',
+            });
             return;
         }
 
-        const activate = async () => {
+        const confirm = async () => {
             try {
-                // Verifica la transacción en Wompi y guarda el método de pago
-                if (txId) {
-                    const res = await fetch(`/api/wompi/transaction?id=${encodeURIComponent(txId)}`);
-                    if (res.ok) {
-                        const data = await res.json();
-                        // Solo activamos si Wompi confirma el pago aprobado
-                        if (data.status && data.status !== 'APPROVED') {
-                            toast({
-                                variant: 'destructive',
-                                title: 'Pago no completado',
-                                description: 'No pudimos confirmar tu pago. Si crees que es un error, contáctanos.',
-                            });
-                            window.history.replaceState({}, '', '/dashboard/billing');
-                            return;
-                        }
-                        if (data.paymentMethod?.label) {
-                            await setPaymentMethod(firestore, user.uid, data.paymentMethod).catch(() => {});
-                        }
-                        // Registra el pago en el historial
-                        await recordPayment(firestore, user.uid, {
-                            plan,
-                            planName: PLAN_NAMES[plan],
-                            amount: getPlan(plan).priceAmount,
-                            currency: 'COP',
-                            method: data.paymentMethod?.label || 'Wompi',
-                            status: data.status || 'APPROVED',
-                            reference: data.reference || txId,
-                            date: new Date().toISOString(),
-                        }).catch(() => {});
-                    }
+                const res = await fetch('/api/wompi/fulfill', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ transactionId: txId }),
+                });
+                const data = await res.json().catch(() => ({}));
+
+                if (res.ok && data.ok) {
+                    toast({
+                        title: data.outcome === 'already_fulfilled' ? '¡Plan activo!' : '¡Plan activado!',
+                        description: `Tienes el plan ${data.planName || plan}. ¡Gracias!`,
+                    });
+                    return;
                 }
-                await setUserPlan(firestore, user.uid, plan);
-                toast({ title: '¡Plan activado!', description: `Ahora tienes el plan ${PLAN_NAMES[plan]}. ¡Gracias!` });
+
+                if (data.status && data.status !== 'APPROVED') {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Pago no completado',
+                        description: 'Wompi no aprobó el pago. Si crees que es un error, contáctanos.',
+                    });
+                    return;
+                }
+
+                toast({
+                    title: 'Estamos confirmando tu pago',
+                    description: 'Tu plan se activará en cuanto Wompi confirme el pago. Revisa Plan y facturación en un minuto.',
+                });
             } catch {
-                /* noop */
-            } finally {
-                window.history.replaceState({}, '', '/dashboard');
+                toast({
+                    title: 'Estamos confirmando tu pago',
+                    description: 'Si ya pagaste, el plan se activará automáticamente. Revisa Plan y facturación.',
+                });
             }
         };
-        activate();
-    }, [user, firestore, toast]);
+
+        void confirm();
+    }, [user, toast]);
 
     return <DashboardPage pendingAnalysis={pendingAnalysis} setPendingAnalysis={setPendingAnalysis} />;
 }
