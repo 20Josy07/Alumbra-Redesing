@@ -26,7 +26,7 @@ export default function Dashboard() {
         }
     }, []);
 
-    // Activación de plan tras volver de Stripe Checkout (?checkout=success&plan=...)
+    // Activación de plan tras volver del pago (?checkout=success&plan=...)
     useEffect(() => {
         if (!user || !firestore) return;
         const params = new URLSearchParams(window.location.search);

@@ -6,14 +6,14 @@ export interface PlanMeta {
   id: PlanId;
   name: string;
   price: string;
+  /** Monto numérico en COP para la pasarela (0 = gratis) */
+  priceAmount: number;
   /** Límite de análisis al mes. Infinity = ilimitado */
   limit: number;
   description: string;
   features: { text: string; included: boolean }[];
   cta: string;
   popular: boolean;
-  /** Variable de entorno con el price ID de Stripe (solo planes pagos) */
-  stripeEnv?: string;
 }
 
 export const PLANS: PlanMeta[] = [
@@ -21,6 +21,7 @@ export const PLANS: PlanMeta[] = [
     id: 'gratis',
     name: 'Gratis',
     price: '$0',
+    priceAmount: 0,
     limit: 10,
     description: 'Ideal para explorar la herramienta.',
     features: [
@@ -37,6 +38,7 @@ export const PLANS: PlanMeta[] = [
     id: 'basico',
     name: 'Básico',
     price: '$12.000',
+    priceAmount: 12000,
     limit: 30,
     description: 'Empieza a analizar sin complicaciones.',
     features: [
@@ -47,12 +49,12 @@ export const PLANS: PlanMeta[] = [
     ],
     cta: 'Elegir Básico',
     popular: false,
-    stripeEnv: 'STRIPE_PRICE_BASICO',
   },
   {
     id: 'pro',
     name: 'Pro',
     price: '$25.000',
+    priceAmount: 25000,
     limit: Infinity,
     description: 'Más control, más análisis.',
     features: [
@@ -64,12 +66,12 @@ export const PLANS: PlanMeta[] = [
     ],
     cta: 'Elegir Pro',
     popular: true,
-    stripeEnv: 'STRIPE_PRICE_PRO',
   },
   {
     id: 'premium',
     name: 'Premium',
     price: '$45.000',
+    priceAmount: 45000,
     limit: Infinity,
     description: 'Sin límites y control total.',
     features: [
@@ -81,7 +83,6 @@ export const PLANS: PlanMeta[] = [
     ],
     cta: 'Elegir Premium',
     popular: false,
-    stripeEnv: 'STRIPE_PRICE_PREMIUM',
   },
 ];
 

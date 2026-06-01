@@ -25,6 +25,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 import { PLANS, PLAN_NAMES, type PlanId } from '@/lib/plans';
 import { lookupPromo } from '@/lib/promo-codes';
+import { redirectToCheckout } from '@/lib/checkout-redirect';
 import { setUserPlan, computePlanEnd } from '@/firebase/firestore/usage';
 import { Tag } from 'lucide-react';
 
@@ -78,7 +79,7 @@ export default function LandingPage() {
   const handleCta = () => router.push(user ? '/dashboard' : '/login');
   const getImage = (id: string) => PlaceHolderImages.find(img => img.id === id);
 
-  /** Selección de plan: gratis → registro · pago → Stripe Checkout */
+  /** Selección de plan: gratis → registro · pago → Mercado Pago */
   const handlePlanSelect = async (planId: PlanId) => {
     if (planId === 'gratis') {
       router.push(user ? '/dashboard' : '/signup');
@@ -103,9 +104,7 @@ export default function LandingPage() {
         return;
       }
       const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
+      if (!redirectToCheckout(data)) {
         toast({ variant: 'destructive', title: 'No se pudo iniciar el pago', description: 'Inténtalo de nuevo en un momento.' });
       }
     } catch {

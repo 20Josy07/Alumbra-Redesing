@@ -1,17 +1,23 @@
 import { NextResponse } from 'next/server';
+import { createHash } from 'node:crypto';
 import { PLANS } from '@/lib/plans';
 
 /**
- * Crea una sesión de Stripe Checkout usando la API REST (sin SDK).
+ * Genera la URL de Wompi Web Checkout (Colombia).
  *
- * Para activarlo, define en tu entorno (.env.local):
- *   STRIPE_SECRET_KEY=sk_live_o_test_...
- *   STRIPE_PRICE_BASICO=price_...
- *   STRIPE_PRICE_PRO=price_...
- *   STRIPE_PRICE_PREMIUM=price_...
+ * Define en `.env.local`:
+ *   NEXT_PUBLIC_WOMPI_PUBLIC_KEY=pub_prod_...     (llave pública, se puede exponer)
+ *   WOMPI_INTEGRITY_SECRET=prod_integrity_...      (secreto de integridad, NUNCA se expone)
  *
- * Sin esas variables, responde 503 y la UI muestra "próximamente".
+ * La llave pública por defecto ya está puesta; solo falta el secreto de
+ * integridad (lo encuentras en tu panel de Wompi → Desarrolladores → Llaves).
+ * Sin el secreto de integridad responde 503 ("pagos próximamente").
+ *
+ * Wompi exige firmar: SHA256(reference + amountInCents + currency + integritySecret).
  */
+
+const DEFAULT_PUBLIC_KEY = 'pub_prod_0nL4uunXMMC3xMpGtjV0uLpZmbehYUKi';
+
 export async function POST(req: Request) {
   let body: { plan?: string; uid?: string; email?: string };
   try {
@@ -21,48 +27,40 @@ export async function POST(req: Request) {
   }
 
   const meta = PLANS.find((p) => p.id === body.plan);
-  if (!meta || !meta.stripeEnv) {
+  if (!meta || meta.priceAmount <= 0) {
     return NextResponse.json({ error: 'invalid_plan' }, { status: 400 });
   }
 
-  const secret = process.env.STRIPE_SECRET_KEY;
-  const priceId = process.env[meta.stripeEnv];
+  const publicKey = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || DEFAULT_PUBLIC_KEY;
+  const integritySecret = process.env.WOMPI_INTEGRITY_SECRET;
 
-  if (!secret || !priceId) {
-    // Aún no configurado: la UI lo interpreta como "próximamente".
+  if (!publicKey || !integritySecret) {
+    // Falta el secreto de integridad → la UI lo trata como "pagos próximamente".
     return NextResponse.json({ error: 'not_configured' }, { status: 503 });
   }
 
   const origin = req.headers.get('origin') || new URL(req.url).origin;
+  const currency = 'COP';
+  const amountInCents = Math.round(meta.priceAmount * 100); // COP → centavos
+  const reference = `alumbra-${meta.id}-${(body.uid || 'anon').slice(0, 10)}-${Date.now()}`;
 
-  const params = new URLSearchParams();
-  params.set('mode', 'subscription');
-  params.set('line_items[0][price]', priceId);
-  params.set('line_items[0][quantity]', '1');
-  params.set('success_url', `${origin}/dashboard?checkout=success&plan=${meta.id}`);
-  params.set('cancel_url', `${origin}/#pricing`);
-  params.set('allow_promotion_codes', 'true');
-  if (body.email) params.set('customer_email', body.email);
-  // Guardamos el destino del plan y el uid para el webhook
-  params.set('metadata[plan]', meta.id);
-  if (body.uid) params.set('metadata[uid]', body.uid);
-  if (body.uid) params.set('client_reference_id', body.uid);
+  // Firma de integridad: SHA256("<reference><amountInCents><currency><secret>")
+  const signature = createHash('sha256')
+    .update(`${reference}${amountInCents}${currency}${integritySecret}`)
+    .digest('hex');
 
-  try {
-    const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${secret}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: params,
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      return NextResponse.json({ error: data?.error?.message || 'stripe_error' }, { status: 502 });
-    }
-    return NextResponse.json({ url: data.url });
-  } catch {
-    return NextResponse.json({ error: 'network_error' }, { status: 502 });
-  }
+  const redirectUrl = `${origin}/dashboard?checkout=success&plan=${meta.id}`;
+
+  const params = new URLSearchParams({
+    'public-key': publicKey,
+    currency,
+    'amount-in-cents': String(amountInCents),
+    reference,
+    'signature:integrity': signature,
+    'redirect-url': redirectUrl,
+  });
+  if (body.email) params.set('customer-data:email', body.email);
+
+  const url = `https://checkout.wompi.co/p/?${params.toString()}`;
+  return NextResponse.json({ url });
 }
