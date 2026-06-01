@@ -258,6 +258,7 @@ function MobileDrawer({
   activeLink?: string | null;
   handleSignOut: () => void;
 }) {
+  const avatarSrc = useUserAvatar();
 
   return (
     <SheetContent
