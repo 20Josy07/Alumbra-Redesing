@@ -117,6 +117,30 @@ export async function setTrustedContact(
   );
 }
 
+/** Guarda la lista de contactos de confianza (según el límite del plan). */
+export async function setTrustedContacts(
+  db: Firestore,
+  uid: string,
+  contacts: TrustedContact[],
+  autoAlertEnabled: boolean
+): Promise<void> {
+  const clean = contacts
+    .filter((c) => c.email?.trim())
+    .map((c) => ({ name: c.name?.trim() || '', email: c.email.trim() }));
+  const ref = doc(db, 'users', uid);
+  await setDoc(
+    ref,
+    {
+      trustedContacts: clean,
+      // Mantiene compatibilidad con el campo antiguo (primer contacto)
+      trustedContact: clean[0] ?? null,
+      autoAlertEnabled,
+      updatedAt: serverTimestamp(),
+    },
+    { merge: true }
+  );
+}
+
 export interface PaymentMethod {
   type: string;        // 'CARD' | 'NEQUI' | 'PSE' | 'BANCOLOMBIA_TRANSFER' …
   brand?: string;      // 'VISA', 'MASTERCARD' …

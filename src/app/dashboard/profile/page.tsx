@@ -1,10 +1,12 @@
 'use client';
 
+import Link from 'next/link';
 import { useState, useEffect, useMemo } from 'react';
 import { updateProfile } from 'firebase/auth';
-import { collection, query, orderBy, type Timestamp } from 'firebase/firestore';
-import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { collection, query, orderBy, doc, type Timestamp } from 'firebase/firestore';
+import { useUser, useFirestore, useCollection, useDoc, useMemoFirebase } from '@/firebase';
 import { type AnalysisRecord } from '@/types';
+import { PLAN_NAMES, PLAN_LIMITS, planCaps, type PlanId } from '@/lib/plans';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,7 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Reveal } from '@/components/reveal';
 import {
   FileText, Calendar, Loader, Check, Mail, ShieldAlert,
-  TrendingUp, BadgeCheck, Pencil,
+  TrendingUp, BadgeCheck, Pencil, Crown, Lock, CheckCircle2, ArrowRight,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -41,6 +43,26 @@ export default function ProfilePage() {
   }, [user, firestore]);
 
   const { data: analyses } = useCollection<AnalysisRecord>(analysesQuery);
+
+  // Plan actual (con expiración)
+  const userDocRef = useMemoFirebase(
+    () => (user && firestore ? doc(firestore, 'users', user.uid) : null),
+    [user, firestore]
+  );
+  const { data: account } = useDoc<{ plan?: PlanId; planEnds?: string }>(userDocRef);
+  const storedPlan: PlanId = account?.plan ?? 'gratis';
+  const subActive = storedPlan === 'gratis' || (!!account?.planEnds && new Date(account.planEnds).getTime() > Date.now());
+  const plan: PlanId = subActive ? storedPlan : 'gratis';
+  const caps = planCaps(plan);
+  const planLimit = PLAN_LIMITS[plan];
+
+  const benefits = [
+    { label: planLimit === Infinity ? 'Análisis ilimitados' : `${planLimit} análisis al mes`, on: true },
+    { label: `${caps.trustedContacts} ${caps.trustedContacts === 1 ? 'contacto de confianza' : 'contactos de confianza'}`, on: true },
+    { label: 'Informe detallado (patrones, resaltado e IA)', on: caps.detailedResults },
+    { label: 'Historial de análisis guardado', on: caps.history },
+    { label: 'Herramientas avanzadas', on: caps.advancedTools },
+  ];
 
   const stats = useMemo(() => {
     const list = analyses ?? [];
@@ -123,7 +145,7 @@ export default function ProfilePage() {
                   <h1 className="text-xl font-black text-gray-900 truncate">{displayName || 'Sin nombre'}</h1>
                   <Badge className="bg-primary/10 text-primary border-0 text-[11px] font-bold gap-1">
                     <BadgeCheck className="w-3 h-3" />
-                    Profesional
+                    Plan {PLAN_NAMES[plan]}
                   </Badge>
                 </div>
                 <p className="text-sm text-gray-400 flex items-center gap-1.5 mt-1">
@@ -155,8 +177,51 @@ export default function ProfilePage() {
         ))}
       </Reveal>
 
+      {/* ── Tu plan y beneficios ── */}
+      <Reveal as="div" delay={60}>
+        <Card className="rounded-3xl border border-purple-100/60 shadow-sm overflow-hidden">
+          <div className="h-1 bg-gradient-to-r from-primary via-violet-400 to-purple-300" />
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center shadow-sm">
+                  <Crown className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm font-black text-gray-900 leading-tight">Plan {PLAN_NAMES[plan]}</p>
+                  <p className="text-xs text-gray-400">Esto incluye tu plan actual</p>
+                </div>
+              </div>
+              <Button asChild size="sm" variant="outline" className="rounded-xl border-purple-200 text-primary hover:bg-purple-50 font-semibold">
+                <Link href="/dashboard/billing">
+                  {plan === 'gratis' ? 'Mejorar' : 'Gestionar'}
+                  <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                </Link>
+              </Button>
+            </div>
+
+            <ul className="grid sm:grid-cols-2 gap-2.5">
+              {benefits.map((b) => (
+                <li key={b.label} className={cn('flex items-center gap-2.5 text-sm rounded-xl px-3 py-2.5 border', b.on ? 'bg-green-50/60 border-green-100 text-gray-700' : 'bg-gray-50 border-gray-100 text-gray-400')}>
+                  {b.on
+                    ? <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    : <Lock className="w-4 h-4 text-gray-300 flex-shrink-0" />}
+                  <span className={cn(!b.on && 'line-through decoration-gray-300')}>{b.label}</span>
+                </li>
+              ))}
+            </ul>
+
+            {plan === 'gratis' && (
+              <p className="text-xs text-gray-400 mt-4">
+                Desbloquea el informe detallado y el historial con un plan de pago o un código promocional.
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      </Reveal>
+
       {/* ── Editar información ── */}
-      <Reveal as="div" delay={80} className="rounded-3xl overflow-hidden">
+      <Reveal as="div" delay={120} className="rounded-3xl overflow-hidden">
         <Card className="rounded-3xl border border-purple-100/60 shadow-sm overflow-hidden">
           <div className="h-1 bg-gradient-to-r from-primary via-violet-400 to-purple-300" />
           <CardHeader>

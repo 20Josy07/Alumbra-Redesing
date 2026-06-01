@@ -27,7 +27,7 @@ export const PLANS: PlanMeta[] = [
     features: [
       { text: '10 análisis al mes', included: true },
       { text: 'Analizador de conversaciones', included: true },
-      { text: 'Resultados básicos', included: true },
+      { text: '1 contacto de confianza', included: true },
       { text: 'Resultados detallados', included: false },
       { text: 'Dashboard de gestión', included: false },
     ],
@@ -43,8 +43,8 @@ export const PLANS: PlanMeta[] = [
     description: 'Empieza a analizar sin complicaciones.',
     features: [
       { text: '30 análisis al mes', included: true },
-      { text: 'Analizador de conversaciones', included: true },
-      { text: 'Resultados claros y directos', included: true },
+      { text: 'Resultados detallados', included: true },
+      { text: '2 contactos de confianza', included: true },
       { text: 'Dashboard de gestión', included: false },
     ],
     cta: 'Elegir Básico',
@@ -59,10 +59,10 @@ export const PLANS: PlanMeta[] = [
     description: 'Más control, más análisis.',
     features: [
       { text: 'Análisis ilimitados', included: true },
-      { text: 'Dashboard de gestión básico', included: true },
       { text: 'Historial de análisis', included: true },
-      { text: 'Visualización de resultados', included: true },
-      { text: 'Funciones avanzadas', included: false },
+      { text: '3 contactos de confianza', included: true },
+      { text: 'Dashboard de gestión', included: true },
+      { text: 'Herramientas avanzadas', included: false },
     ],
     cta: 'Elegir Pro',
     popular: true,
@@ -76,8 +76,8 @@ export const PLANS: PlanMeta[] = [
     description: 'Sin límites y control total.',
     features: [
       { text: 'Análisis ilimitados', included: true },
-      { text: 'Dashboard completo', included: true },
       { text: 'Historial completo', included: true },
+      { text: '5 contactos de confianza', included: true },
       { text: 'Herramientas avanzadas', included: true },
       { text: 'Acceso prioritario', included: true },
     ],
@@ -92,6 +92,29 @@ export const PLAN_LIMITS: Record<PlanId, number> = {
   pro: Infinity,
   premium: Infinity,
 };
+
+/* ─── Capacidades por plan (qué desbloquea cada uno) ─── */
+export interface PlanCapabilities {
+  /** Informe detallado: desglose de patrones, conversación resaltada y sugerencia de IA */
+  detailedResults: boolean;
+  /** Guardar y consultar el historial de análisis */
+  history: boolean;
+  /** Herramientas avanzadas (exportar/copiar informe, etc.) */
+  advancedTools: boolean;
+  /** Número máximo de contactos de confianza para alertas de riesgo */
+  trustedContacts: number;
+}
+
+export const PLAN_CAPS: Record<PlanId, PlanCapabilities> = {
+  gratis:  { detailedResults: false, history: false, advancedTools: false, trustedContacts: 1 },
+  basico:  { detailedResults: true,  history: false, advancedTools: false, trustedContacts: 2 },
+  pro:     { detailedResults: true,  history: true,  advancedTools: false, trustedContacts: 3 },
+  premium: { detailedResults: true,  history: true,  advancedTools: true,  trustedContacts: 5 },
+};
+
+export function planCaps(plan: PlanId): PlanCapabilities {
+  return PLAN_CAPS[plan] ?? PLAN_CAPS.gratis;
+}
 
 export const PLAN_NAMES: Record<PlanId, string> = {
   gratis: 'Gratis',

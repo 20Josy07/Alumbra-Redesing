@@ -25,7 +25,7 @@ import { collection, query, orderBy, doc } from "firebase/firestore";
 import { useCollection, useMemoFirebase, useDoc } from "@/firebase";
 import { incrementUsage } from "@/firebase/firestore/usage";
 import { isHighRisk, sendRiskAlert } from "@/lib/alerts";
-import { PLAN_LIMITS, PLAN_NAMES, currentMonthKey, type PlanId } from "@/lib/plans";
+import { PLAN_LIMITS, PLAN_NAMES, planCaps, currentMonthKey, type PlanId } from "@/lib/plans";
 import { Textarea } from "./ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Badge } from "./ui/badge";
@@ -71,6 +71,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
     usageMonth?: string;
     usageCount?: number;
     trustedContact?: { name?: string; email?: string } | null;
+    trustedContacts?: { name?: string; email?: string }[];
     autoAlertEnabled?: boolean;
   }>(userDocRef);
 
@@ -87,6 +88,7 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
   const isUnlimited = planLimit === Infinity;
   const remaining = isUnlimited ? Infinity : Math.max(0, planLimit - usageCount);
   const limitReached = !isUnlimited && remaining <= 0;
+  const caps = planCaps(plan);
 
   // ── Stats reales calculadas desde Firestore ──
   const toDate = (r: AnalysisRecord): Date | null => {
@@ -152,37 +154,49 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
     });
   };
 
-  const maybeSendRiskAlert = (data: AnalysisResult) => {
-    const contactEmail = account?.trustedContact?.email?.trim();
-    if (!contactEmail) return;
+  const maybeSendRiskAlert = async (data: AnalysisResult) => {
     if (account?.autoAlertEnabled === false) return;
     if (!isHighRisk(data.score.risk_level)) return;
 
-    sendRiskAlert({
-      to: contactEmail,
-      contactName: account?.trustedContact?.name?.trim() || '',
-      userName: user?.displayName?.trim() || user?.email || '',
-      result: data,
-    }).then((outcome) => {
-      if (outcome === 'sent') {
-        toast({
-          title: 'Alerta enviada',
-          description: `Avisamos a tu contacto de confianza (${contactEmail}) por el nivel de riesgo detectado.`,
-        });
-      } else if (outcome === 'not_configured') {
-        toast({
-          variant: 'destructive',
-          title: 'Alertas no disponibles',
-          description: 'El envío de correos aún no está configurado. Revisa las variables de Resend en el servidor.',
-        });
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'No se pudo enviar la alerta',
-          description: 'Detectamos riesgo alto, pero el correo al contacto falló. Inténtalo desde Configuración.',
-        });
-      }
-    });
+    // Lista de contactos (nuevo array) con compatibilidad al campo antiguo
+    const list = (account?.trustedContacts?.length
+      ? account.trustedContacts
+      : account?.trustedContact ? [account.trustedContact] : []
+    ).filter((c) => c?.email?.trim());
+
+    if (list.length === 0) return;
+
+    const userName = user?.displayName?.trim() || user?.email || '';
+    const outcomes = await Promise.all(
+      list.map((c) =>
+        sendRiskAlert({
+          to: c.email!.trim(),
+          contactName: c.name?.trim() || '',
+          userName,
+          result: data,
+        })
+      )
+    );
+
+    const sent = outcomes.filter((o) => o === 'sent').length;
+    if (sent > 0) {
+      toast({
+        title: 'Alerta enviada',
+        description: `Avisamos a ${sent} ${sent === 1 ? 'contacto de confianza' : 'contactos de confianza'} por el nivel de riesgo detectado.`,
+      });
+    } else if (outcomes.includes('not_configured')) {
+      toast({
+        variant: 'destructive',
+        title: 'Alertas no disponibles',
+        description: 'El envío de correos aún no está configurado. Revisa las variables de Resend en el servidor.',
+      });
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'No se pudo enviar la alerta',
+        description: 'Detectamos riesgo alto, pero el correo a los contactos falló.',
+      });
+    }
   };
 
   const handleSaveAnalysis = async () => {
@@ -240,25 +254,41 @@ export default function DashboardPage({ pendingAnalysis, setPendingAnalysis }: D
         </div>
 
         {/* Informe (componente compartido) */}
-        <AnalysisReport result={pendingAnalysis} originalText={lastAnalyzedText} />
+        <AnalysisReport result={pendingAnalysis} originalText={lastAnalyzedText} detailed={caps.detailedResults} />
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-3 pt-1">
-          <Button
-            onClick={handleSaveAnalysis}
-            className="flex-1 h-12 rounded-2xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 font-bold shadow-md"
-          >
-            <Check className="w-4 h-4 mr-2" />
-            Guardar en Historial
-          </Button>
-          <Button
-            onClick={handleDiscardAnalysis}
-            variant="outline"
-            className="flex-1 h-12 rounded-2xl border-gray-200 hover:border-red-200 hover:text-red-500 hover:bg-red-50 font-semibold"
-          >
-            Descartar
-          </Button>
-        </div>
+        {caps.history ? (
+          <div className="flex flex-col sm:flex-row gap-3 pt-1">
+            <Button
+              onClick={handleSaveAnalysis}
+              className="flex-1 h-12 rounded-2xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 font-bold shadow-md"
+            >
+              <Check className="w-4 h-4 mr-2" />
+              Guardar en Historial
+            </Button>
+            <Button
+              onClick={handleDiscardAnalysis}
+              variant="outline"
+              className="flex-1 h-12 rounded-2xl border-gray-200 hover:border-red-200 hover:text-red-500 hover:bg-red-50 font-semibold"
+            >
+              Descartar
+            </Button>
+          </div>
+        ) : (
+          <div className="flex flex-col sm:flex-row gap-3 pt-1 items-center">
+            <div className="flex-1 flex items-center gap-2 text-xs text-gray-400">
+              <Lock className="w-3.5 h-3.5 flex-shrink-0" />
+              Guardar en el historial está disponible en los planes Pro y Premium.
+            </div>
+            <Button
+              onClick={handleDiscardAnalysis}
+              variant="outline"
+              className="h-12 px-6 rounded-2xl border-gray-200 hover:bg-gray-50 font-semibold"
+            >
+              Cerrar
+            </Button>
+          </div>
+        )}
       </div>
     );
   };

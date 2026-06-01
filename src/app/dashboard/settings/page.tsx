@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { sendPasswordResetEmail, deleteUser } from 'firebase/auth';
 import { doc } from 'firebase/firestore';
+import Link from 'next/link';
 import { useUser, useAuth, useFirestore, useDoc, useMemoFirebase } from '@/firebase';
-import { setTrustedContact } from '@/firebase/firestore/usage';
+import { setTrustedContacts, type TrustedContact } from '@/firebase/firestore/usage';
+import { planCaps, PLAN_NAMES, type PlanId } from '@/lib/plans';
 import { buildAuthActionSettings } from '@/lib/auth-action';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,7 +19,7 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Settings, KeyRound, Bell, Save, Trash2, Loader, ShieldCheck, LogOut, HeartHandshake, Check } from 'lucide-react';
+import { Settings, KeyRound, Bell, Save, Trash2, Loader, ShieldCheck, LogOut, HeartHandshake, Check, Plus, X, Crown } from 'lucide-react';
 
 const PREFS_KEY = 'alumbra:prefs';
 
@@ -25,7 +27,10 @@ type Prefs = { autoSave: boolean; emailNotifications: boolean };
 const defaultPrefs: Prefs = { autoSave: false, emailNotifications: true };
 
 interface AccountDoc {
+  plan?: PlanId;
+  planEnds?: string;
   trustedContact?: { name?: string; email?: string } | null;
+  trustedContacts?: { name?: string; email?: string }[];
   autoAlertEnabled?: boolean;
 }
 
@@ -47,20 +52,38 @@ export default function SettingsPage() {
   );
   const { data: account } = useDoc<AccountDoc>(userDocRef);
 
-  const [contactName, setContactName] = useState('');
-  const [contactEmail, setContactEmail] = useState('');
+  const [contacts, setContacts] = useState<TrustedContact[]>([]);
   const [autoAlert, setAutoAlert] = useState(true);
   const [savingContact, setSavingContact] = useState(false);
   const [contactLoaded, setContactLoaded] = useState(false);
 
-  // Carga inicial del contacto desde Firestore (solo la primera vez)
+  // Plan y límite de contactos
+  const storedPlan: PlanId = account?.plan ?? 'gratis';
+  const subActive = storedPlan === 'gratis' || (!!account?.planEnds && new Date(account.planEnds).getTime() > Date.now());
+  const plan: PlanId = subActive ? storedPlan : 'gratis';
+  const maxContacts = planCaps(plan).trustedContacts;
+
+  // Carga inicial de contactos desde Firestore (solo la primera vez)
   useEffect(() => {
     if (!account || contactLoaded) return;
-    setContactName(account.trustedContact?.name ?? '');
-    setContactEmail(account.trustedContact?.email ?? '');
+    const initial = account.trustedContacts?.length
+      ? account.trustedContacts
+      : account.trustedContact ? [account.trustedContact] : [];
+    setContacts(initial.map((c) => ({ name: c?.name ?? '', email: c?.email ?? '' })));
     setAutoAlert(account.autoAlertEnabled ?? true);
     setContactLoaded(true);
   }, [account, contactLoaded]);
+
+  const updateContact = (i: number, field: 'name' | 'email', value: string) => {
+    setContacts((prev) => prev.map((c, idx) => (idx === i ? { ...c, [field]: value } : c)));
+  };
+  const addContact = () => {
+    if (contacts.length >= maxContacts) return;
+    setContacts((prev) => [...prev, { name: '', email: '' }]);
+  };
+  const removeContact = (i: number) => {
+    setContacts((prev) => prev.filter((_, idx) => idx !== i));
+  };
 
   // Cargar preferencias desde localStorage
   useEffect(() => {
@@ -70,28 +93,27 @@ export default function SettingsPage() {
     } catch { /* noop */ }
   }, []);
 
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail.trim());
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const handleSaveContact = async () => {
     if (!user || !firestore) return;
-    if (contactEmail.trim() && !emailValid) {
-      toast({ variant: 'destructive', title: 'Correo no válido', description: 'Revisa el correo del contacto de confianza.' });
+    const filled = contacts.filter((c) => c.email.trim());
+    const invalid = filled.find((c) => !emailRe.test(c.email.trim()));
+    if (invalid) {
+      toast({ variant: 'destructive', title: 'Correo no válido', description: `Revisa el correo "${invalid.email}".` });
       return;
     }
     setSavingContact(true);
     try {
-      const contact = contactEmail.trim()
-        ? { name: contactName.trim(), email: contactEmail.trim() }
-        : null;
-      await setTrustedContact(firestore, user.uid, contact, autoAlert);
+      await setTrustedContacts(firestore, user.uid, filled.slice(0, maxContacts), autoAlert);
       toast({
-        title: contact ? 'Contacto guardado' : 'Contacto eliminado',
-        description: contact
-          ? 'Avisaremos a esta persona si detectamos un riesgo alto.'
+        title: 'Contactos guardados',
+        description: filled.length
+          ? `Avisaremos a ${filled.length} ${filled.length === 1 ? 'contacto' : 'contactos'} si detectamos riesgo alto.`
           : 'Ya no enviaremos alertas automáticas.',
       });
     } catch {
-      toast({ variant: 'destructive', title: 'Error', description: 'No se pudo guardar el contacto. Inténtalo de nuevo.' });
+      toast({ variant: 'destructive', title: 'Error', description: 'No se pudieron guardar los contactos. Inténtalo de nuevo.' });
     } finally {
       setSavingContact(false);
     }
@@ -200,37 +222,71 @@ export default function SettingsPage() {
         <div className="h-1 bg-gradient-to-r from-rose-400 via-pink-400 to-fuchsia-400" />
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base font-black">
-            <HeartHandshake className="w-4 h-4 text-primary" /> Contacto de confianza
+            <HeartHandshake className="w-4 h-4 text-primary" /> Contactos de confianza
           </CardTitle>
           <CardDescription className="text-sm">
             Si un análisis detecta un nivel de riesgo <span className="font-semibold text-rose-600">alto</span> o{' '}
-            <span className="font-semibold text-red-600">muy alto</span>, avisaremos por correo a esta persona.
+            <span className="font-semibold text-red-600">muy alto</span>, avisaremos por correo a estas personas.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="contactName" className="text-sm font-semibold text-gray-700">Nombre (opcional)</Label>
-              <Input
-                id="contactName"
-                value={contactName}
-                onChange={(e) => setContactName(e.target.value)}
-                placeholder="Ej. María, mi hermana"
-                className="h-11 rounded-xl border-gray-200 focus:border-primary"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="contactEmail" className="text-sm font-semibold text-gray-700">Correo del contacto</Label>
-              <Input
-                id="contactEmail"
-                type="email"
-                value={contactEmail}
-                onChange={(e) => setContactEmail(e.target.value)}
-                placeholder="contacto@email.com"
-                className="h-11 rounded-xl border-gray-200 focus:border-primary"
-              />
-            </div>
+          {/* Indicador de cupo según el plan */}
+          <div className="flex items-center justify-between gap-3 rounded-2xl bg-purple-50/60 border border-purple-100/60 px-4 py-2.5">
+            <span className="text-xs font-medium text-gray-500">
+              Plan <span className="font-bold text-primary">{PLAN_NAMES[plan]}</span> · {contacts.length}/{maxContacts} contactos
+            </span>
+            <Link href="/dashboard/billing" className="text-xs font-bold text-primary hover:underline inline-flex items-center gap-1">
+              <Crown className="w-3.5 h-3.5" /> Ampliar
+            </Link>
           </div>
+
+          {/* Lista de contactos */}
+          <div className="space-y-3">
+            {contacts.length === 0 && (
+              <p className="text-sm text-gray-400 text-center py-4 border border-dashed border-gray-200 rounded-2xl">
+                Aún no has añadido contactos de confianza.
+              </p>
+            )}
+            {contacts.map((c, i) => (
+              <div key={i} className="grid sm:grid-cols-[1fr_1.4fr_auto] gap-2 items-center">
+                <Input
+                  value={c.name}
+                  onChange={(e) => updateContact(i, 'name', e.target.value)}
+                  placeholder="Nombre (opcional)"
+                  className="h-11 rounded-xl border-gray-200 focus:border-primary"
+                />
+                <Input
+                  type="email"
+                  value={c.email}
+                  onChange={(e) => updateContact(i, 'email', e.target.value)}
+                  placeholder="contacto@email.com"
+                  className="h-11 rounded-xl border-gray-200 focus:border-primary"
+                />
+                <button
+                  onClick={() => removeContact(i)}
+                  className="w-11 h-11 rounded-xl border border-gray-200 flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition-colors flex-shrink-0"
+                  aria-label="Quitar contacto"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Añadir contacto */}
+          {contacts.length < maxContacts ? (
+            <button
+              onClick={addContact}
+              className="w-full inline-flex items-center justify-center gap-1.5 text-sm font-semibold text-primary bg-purple-50 hover:bg-purple-100 border border-dashed border-purple-200 rounded-xl py-2.5 transition-colors"
+            >
+              <Plus className="w-4 h-4" /> Añadir contacto
+            </button>
+          ) : (
+            <p className="text-xs text-gray-400 text-center">
+              Alcanzaste el máximo de tu plan ({maxContacts}).{' '}
+              <Link href="/dashboard/billing" className="text-primary font-bold hover:underline">Mejora tu plan</Link> para añadir más.
+            </p>
+          )}
 
           <div className="flex items-center justify-between gap-4 p-4 rounded-2xl bg-purple-50/60 border border-purple-100/60">
             <div className="flex items-center gap-3 min-w-0">
@@ -246,7 +302,7 @@ export default function SettingsPage() {
           </div>
 
           <p className="text-xs text-gray-400 leading-relaxed">
-            Solo se enviará un correo de aviso (sin el contenido de la conversación). Deja el correo en blanco y guarda para desactivar las alertas.
+            Solo se enviará un correo de aviso (sin el contenido de la conversación).
           </p>
 
           <div className="flex justify-end">
@@ -255,7 +311,7 @@ export default function SettingsPage() {
               disabled={savingContact}
               className="h-11 px-6 rounded-xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 font-bold shadow-md"
             >
-              {savingContact ? <><Loader className="w-4 h-4 mr-2 animate-spin" /> Guardando…</> : <><Check className="w-4 h-4 mr-2" /> Guardar contacto</>}
+              {savingContact ? <><Loader className="w-4 h-4 mr-2 animate-spin" /> Guardando…</> : <><Check className="w-4 h-4 mr-2" /> Guardar contactos</>}
             </Button>
           </div>
         </CardContent>

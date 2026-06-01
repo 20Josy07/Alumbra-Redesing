@@ -1,7 +1,9 @@
 'use client';
 
+import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { Button } from "./ui/button";
 import { ShieldAlert, ListChecks, Highlighter, Sparkles, AlertCircle, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { type AnalysisResult } from "@/types";
@@ -52,9 +54,11 @@ interface AnalysisReportProps {
   originalText: string;
   /** compacto = para tarjetas del historial (gauge más pequeño) */
   compact?: boolean;
+  /** false = plan Gratis: muestra solo resultados básicos y bloquea el detalle */
+  detailed?: boolean;
 }
 
-export default function AnalysisReport({ result, originalText, compact = false }: AnalysisReportProps) {
+export default function AnalysisReport({ result, originalText, compact = false, detailed = true }: AnalysisReportProps) {
   const { rules, score, help, ai_suggestion } = result;
   const breakdown = buildCategoryBreakdown(rules);
   const segments = buildHighlightSegments(originalText, rules);
@@ -89,8 +93,32 @@ export default function AnalysisReport({ result, originalText, compact = false }
         </CardContent>
       </Card>
 
+      {/* Plan Gratis: resultados básicos → bloqueo del detalle */}
+      {!detailed && (
+        <Card className="rounded-3xl border-2 border-dashed border-purple-200 bg-purple-50/40 shadow-sm">
+          <CardContent className="p-6 text-center">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-violet-500 flex items-center justify-center mx-auto mb-4 shadow-md">
+              <Lock className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="text-base font-black text-gray-900 mb-1.5">Desbloquea el análisis detallado</h3>
+            <p className="text-sm text-gray-500 leading-relaxed max-w-sm mx-auto mb-4">
+              Con un plan de pago verás el <strong>desglose de patrones</strong>, la
+              <strong> conversación resaltada</strong> y la <strong>interpretación asistida por IA</strong>.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 mb-5 text-xs text-gray-500">
+              <span className="inline-flex items-center gap-1.5"><ListChecks className="w-3.5 h-3.5 text-primary" /> Patrones por gravedad</span>
+              <span className="inline-flex items-center gap-1.5"><Highlighter className="w-3.5 h-3.5 text-primary" /> Frases resaltadas</span>
+              <span className="inline-flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5 text-primary" /> Sugerencia de IA</span>
+            </div>
+            <Button asChild className="rounded-xl bg-gradient-to-r from-primary to-violet-500 hover:opacity-90 font-bold">
+              <Link href="/dashboard/billing">Mejorar mi plan</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Desglose por categoría */}
-      {breakdown.length > 0 && (
+      {detailed && breakdown.length > 0 && (
         <Card className="rounded-3xl border border-purple-100 shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base font-black">
@@ -130,6 +158,7 @@ export default function AnalysisReport({ result, originalText, compact = false }
       )}
 
       {/* Conversación resaltada */}
+      {detailed && (
       <Card className="rounded-3xl border border-purple-100 shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base font-black">
@@ -168,8 +197,10 @@ export default function AnalysisReport({ result, originalText, compact = false }
           )}
         </CardContent>
       </Card>
+      )}
 
       {/* AI Suggestion */}
+      {detailed && (
       <Card className="rounded-3xl border border-purple-100 shadow-sm overflow-hidden">
         <div className="h-1 bg-gradient-to-r from-primary via-violet-400 to-purple-300" />
         <CardHeader className="pb-3">
@@ -182,6 +213,7 @@ export default function AnalysisReport({ result, originalText, compact = false }
           <p className="text-sm text-gray-600 leading-relaxed">{ai_suggestion}</p>
         </CardContent>
       </Card>
+      )}
 
       {/* Help */}
       <Alert className={cn("rounded-2xl", theme.soft, theme.border)}>
