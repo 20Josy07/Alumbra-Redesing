@@ -9,14 +9,11 @@ import { PLANS } from '@/lib/plans';
  *   NEXT_PUBLIC_WOMPI_PUBLIC_KEY=pub_prod_...     (llave pública, se puede exponer)
  *   WOMPI_INTEGRITY_SECRET=prod_integrity_...      (secreto de integridad, NUNCA se expone)
  *
- * La llave pública por defecto ya está puesta; solo falta el secreto de
- * integridad (lo encuentras en tu panel de Wompi → Desarrolladores → Llaves).
- * Sin el secreto de integridad responde 503 ("pagos próximamente").
+ * Sin la llave pública o el secreto de integridad responde 503
+ * ("pagos próximamente").
  *
  * Wompi exige firmar: SHA256(reference + amountInCents + currency + integritySecret).
  */
-
-const DEFAULT_PUBLIC_KEY = 'pub_prod_0nL4uunXMMC3xMpGtjV0uLpZmbehYUKi';
 
 export async function POST(req: Request) {
   let body: { plan?: string; uid?: string; email?: string };
@@ -31,7 +28,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'invalid_plan' }, { status: 400 });
   }
 
-  const publicKey = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || DEFAULT_PUBLIC_KEY;
+  const publicKey = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY;
   const integritySecret = process.env.WOMPI_INTEGRITY_SECRET;
 
   if (!publicKey || !integritySecret) {
