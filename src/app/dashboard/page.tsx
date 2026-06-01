@@ -5,7 +5,7 @@ import DashboardPage from "@/components/dashboard-page";
 import type { AnalysisResult } from "@/app/actions";
 import { useUser, useFirestore } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
-import { setUserPlan } from "@/firebase/firestore/usage";
+import { setUserPlan, setPaymentMethod } from "@/firebase/firestore/usage";
 import { PLAN_NAMES, type PlanId } from "@/lib/plans";
 
 export default function Dashboard() {
@@ -26,19 +26,49 @@ export default function Dashboard() {
         }
     }, []);
 
-    // Activación de plan tras volver del pago (?checkout=success&plan=...)
+    // Activación de plan tras volver del pago (?checkout=success&plan=...&id=...)
     useEffect(() => {
         if (!user || !firestore) return;
         const params = new URLSearchParams(window.location.search);
         if (params.get('checkout') !== 'success') return;
         const plan = params.get('plan') as PlanId | null;
-        if (plan && ['basico', 'pro', 'premium'].includes(plan)) {
-            setUserPlan(firestore, user.uid, plan)
-                .then(() => toast({ title: '¡Plan activado!', description: `Ahora tienes el plan ${PLAN_NAMES[plan]}. ¡Gracias!` }))
-                .catch(() => {});
+        const txId = params.get('id'); // Wompi añade el id de la transacción
+        if (!plan || !['basico', 'pro', 'premium'].includes(plan)) {
+            window.history.replaceState({}, '', '/dashboard');
+            return;
         }
-        // Limpia los parámetros de la URL
-        window.history.replaceState({}, '', '/dashboard');
+
+        const activate = async () => {
+            try {
+                // Verifica la transacción en Wompi y guarda el método de pago
+                if (txId) {
+                    const res = await fetch(`/api/wompi/transaction?id=${encodeURIComponent(txId)}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        // Solo activamos si Wompi confirma el pago aprobado
+                        if (data.status && data.status !== 'APPROVED') {
+                            toast({
+                                variant: 'destructive',
+                                title: 'Pago no completado',
+                                description: 'No pudimos confirmar tu pago. Si crees que es un error, contáctanos.',
+                            });
+                            window.history.replaceState({}, '', '/dashboard/billing');
+                            return;
+                        }
+                        if (data.paymentMethod?.label) {
+                            await setPaymentMethod(firestore, user.uid, data.paymentMethod).catch(() => {});
+                        }
+                    }
+                }
+                await setUserPlan(firestore, user.uid, plan);
+                toast({ title: '¡Plan activado!', description: `Ahora tienes el plan ${PLAN_NAMES[plan]}. ¡Gracias!` });
+            } catch {
+                /* noop */
+            } finally {
+                window.history.replaceState({}, '', '/dashboard');
+            }
+        };
+        activate();
     }, [user, firestore, toast]);
 
     return <DashboardPage pendingAnalysis={pendingAnalysis} setPendingAnalysis={setPendingAnalysis} />;

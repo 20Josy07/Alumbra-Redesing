@@ -117,6 +117,19 @@ export async function setTrustedContact(
   );
 }
 
+export interface PaymentMethod {
+  type: string;        // 'CARD' | 'NEQUI' | 'PSE' | 'BANCOLOMBIA_TRANSFER' …
+  brand?: string;      // 'VISA', 'MASTERCARD' …
+  lastFour?: string;   // '4242'
+  label: string;       // texto legible: "Visa terminada en 4242"
+}
+
+/** Guarda el método de pago con que el usuario realizó el último pago. */
+export async function setPaymentMethod(db: Firestore, uid: string, method: PaymentMethod): Promise<void> {
+  const ref = doc(db, 'users', uid);
+  await setDoc(ref, { paymentMethod: method, updatedAt: serverTimestamp() }, { merge: true });
+}
+
 /**
  * Programa o revierte la cancelación de la suscripción.
  * No corta el acceso de inmediato: el plan sigue activo hasta `planEnds`

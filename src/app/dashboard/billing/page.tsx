@@ -20,7 +20,7 @@ import { Reveal } from '@/components/reveal';
 import { cn } from '@/lib/utils';
 import {
   CreditCard, Tag, Clock, Loader, FileText, TrendingUp, Crown,
-  CheckCircle2, AlertCircle, RotateCcw,
+  CheckCircle2, AlertCircle, RotateCcw, Wallet, Shield,
 } from 'lucide-react';
 
 export default function BillingPage() {
@@ -36,7 +36,7 @@ export default function BillingPage() {
     () => (user && firestore ? doc(firestore, 'users', user.uid) : null),
     [user, firestore]
   );
-  const { data: account } = useDoc<{ plan?: PlanId; planEnds?: string; cancelAtPeriodEnd?: boolean; usageMonth?: string; usageCount?: number }>(userDocRef);
+  const { data: account } = useDoc<{ plan?: PlanId; planEnds?: string; cancelAtPeriodEnd?: boolean; usageMonth?: string; usageCount?: number; paymentMethod?: { type?: string; brand?: string; lastFour?: string; label?: string } }>(userDocRef);
 
   const analysesQuery = useMemoFirebase(
     () => (user && firestore ? query(collection(firestore, 'users', user.uid, 'analyses'), orderBy('createdAt', 'desc')) : null),
@@ -247,21 +247,41 @@ export default function BillingPage() {
         </Card>
       </Reveal>
 
-      {/* Información de pago */}
+      {/* Método de pago */}
       <Reveal as="div" delay={180}>
         <Card className="rounded-3xl border border-purple-100/60 shadow-sm">
           <CardContent className="p-6">
             <p className="text-sm font-black text-gray-900 mb-3">Método de pago</p>
-            <div className="flex items-center gap-3 rounded-2xl bg-gray-50 border border-gray-100 p-4">
-              <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center flex-shrink-0">
-                <CreditCard className="w-4 h-4 text-gray-400" />
+            {account?.paymentMethod?.label ? (
+              <div className="flex items-center gap-3 rounded-2xl bg-gray-50 border border-gray-100 p-4">
+                <div className="w-11 h-11 rounded-xl bg-white border border-gray-200 flex items-center justify-center flex-shrink-0">
+                  {account.paymentMethod.type === 'CARD'
+                    ? <CreditCard className="w-5 h-5 text-primary" />
+                    : <Wallet className="w-5 h-5 text-primary" />}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-gray-900">{account.paymentMethod.label}</p>
+                  <p className="text-xs text-gray-400">Usado en tu último pago con Wompi</p>
+                </div>
+                <Badge className="bg-green-100 text-green-700 border-green-200 font-bold text-[11px]">
+                  <CheckCircle2 className="w-3 h-3 mr-1" /> Activo
+                </Badge>
               </div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-gray-700">Pagos con tarjeta próximamente</p>
-                <p className="text-xs text-gray-400">Por ahora, accede a cualquier plan con un código promocional.</p>
+            ) : (
+              <div className="flex items-center gap-3 rounded-2xl bg-gray-50 border border-gray-100 p-4">
+                <div className="w-11 h-11 rounded-xl bg-white border border-gray-200 flex items-center justify-center flex-shrink-0">
+                  <CreditCard className="w-5 h-5 text-gray-400" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-gray-700">Aún no tienes un método de pago</p>
+                  <p className="text-xs text-gray-400">Aparecerá aquí cuando completes tu primer pago con Wompi (tarjeta, Nequi o PSE).</p>
+                </div>
               </div>
-              <CheckCircle2 className="w-4 h-4 text-gray-300" />
-            </div>
+            )}
+            <p className="text-[11px] text-gray-400 mt-3 flex items-center gap-1.5">
+              <Shield className="w-3 h-3" />
+              Procesado de forma segura por Wompi. Alumbra no almacena los datos de tu tarjeta.
+            </p>
           </CardContent>
         </Card>
       </Reveal>
