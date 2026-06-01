@@ -15,6 +15,8 @@ export interface UserAccount {
   planEnds: string | null;
   usageMonth: string;
   usageCount: number;
+  /** Foto de perfil en data URL (JPEG base64), guardada en Firestore */
+  avatarDataUrl?: string | null;
 }
 
 /** Devuelve true si la suscripción de pago sigue vigente. */
@@ -150,6 +152,9 @@ export interface PaymentMethod {
 
 /** Guarda (o borra) la foto de perfil como data URL base64 en Firestore. */
 export async function setAvatar(db: Firestore, uid: string, dataUrl: string | null): Promise<void> {
+  if (dataUrl && dataUrl.length > 450_000) {
+    throw new Error('avatar_too_large');
+  }
   const ref = doc(db, 'users', uid);
   await setDoc(ref, { avatarDataUrl: dataUrl || null, updatedAt: serverTimestamp() }, { merge: true });
 }
